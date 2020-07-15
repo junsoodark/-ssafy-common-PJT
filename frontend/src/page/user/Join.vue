@@ -1,7 +1,7 @@
 <template>
     <div class="user" id="join"> 
         <div class="wrapC table">
-            <div class="middle">
+            <form @submit.prevent="signUp" class="middle">
                 <h1>회원가입</h1>
                 <div class="form-wrap">
                     <div class="input-wrap">
@@ -50,7 +50,7 @@
                         작성완료
                     </span>
                 </button>
-            </div>
+            </form>
 
 
         </div> 
@@ -61,6 +61,7 @@
 
 <script>
     import '../../assets/css/user.scss'
+    import axios from 'axios'
 
     export default {
         components: {
@@ -70,6 +71,33 @@
 
         },
         methods: {
+            signUp () {
+                const email = this.email
+                const nickname = this.nickName
+                const password = this.password
+                const passwordConfirm = this.passwordConfirm
+                const isTerm = this.isTerm
+                if (password!=passwordConfirm) {
+                    alert('비밀번호 확인과 비밀번호가 다릅니다!')
+                    return false
+                } else if (!isTerm) {
+                    alert('동의를 해주세요!')
+                    return false
+                }
+
+                axios.post('http://localhost:3000/account/signup',{ email, nickname, password })
+                .then(res => {
+                    if (res.status == 200) {
+                        alert('가입성공')
+                        console.log(res)
+                        this.$router.push({name:'login'})
+                    }
+                })
+                .catch(err => {
+                    alert('가입실패')
+                    console.log(err)
+                })
+            }
         },
         watch: {
         },
