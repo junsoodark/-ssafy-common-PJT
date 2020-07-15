@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 		@ApiResponse(code = 404, message = "Not Found", response = BasicResponse.class),
 		@ApiResponse(code = 500, message = "Failure", response = BasicResponse.class) })
 
-@CrossOrigin(origins = { "http://localhost:8080" })
+@CrossOrigin(origins = { "http://localhost:3000" })
 @RestController
 public class AccountController {
 
