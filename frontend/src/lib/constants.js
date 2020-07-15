@@ -5,7 +5,8 @@ export default {
         USER_TOKEN: 'userToken',
     },
     ERROR: { 
-        FRONT_ERROR: 'FE00' 
+        FRONT_ERROR: 'FE00',
+        NOT_FOUND: 'notfound' 
     },
     URL_TYPE: {
         USER: {
