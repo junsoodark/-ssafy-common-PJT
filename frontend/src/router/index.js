@@ -12,6 +12,7 @@ import List from '../page/post/List.vue'
 
 // error페이지들
 import NotFound from '../page/error/NotFound.vue'
+import ErrorPage from '../page/error/Error.vue'
 Vue.use(Router) 
  
 export default new Router({
@@ -35,8 +36,13 @@ export default new Router({
     },
     // 에러
     {
-      path: '*',
+      path: '/err',
       name: constants.ERROR.FRONT_ERROR,
+      component: ErrorPage
+    },
+    {
+      path: '*',
+      name: constants.ERROR.NOT_FOUND,
       component: NotFound,
     }
   ]
