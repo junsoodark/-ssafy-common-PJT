@@ -9,7 +9,9 @@ import Join from '../page/user/Join.vue'
 
 // 포스트
 import List from '../page/post/List.vue'
- 
+
+// error페이지들
+import NotFound from '../page/error/NotFound.vue'
 Vue.use(Router) 
  
 export default new Router({
@@ -31,5 +33,11 @@ export default new Router({
       name: constants.URL_TYPE.POST.MAIN,
       component: List,
     },
+    // 에러
+    {
+      path: '*',
+      name: constants.ERROR.FRONT_ERROR,
+      component: NotFound,
+    }
   ]
 })
