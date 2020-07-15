@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Header :isHeader="isHeader"/>
-    <router-view/>
+    <router-view @submit-login="login"/>
   </div>
 </template>
 
@@ -43,9 +43,14 @@ export default {
           this.isHeader = isHeader;
 
       },
+      login(cooky){
+        this.$cookies.set('auth-token',cooky)
+        this.isLoggedIn = true
+      }
   },
   data: function () {
         return {
+            isLoggedIn: false,
             isHeader: true,
             constants
         } 
