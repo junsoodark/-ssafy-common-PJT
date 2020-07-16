@@ -52,6 +52,7 @@ export default {
       Logout(){
         this.$cookies.remove('auth-token')
         this.isLoggedIn = false
+        this.$router.push({name:'main'})
       }
   },
   data: function () {

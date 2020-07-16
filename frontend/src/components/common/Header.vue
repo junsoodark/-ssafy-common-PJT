@@ -13,7 +13,7 @@
             <button v-if="isLoggedIn" @click="Logout">로그아웃</button>
             <b-button v-else v-b-modal.modal-1>로그인</b-button>
         </div>  
-        <b-modal ref="my-modal" id="modal-1" title="BootstrapVue">
+        <b-modal ref="my-modal" id="modal-1" title="BootstrapVue" ok-only>
             <form @submit.prevent="signIn" class="middle">
                 <h1>로그인 창 입니다</h1>
                 <div class="input-wrap my-3">
