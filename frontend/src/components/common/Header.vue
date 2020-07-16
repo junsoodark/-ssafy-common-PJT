@@ -11,12 +11,9 @@
                 <input v-model="keyword" type="text"/>
             </div> 
             <button v-if="isLoggedIn" @click="Logout">로그아웃</button>
-            <router-link v-else v-bind:to="{name:constants.URL_TYPE.USER.LOGIN}" class="login-btn">
-                로그인 
-            </router-link>
-            <b-button v-b-modal.modal-1>Launch demo modal</b-button>
+            <b-button v-else v-b-modal.modal-1>로그인</b-button>
         </div>  
-        <b-modal id="modal-1" title="BootstrapVue">
+        <b-modal ref="my-modal" id="modal-1" title="BootstrapVue">
             <form @submit.prevent="signIn" class="middle">
                 <h1>로그인 창 입니다</h1>
                 <div class="input-wrap my-3">
@@ -87,6 +84,7 @@
                     if (res.status == 200) {
                         console.log(res)
                         this.$emit('submit-login',res.data.object)
+                        this.$refs['my-modal'].hide()
                     } else { alert('로그인 실패!!!') }
                 })
                 .catch(err => {
