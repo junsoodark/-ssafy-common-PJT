@@ -2,7 +2,6 @@
     <div class="post">
         <div class="wrapB">
             <h2>전체글</h2>
-
             <section class="post-list">
                 <div>
                     <div class="post-card">

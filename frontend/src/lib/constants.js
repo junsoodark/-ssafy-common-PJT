@@ -11,7 +11,9 @@ export default {
     URL_TYPE: {
         USER: {
             LOGIN: 'login',
-            JOIN: 'join', 
+            JOIN: 'join',
+            USER_INFO: 'user_info',
+            MODIFY: 'modify',
         },
         POST: {
             MAIN : "main",

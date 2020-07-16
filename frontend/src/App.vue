@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Header :isHeader="isHeader"/>
+    <Header :isHeader="isHeader" :isLoggedIn="isLoggedIn" @try-logout="Logout" @submit-login="login"/>
     <router-view @submit-login="login"/>
   </div>
 </template>
@@ -17,9 +17,11 @@ export default {
     Header
   },
   created() {
-      let url = this.$route.name;
+    this.isLoggedIn = this.$cookies.isKey('auth-token')
+    
+    let url = this.$route.name;
 
-      this.checkUrl(url);
+    this.checkUrl(url);
   },
   watch: {
       $route (to){
@@ -46,6 +48,11 @@ export default {
       login(cooky){
         this.$cookies.set('auth-token',cooky)
         this.isLoggedIn = true
+      },
+      Logout(){
+        this.$cookies.remove('auth-token')
+        this.isLoggedIn = false
+        this.$router.push({name:'main'})
       }
   },
   data: function () {

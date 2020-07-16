@@ -63,7 +63,6 @@
                 .then(res => {
                     if (res.status == 200) {
                         console.log(res)
-                        document.cookie = `accessToken=${res.data.data.accessToken}`
                         this.$emit('submit-login',res.data.object)
                         this.$router.push({'name':'main'})
                     } else { alert('로그인 실패!!!') }

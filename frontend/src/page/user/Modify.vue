@@ -1,8 +1,8 @@
 <template>
     <div class="user" id="join"> 
         <div class="wrapC table">
-            <form @submit.prevent="signUp" class="middle">
-                <h1>회원가입</h1>
+            <form @submit.prevent="modify" class="middle">
+                <h1>회원 정보 수정</h1>
                 <div class="form-wrap">
                     <div class="input-wrap">
                         <input v-model="nickName"
@@ -14,7 +14,7 @@
                         <input v-model="email" 
                             id="email"
                             placeholder="이메일을 입력해주세요"
-                            type="email"/>
+                            type="text" disabled/>
                     </div>
 
                     <div class="input-wrap password-wrap">
@@ -37,87 +37,57 @@
                             </span>
                     </div>
                 </div>
-
-                <label>
-                    <input v-model="isTerm" type="checkbox" id="term"/>
-                    <span>약관에 동의합니다</span>
-                </label>
-
-                <span class="go-term">약관 보기</span>
-
                 <button class="btn">
                     <span>
                         작성완료
                     </span>
                 </button>
             </form>
-
-
         </div> 
-        
-
     </div>
 </template>
 
 <script>
-    import '../../assets/css/user.scss'
-    import axios from 'axios'
-
-    export default {
-        components: {
-        },
-        created(){
-
-
-        },
-        methods: {
-            signUp () {
+import axios from 'axios'
+export default {
+    props: ['email'],
+    data: () => {
+        return {
+            nickName: '',
+            password: '',
+            passwordConfirm: '',
+            passwordType:"password",
+            passwordConfirmType:"password",
+        }
+    },
+    methods: {
+        modify () {
                 const email = this.email
                 const nickname = this.nickName
                 const password = this.password
                 const passwordConfirm = this.passwordConfirm
-                const isTerm = this.isTerm
                 if (password!=passwordConfirm) {
                     alert('비밀번호 확인과 비밀번호가 다릅니다!')
                     return false
-                } else if (!isTerm) {
-                    alert('동의를 해주세요!')
-                    return false
-                } else if (email.indexOf('@')===-1) {
-                    alert('이메일 형식을 사용해야합니다!')
-                    return false
                 }
 
-                axios.post('http://localhost:3000/account/signup',{ email, nickname, password })
+                axios.post('http://localhost:3000/account/modify',{ email, nickname, password })
                 .then(res => {
                     if (res.status == 200) {
-                        alert('가입성공')
+                        alert('수정성공')
                         console.log(res)
                         this.$router.push({name:'login'})
                     }
                 })
                 .catch(err => {
-                    alert('가입실패')
+                    alert('수정실패')
                     console.log(err)
                 })
             }
-        },
-        watch: {
-        },
-        data: () => {
-            return {
-                email: '',
-                nickName: '',
-                password: '',
-                passwordConfirm: '',
-                isTerm: false,
-                passwordType:"password",
-                passwordConfirmType:"password",
-            }
-        }
-
     }
-
+}
 </script>
 
+<style>
 
+</style>
