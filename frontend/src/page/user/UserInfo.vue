@@ -24,6 +24,7 @@
         <h1> 닉네임: {{ nickname }}</h1>
         <h1> 이메일: {{ email }}</h1>
         <b-button @click="readyModify">회원정보 수정 </b-button>
+        <b-button @click="readyDelete">삭제 버튼</b-button>
         </div>
         <div class="wrapC table d-none" id="modify-window">
             <form @submit.prevent="modify" class="middle">
@@ -68,7 +69,11 @@
                     </span>
                 </button>
             </form>
-        </div> 
+        </div>
+        <div id="delete-window" class="d-none">
+            <h1>진짜로 삭제하시겠습니까?</h1>
+            <b-button @click="DeleteButton" pill variant="outline-danger">삭제한다</b-button>
+        </div>
     </div>
   </div>
 </template>
@@ -142,7 +147,28 @@ export default {
                     alert('수정실패')
                     console.log(err)
                 })
-            }
+            },
+        readyDelete() {
+            const modifyWindow = document.querySelector('#delete-window')
+            modifyWindow.className = ''
+            const InfoWindow = document.querySelector('#user-info')
+            InfoWindow.className = 'd-none'
+        },
+        DeleteButton() {
+            axios.delete('http://localhost:3000/account/delete',{
+                    params: {
+                        email: this.email,
+                        password: this.password
+                    }
+                })
+            .then(res => {
+                console.log(res)
+                alert('삭제되었습니다')
+                this.$emit('delete-id')
+                this.$router.push({name:'main'})
+            })
+            .catch(err => {console.log(err)})
+        }
     }
 }
 </script>
