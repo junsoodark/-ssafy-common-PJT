@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <Header :isHeader="isHeader" :isLoggedIn="isLoggedIn"/>
-    <router-view @submit-login="login" @try-logout="Logout"/>
+    <Header :isHeader="isHeader" :isLoggedIn="isLoggedIn" @try-logout="Logout" @submit-login="login"/>
+    <router-view @submit-login="login"/>
   </div>
 </template>
 
@@ -49,6 +49,10 @@ export default {
         this.$cookies.set('auth-token',cooky)
         this.isLoggedIn = true
       },
+      Logout(){
+        this.$cookies.remove('auth-token')
+        this.isLoggedIn = false
+      }
   },
   data: function () {
         return {
