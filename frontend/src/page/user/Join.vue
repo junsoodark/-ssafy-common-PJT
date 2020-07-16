@@ -14,7 +14,7 @@
                         <input v-model="email" 
                             id="email"
                             placeholder="이메일을 입력해주세요"
-                            type="text"/>
+                            type="email"/>
                     </div>
 
                     <div class="input-wrap password-wrap">
