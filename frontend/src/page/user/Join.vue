@@ -83,6 +83,9 @@
                 } else if (!isTerm) {
                     alert('동의를 해주세요!')
                     return false
+                } else if (email.indexOf('@')===-1) {
+                    alert('이메일 형식을 사용해야합니다!')
+                    return false
                 }
 
                 axios.post('http://localhost:3000/account/signup',{ email, nickname, password })
