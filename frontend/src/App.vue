@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Header :isHeader="isHeader" :isLoggedIn="isLoggedIn" @try-logout="Logout" @submit-login="login"/>
-    <router-view @submit-login="login"/>
+    <router-view @submit-login="login" @delete-id="DeleteId"/>
   </div>
 </template>
 
@@ -53,6 +53,10 @@ export default {
         this.$cookies.remove('auth-token')
         this.isLoggedIn = false
         this.$router.push({name:'main'})
+      },
+      DeleteId(){
+        this.$cookies.remove('auth-token')
+        this.isLoggedIn = false
       }
   },
   data: function () {
