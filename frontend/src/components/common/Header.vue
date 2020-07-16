@@ -17,7 +17,7 @@
             <b-button v-b-modal.modal-1>Launch demo modal</b-button>
         </div>  
         <b-modal id="modal-1" title="BootstrapVue">
-            <b-form-group @submit.prevent="signIn" class="middle">
+            <form @submit.prevent="signIn" class="middle">
                 <h1>로그인 창 입니다</h1>
                 <div class="input-wrap my-3">
                     <b-form-input v-model="email"
@@ -42,7 +42,7 @@
                     </div>
 
                 </div>
-            </b-form-group>
+            </form>
         </b-modal>
         
     </div>
@@ -76,7 +76,7 @@
                     alert('빈칸을 채워주세요!')
                     return false
                 }
-
+                console.log('hi')
                 axios.get('http://localhost:3000/account/login',{
                     params: {
                         email: email,
@@ -87,7 +87,6 @@
                     if (res.status == 200) {
                         console.log(res)
                         this.$emit('submit-login',res.data.object)
-                        this.$router.push({'name':'main'})
                     } else { alert('로그인 실패!!!') }
                 })
                 .catch(err => {
