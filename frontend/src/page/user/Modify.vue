@@ -43,11 +43,7 @@
                     </span>
                 </button>
             </form>
-
-
         </div> 
-        
-
     </div>
 </template>
 
@@ -65,7 +61,7 @@ export default {
         }
     },
     methods: {
-        signUp () {
+        modify () {
                 const email = this.email
                 const nickname = this.nickName
                 const password = this.password

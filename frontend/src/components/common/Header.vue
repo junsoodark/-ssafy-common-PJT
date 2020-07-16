@@ -12,6 +12,7 @@
             </div> 
             <button v-if="isLoggedIn" @click="Logout">로그아웃</button>
             <b-button v-else v-b-modal.modal-1>로그인</b-button>
+            <router-link v-if="isLoggedIn" v-bind:to="{name:constants.URL_TYPE.USER.USER_INFO}">회원정보</router-link>
         </div>  
         <b-modal ref="my-modal" id="modal-1" title="BootstrapVue" ok-only>
             <form @submit.prevent="signIn" class="middle">
