@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.web.blog.dao.user.UserDao;
+import com.web.blog.model.user.SignupRequest;
 import com.web.blog.model.user.User;
 
 @Service
@@ -21,8 +22,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void join(User user) {
-		userDao.save(user);
+	public void join(SignupRequest request) {
+		User u = new User();
+		u.setEmail(request.getEmail());
+		u.setPassword(request.getPassword());
+		u.setNickname(request.getNickname());
+		userDao.save(u);
 	}
 
 	@Override

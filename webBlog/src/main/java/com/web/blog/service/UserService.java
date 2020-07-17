@@ -3,12 +3,13 @@ package com.web.blog.service;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.web.blog.model.user.SignupRequest;
 import com.web.blog.model.user.User;
 
 public interface UserService {
 	public User login(String uid, String upw) throws SQLException;
 
-	public void join(User user);
+	public void join(SignupRequest request);
 
 	public void update(User user);
 
