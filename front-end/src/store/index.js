@@ -1,21 +1,20 @@
-import Vue from "vue";
-import Vuex from "vuex";
-import Axios from "axios";
-// import Axios from 'axios'
-// import VueCookies from 'vue-cookies'
-Vue.use(Vuex);
+import Vue from 'vue'
+import Vuex from 'vuex'
+//import Axios from 'axios'
+import VueCookies from 'vue-cookies'
+Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    authToken: "asdf",
+    authToken:  VueCookies.get('auth-token')
   },
   mutations: {
-    // Login (state,{cooky}) {
-    //   state.authToken = cooky
-    // },
-    // Logout (state) {
-    //   state.authToken = null
-    // }
+    Login (state,{cooky}) {
+      state.authToken = cooky
+    },
+    Logout (state) {
+      state.authToken = null
+    }
   },
   actions: {
     Login(state, { email, password }) {
@@ -31,24 +30,16 @@ export default new Vuex.Store({
       //   })
       //   .catch(err => {console.log(err)})
       // })
-      alert(email, password);
+      console.log(email,password)
     },
-    signup(state, { email, password }) {
-      Axios.post("http://localhost:3000/account/signup", { email, password })
-        .then((res) => {
-          if (res.status == 200) {
-            alert("가입성공");
-            console.log(res);
-          }
-        })
-        .catch((err) => {
-          alert("가입실패!");
-          console.log(err);
-        });
-    },
+    Logout () {
+      this.commit('Logout')
+      this.$cookies.remove('auth-token')
+    }
+  },
+  modules: {
   },
   modules: {},
   getters: {
-    IsLoggedIn: (state) => !!state.authToken,
-  },
-});
+  }
+})
