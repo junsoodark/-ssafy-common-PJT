@@ -2,9 +2,9 @@
   <div>
     <h1>로그인창입니다</h1>
     <form @submit.prevent="Login">
-      <input v-model="email" type="email">
-			<input v-model="password" type="password">
-			<button type="submit">제출</button>
+      <input v-model="email" type="email" />
+      <input v-model="password" type="password" />
+      <button type="submit">제출</button>
     </form>
   </div>
 </template>
@@ -36,5 +36,4 @@ export default {
 </script>
 
 <style>
-
 </style>

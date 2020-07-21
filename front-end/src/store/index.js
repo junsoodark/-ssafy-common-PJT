@@ -24,7 +24,7 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    Login (state,{email,password}) {
+    Login(state, { email, password }) {
       // Axios.get('http://localhost:3000/accounts/login',{
       //   params: {
       //     email: email,
@@ -73,6 +73,7 @@ export default new Vuex.Store({
   },
   modules: {
   },
+  modules: {},
   getters: {
   }
 })
