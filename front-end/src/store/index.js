@@ -6,7 +6,10 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    authToken:  'asdf'
+    authToken: 'asdf',
+    email: null,
+    password: null,
+    passwordConfirm: null,
   },
   mutations: {
     // Login (state,{cooky}) {
@@ -31,6 +34,34 @@ export default new Vuex.Store({
       //   .catch(err => {console.log(err)})
       // })
       alert(email,password)
+      console.log(email, password)
+    },
+    Signup (state, event) {
+      console.log('email:', event.target[0].value)
+      console.log('password:', event.target[1].value)
+      
+      if (event.target[1].value != event.target[0].value) {
+        alert('비밀번호와 비밀번호 확인이 다릅니다.')
+        return false
+      }
+      
+      // console.log(input)
+      
+      // Axios.post('http://localhost:3000/accounts/signup', {
+      //   params: {
+      //     email: email,
+      //     password: password,
+      //     // 등등
+      //   }
+      //   .then(res => {
+      //     this.commit('Signup', res.data.object)
+      //   })
+      //   .cathc(err => {
+      //     alert('로그인 실패')
+      //     console.error(err)
+      //   })
+      // })
+
     }
   },
   modules: {
