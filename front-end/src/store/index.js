@@ -1,23 +1,27 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-// import Axios from 'axios'
-// import VueCookies from 'vue-cookies'
+//import Axios from 'axios'
+import VueCookies from 'vue-cookies'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+<<<<<<< HEAD
     authToken: 'asdf',
     email: null,
     password: null,
     passwordConfirm: null,
+=======
+    authToken:  VueCookies.get('auth-token')
+>>>>>>> 3fae5f281964b582cf36b68b8665d7a445520311
   },
   mutations: {
-    // Login (state,{cooky}) {
-    //   state.authToken = cooky
-    // },
-    // Logout (state) {
-    //   state.authToken = null
-    // }
+    Login (state,{cooky}) {
+      state.authToken = cooky
+    },
+    Logout (state) {
+      state.authToken = null
+    }
   },
   actions: {
     Login (state,{email,password}) {
@@ -61,12 +65,14 @@ export default new Vuex.Store({
       //     console.error(err)
       //   })
       // })
-
+    },
+    Logout () {
+      this.commit('Logout')
+      this.$cookies.remove('auth-token')
     }
   },
   modules: {
   },
   getters: {
-    IsLoggedIn: state => !!state.authToken
   }
 })

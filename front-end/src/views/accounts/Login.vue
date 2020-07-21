@@ -25,7 +25,11 @@ export default {
 				alert('빈칸을 채워주세요')
 				return false
 			}
+			console.log(email,password)
 			this.$store.dispatch('Login',{email,password})
+			this.$cookies.set('auth-token','asdf')
+			this.$emit('try-login')
+			this.$router.push({name:'Home'})
 		}
 	}
 }

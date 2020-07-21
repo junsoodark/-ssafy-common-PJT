@@ -6,10 +6,28 @@
       <router-link to="/login">Login</router-link> |
       <router-link to="/signup">Signup</router-link>
     </div>
-    <router-view/>
+    <router-view @try-login="Login"/>
   </div>
 </template>
 
+<script>
+export default {
+  data () {
+    return {
+      IsLoggedIn: false
+    }
+  },
+  created () {
+    this.IsLoggedIn = this.$cookies.isKey('auth-token')
+  },
+  methods: {
+    Login () {
+      this.IsLoggedIn = true
+    }
+  }
+}
+
+</script>
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
