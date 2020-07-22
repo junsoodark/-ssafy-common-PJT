@@ -8,8 +8,10 @@ import javax.validation.Valid;
 
 import com.web.blog.dao.user.UserDao;
 import com.web.blog.model.BasicResponse;
+import com.web.blog.model.email.SignUpEmail;
 import com.web.blog.model.user.SignupRequest;
 import com.web.blog.model.user.User;
+import com.web.blog.service.EmailService;
 import com.web.blog.service.JwtService;
 import com.web.blog.service.UserService;
 
@@ -26,6 +28,8 @@ import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 @ApiResponses(value = { @ApiResponse(code = 401, message = "Unauthorized", response = BasicResponse.class),
 		@ApiResponse(code = 403, message = "Forbidden", response = BasicResponse.class),
@@ -35,14 +39,28 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 public class UserController {
 
-    @Autowired
-    UserDao userDao;
-    
-    @Autowired
-    UserService userService;
-    
-    @Autowired
-    private JwtService jwtService;
+	@Autowired
+	UserDao userDao;
+
+	@Autowired
+	EmailService emailService;
+
+	@Autowired
+	UserService userService;
+
+	@Autowired
+	private JwtService jwtService;
+
+	@RequestMapping(path = "/signup/send", method = RequestMethod.POST)
+	private Object sendEmailVerification(@RequestParam(required = true) final String email) {
+		System.out.println("?????");
+		SignUpEmail se = emailService.sendEmailVerification(email);
+
+		if (se == null) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		} else
+			return new ResponseEntity<>(null, HttpStatus.OK);
+	}
 
 	@GetMapping("/account/login")
 	@ApiOperation(value = "로그인")
@@ -53,16 +71,16 @@ public class UserController {
 
 		ResponseEntity response = null;
 
-        if (userOpt.isPresent()) {
-        	String token = jwtService.generateToken(email);
-            final BasicResponse result = new BasicResponse();
-            result.status = true;
-            result.data = "success";
-            result.object = token;
-            response = new ResponseEntity<>(result, HttpStatus.OK);
-        } else {
-            response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
+		if (userOpt.isPresent()) {
+			String token = jwtService.generateToken(email);
+			final BasicResponse result = new BasicResponse();
+			result.status = true;
+			result.data = "success";
+			result.object = token;
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		} else {
+			response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
 
 		return response;
 	}
@@ -74,54 +92,54 @@ public class UserController {
 		// 회원가입단을 생성해 보세요.
 		userService.join(request);
 		final BasicResponse result = new BasicResponse();
-		
+
 		result.status = true;
 		result.data = "success";
 
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/account/userinfo")
 	@ApiOperation(value = "회원정보 읽기")
 	public Object userinfo(@RequestParam(required = true) final String email,
 			@RequestParam(required = true) final String password) {
 		ResponseEntity response = null;
-		
+
 		Optional<User> userOpt = userDao.findUserByEmailAndPassword(email, password);
-		
-		if(userOpt.isPresent()) {
+
+		if (userOpt.isPresent()) {
 			User user = userOpt.get();
 			Map<String, String> map = new HashMap<>();
-			map.put("email", 	user.getEmail());
+			map.put("email", user.getEmail());
 			map.put("nickname", user.getName());
-			
+
 			final BasicResponse result = new BasicResponse();
 			result.status = true;
 			result.data = "success";
 			result.object = map;
-			
+
 			response = new ResponseEntity<>(result, HttpStatus.OK);
-		}
-		else response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		
+		} else
+			response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+
 		return response;
 	}
-	
+
 	@PostMapping("/account/modify")
 	@ApiOperation(value = "회원정보 수정")
 	public Object modify(@Valid @RequestBody SignupRequest request) {
 		Optional<User> userOpt = userDao.findUserByEmail(request.getEmail());
-		userOpt.ifPresent(user ->{
+		userOpt.ifPresent(user -> {
 			user.setPassword(request.getPassword());
 			user.setName(request.getNickname());
 			userDao.save(user);
 		});
-		
+
 		final BasicResponse result = new BasicResponse();
-		
+
 		result.status = true;
 		result.data = "success";
-		
+
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
