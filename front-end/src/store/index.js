@@ -64,14 +64,17 @@ export default new Vuex.Store({
       //     password: password,
       //     // 등등
       //   }
-      //   .then(res => {
-      //     this.commit('Signup', res.data.object)
-      //   })
-      //   .cathc(err => {
-      //     alert('로그인 실패')
-      //     console.error(err)
-      //   })
       // })
+      // .catch((err) => {
+      //   alert("가입실패!");
+      //   console.log(err);
+      // });
+      console.log(email, password);
+    },
+
+    Logout() {
+      this.commit("Logout");
+      this.$cookies.remove("auth-token");
     },
     logout({ commit }) {
       // Axios.post('http://localhost:3000/accounts/logout', null, getters.config)
