@@ -93,7 +93,7 @@ public class UserController {
 			User user = userOpt.get();
 			Map<String, String> map = new HashMap<>();
 			map.put("email", 	user.getEmail());
-			map.put("nickname", user.getNickname());
+			map.put("nickname", user.getName());
 			
 			final BasicResponse result = new BasicResponse();
 			result.status = true;
@@ -113,7 +113,7 @@ public class UserController {
 		Optional<User> userOpt = userDao.findUserByEmail(request.getEmail());
 		userOpt.ifPresent(user ->{
 			user.setPassword(request.getPassword());
-			user.setNickname(request.getNickname());
+			user.setName(request.getNickname());
 			userDao.save(user);
 		});
 		
