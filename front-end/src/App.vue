@@ -1,32 +1,29 @@
 <template>
   <div id="app">
-    <Header :IsLoggedIn="IsLoggedIn" @try-logout="Logout"/>
-    <router-view @try-login="Login"/>
+    <div id="nav">
+      <router-link to="/">Home</router-link> |
+      <router-link to="/about">About</router-link> |
+      <router-link v-if="!isLoggedIn" to="/login">Login</router-link> |
+      <router-link v-if="!isLoggedIn" to="/signup">Signup</router-link>|
+      <router-link v-if="isLoggedIn" :to="{ name: 'Logout' }">Logout</router-link>
+
+    </div>
+    <router-view />
   </div>
 </template>
 
 <script>
-import Header from './components/common/Header.vue'
+import { mapGetters } from 'vuex'
+
 export default {
-  data () {
-    return {
-      IsLoggedIn: false
-    }
+  name: 'App',
+
+  computed: {
+    ...mapGetters(['isLoggedIn'])
   },
-  created () {
-    this.IsLoggedIn = this.$cookies.isKey('auth-token')
-  },
+
   methods: {
-    Login () {
-      this.IsLoggedIn = true
-    },
-    Logout () {
-      this.IsLoggedIn = false
-    }
   },
-  components: {
-    Header
-  }
 }
 
 </script>
