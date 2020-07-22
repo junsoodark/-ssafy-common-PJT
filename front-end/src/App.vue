@@ -1,16 +1,12 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> |
-      <router-link to="/login">Login</router-link> |
-      <router-link to="/signup">Signup</router-link>
-    </div>
+    <Header :IsLoggedIn="IsLoggedIn" @try-logout="Logout"/>
     <router-view @try-login="Login"/>
   </div>
 </template>
 
 <script>
+import Header from './components/common/Header.vue'
 export default {
   data () {
     return {
@@ -23,7 +19,13 @@ export default {
   methods: {
     Login () {
       this.IsLoggedIn = true
+    },
+    Logout () {
+      this.IsLoggedIn = false
     }
+  },
+  components: {
+    Header
   }
 }
 
