@@ -1,27 +1,20 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from "vue";
+import Vuex from "vuex";
 //import Axios from 'axios'
-import VueCookies from 'vue-cookies'
-Vue.use(Vuex)
+import VueCookies from "vue-cookies";
+Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-<<<<<<< HEAD
-    authToken: 'asdf',
-    email: null,
-    password: null,
-    passwordConfirm: null,
-=======
-    authToken:  VueCookies.get('auth-token')
->>>>>>> 3fae5f281964b582cf36b68b8665d7a445520311
+    authToken: VueCookies.get("auth-token"),
   },
   mutations: {
-    Login (state,{cooky}) {
-      state.authToken = cooky
+    Login(state, { cooky }) {
+      state.authToken = cooky;
     },
-    Logout (state) {
-      state.authToken = null
-    }
+    Logout(state) {
+      state.authToken = null;
+    },
   },
   actions: {
     Login(state, { email, password }) {
@@ -37,43 +30,29 @@ export default new Vuex.Store({
       //   })
       //   .catch(err => {console.log(err)})
       // })
-      alert(email,password)
-      console.log(email, password)
+      alert(email, password);
+      console.log(email, password);
     },
-    Signup (state, event) {
-      console.log('email:', event.target[0].value)
-      console.log('password:', event.target[1].value)
-      
-      if (event.target[1].value != event.target[0].value) {
-        alert('비밀번호와 비밀번호 확인이 다릅니다.')
-        return false
-      }
-      
-      // console.log(input)
-      
-      // Axios.post('http://localhost:3000/accounts/signup', {
-      //   params: {
-      //     email: email,
-      //     password: password,
-      //     // 등등
+    signup(state, { email, password }) {
+      // Axios.post("http://localhost:3000/account/signup", { email, password })
+      // .then((res) => {
+      //   if (res.status == 200) {
+      //     alert("가입성공");
+      //     console.log(res);
       //   }
-      //   .then(res => {
-      //     this.commit('Signup', res.data.object)
-      //   })
-      //   .cathc(err => {
-      //     alert('로그인 실패')
-      //     console.error(err)
-      //   })
       // })
+      // .catch((err) => {
+      //   alert("가입실패!");
+      //   console.log(err);
+      // });
+      console.log(email, password);
     },
-    Logout () {
-      this.commit('Logout')
-      this.$cookies.remove('auth-token')
-    }
-  },
-  modules: {
+
+    Logout() {
+      this.commit("Logout");
+      this.$cookies.remove("auth-token");
+    },
   },
   modules: {},
-  getters: {
-  }
-})
+  getters: {},
+});
