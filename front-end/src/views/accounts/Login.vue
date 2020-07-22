@@ -1,13 +1,6 @@
 <template>
   <div style="max-width:450px;">
     <h1>로그인창입니다</h1>
-    <!-- <form @submit.prevent="onLoginSubmit">
-      <input v-model="email" type="email" />
-      <input v-model="password" type="password" />
-      <button type="submit">제출</button>
-    </form> -->
-
-		<!-- 수정 -->
 		
     <b-form @submit.prevent="login(loginData)">
       <b-form-group
@@ -53,21 +46,6 @@ export default {
 	},
 	methods: {
 		...mapActions(['login']),
-		// onLoginSubmit () {
-		// 	const email = this.form.email
-		// 	const password = this.form.password
-
-		// 	if (!email || !password) {
-		// 		alert('빈칸을 채워주세요')
-		// 		return false
-		// 	}
-
-		// 	console.log('m', email, password)
-		// 	this.$cookies.set('auth-token','qwer')
-		// 	this.$store.dispatch('Login', { email, password })
-		// 	// this.$emit('try-login')
-		// 	this.$router.push({name:'Home'})
-		// },
 	}
 }
 </script>

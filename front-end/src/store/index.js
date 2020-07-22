@@ -26,32 +26,11 @@ export default new Vuex.Store({
       VueCookies.set('auth-token', token)
     },
 
-    setLogin (state, cooky) {
-      console.log('cookie', cooky)
-      console.log(state.authToken)
-      state.authToken = cooky
-      console.log(state.authToken)
-    },
     Logout (state) {
       state.authToken = null
     }
   },
   actions: {
-    Login({ commit }, loginObj) {
-      console.log('e', loginObj)
-      console.log(VueCookies.get('auth-token'),)
-      commit('setLogin', VueCookies.get('auth-token'),)
-      // Axios.get('http://localhost:3000/accounts/login',loginObj)
-      //   .then(res => {
-      //     commit('setLogin', res.data.object)
-      //     this.$cookies.set('auth-token', res.data.object)
-      //     this.IsLoggedIn = true
-      //   })
-      //   .catch(err => {console.log(err)})
-      // })
-      alert(loginObj)
-    },
-
     postAuthData({ commit }, loginData) {
       // Axios.post('http://localhost:3000/accounts/login', loginData)
       //   .then(res => {
@@ -94,6 +73,19 @@ export default new Vuex.Store({
       //   })
       // })
     },
+    logout({ commit }) {
+      // Axios.post('http://localhost:3000/accounts/logout', null, getters.config)
+      //   .then(() => {  // Django DB 에서는 삭제 | cookie, state 에는 남아있음
+      //     commit('SET_TOKEN', null)  // state 에서도 삭제
+      //     cookies.remove('auth-token')  // cookie 에서는 삭제
+      //     router.push({ name: 'Home' })
+      //   })
+      //   .catch(err => console.log(err.response.data))
+      commit('SET_TOKEN', null)  // state 에서도 삭제
+      VueCookies.remove('auth-token')  // cookie 에서는 삭제
+      router.push({ name: 'Home' })
+    },
+
     Logout () {
       this.commit('Logout')
       this.$cookies.remove('auth-token')
