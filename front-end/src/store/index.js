@@ -1,45 +1,73 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-//import Axios from 'axios'
+// import Axios from 'axios'
+import router from '@/router'
 import VueCookies from 'vue-cookies'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-<<<<<<< HEAD
-    authToken: 'asdf',
     email: null,
     password: null,
     passwordConfirm: null,
-=======
-    authToken:  VueCookies.get('auth-token')
->>>>>>> 3fae5f281964b582cf36b68b8665d7a445520311
+    authToken: VueCookies.get('auth-token'),
+  },
+  getters: {
+    // auth
+    isLoggedIn: state => !!state.authToken,
+    // auth, articles
+    config: state => ({ headers: { Authorization: `Token ${state.authToken}` } })
   },
   mutations: {
-    Login (state,{cooky}) {
+    // auth
+    SET_TOKEN(state, token) {
+      console.log(token)
+      state.authToken = token
+      VueCookies.set('auth-token', token)
+    },
+
+    setLogin (state, cooky) {
+      console.log('cookie', cooky)
+      console.log(state.authToken)
       state.authToken = cooky
+      console.log(state.authToken)
     },
     Logout (state) {
       state.authToken = null
     }
   },
   actions: {
-    Login(state, { email, password }) {
-      // Axios.get('http://localhost:3000/accounts/login',{
-      //   params: {
-      //     email: email,
-      //     password: password
-      //   }
+    Login({ commit }, loginObj) {
+      console.log('e', loginObj)
+      console.log(VueCookies.get('auth-token'),)
+      commit('setLogin', VueCookies.get('auth-token'),)
+      // Axios.get('http://localhost:3000/accounts/login',loginObj)
       //   .then(res => {
-      //     this.commit('Login',res.data.object)
-      //     this.$cookies.set('auth-token',res.data.object)
+      //     commit('setLogin', res.data.object)
+      //     this.$cookies.set('auth-token', res.data.object)
       //     this.IsLoggedIn = true
       //   })
       //   .catch(err => {console.log(err)})
       // })
-      alert(email,password)
-      console.log(email, password)
+      alert(loginObj)
     },
+
+    postAuthData({ commit }, loginData) {
+      // Axios.post('http://localhost:3000/accounts/login', loginData)
+      //   .then(res => {
+      //     commit('SET_TOKEN', res.data.key)
+      //     router.push({ name: 'Home' })
+      //   })
+      //   .catch(err => console.log(err.response.data))
+      
+      commit('SET_TOKEN', 'qwer'+loginData)
+      router.push({ name: 'Home' })
+    },
+
+    login({ dispatch }, loginData) {
+      dispatch('postAuthData', loginData)
+    },
+
     Signup (state, event) {
       console.log('email:', event.target[0].value)
       console.log('password:', event.target[1].value)
@@ -73,7 +101,4 @@ export default new Vuex.Store({
   },
   modules: {
   },
-  modules: {},
-  getters: {
-  }
 })
