@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <div id="top-carousel" ref="toporto">
+    <div id="top-carousel" ref="toporto" class="mb-3">
     <b-carousel
       id="carousel-1"
       v-model="slide"
@@ -59,6 +59,7 @@
     </div>
     <div id="bot-div" ref="porto">
       <HelloWorld msg="Welcome to Your Vue.js App"/>
+      <TeamListItem v-for="team in TeamList" :key="team"></TeamListItem>
     </div>
   </div>
 </template>
@@ -66,11 +67,15 @@
 <script>
 // @ is an alias to /src
 import HelloWorld from '@/components/HelloWorld.vue'
+import TeamListItem from '../components/TeamlistItem.vue'
+// 팀 리스트 조회 뜨면 밑에 주석 제거 하고 axios과정 추가
+// import Axios from 'axios
 
 export default {
   name: 'Home',
   components: {
-    HelloWorld
+    HelloWorld,
+    TeamListItem
   },
   methods: {
     scrollMeTo(refName) {
@@ -94,6 +99,14 @@ export default {
         setTimeout(function(){scrollMeTo('toporto')},0)
       } 
     })
+  },
+  data () {
+    return {
+      TeamList: [],
+    }
+  },
+  created () {
+
   }
 }
 </script>

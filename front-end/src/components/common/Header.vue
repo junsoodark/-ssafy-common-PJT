@@ -1,9 +1,10 @@
 <template>
   <div>
     <b-navbar toggleable="lg" type="dark" variant="info">
-      <router-link to="/">Home</router-link>
+      <router-link to="/" class="ml-2 mr-5">Home</router-link>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
         <b-collapse id="nav-collapse" is-nav>
+        <router-link to="/study/list">스터디 팀들</router-link>
 
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
