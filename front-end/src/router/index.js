@@ -5,7 +5,7 @@ import Home from '../views/Home.vue'
 import Login from '../views/accounts/Login.vue'
 import Signup from '../views/accounts/Signup.vue'
 import Logout from '../views/accounts/Logout.vue'
-
+import TeamList from '../views/team/TeamList.vue'
 
 Vue.use(VueRouter);
 
@@ -34,13 +34,16 @@ const routes = [
     name: 'Signup',
     component: Signup
   },
-
   {
     path: '/logout',
     name: 'Logout',
     component: Logout,
   },
-
+  {
+    path: '/study/list',
+    name: 'StudyList',
+    component: TeamList
+  }
 ]
 
 const router = new VueRouter({

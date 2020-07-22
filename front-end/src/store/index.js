@@ -88,7 +88,6 @@ export default new Vuex.Store({
 
     Logout () {
       this.commit('Logout')
-      this.$cookies.remove('auth-token')
     }
   },
   modules: {
