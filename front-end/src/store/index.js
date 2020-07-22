@@ -69,7 +69,6 @@ export default new Vuex.Store({
       //   alert("가입실패!");
       //   console.log(err);
       // });
-      console.log(email, password);
     },
 
     Logout() {
@@ -88,10 +87,6 @@ export default new Vuex.Store({
       VueCookies.remove('auth-token')  // cookie 에서는 삭제
       router.push({ name: 'Home' })
     },
-
-    Logout () {
-      this.commit('Logout')
-    }
   },
   modules: {
   },
