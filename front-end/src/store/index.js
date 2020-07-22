@@ -6,14 +6,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-<<<<<<< HEAD
-    authToken: 'asdf',
-    email: null,
-    password: null,
-    passwordConfirm: null,
-=======
     authToken:  VueCookies.get('auth-token')
->>>>>>> 3fae5f281964b582cf36b68b8665d7a445520311
   },
   mutations: {
     Login (state,{cooky}) {
@@ -73,7 +66,6 @@ export default new Vuex.Store({
   },
   modules: {
   },
-  modules: {},
   getters: {
   }
 })
