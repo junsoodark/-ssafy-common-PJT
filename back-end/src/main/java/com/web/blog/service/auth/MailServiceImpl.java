@@ -12,19 +12,19 @@ import com.web.blog.model.auth.Mail;
 import lombok.*;
 
 @Service
-public class MailServiceImpl implements MailService{
+public class MailServiceImpl implements MailService {
 	@Value("${spring.mail.protocol}")
 	private String protocol;
-	
+
 	@Value("${spring.mail.host}")
 	private String host;
-	
+
 	@Value("${spring.mail.port}")
 	private int port;
-	
+
 	@Value("${spring.mail.username}")
 	private String username;
-	
+
 	@Value("${spring.mail.password}")
 	private String password;
 
@@ -35,14 +35,14 @@ public class MailServiceImpl implements MailService{
 		message.setTo(mail.getTo());
 		message.setSubject(mail.getTitle());
 		message.setText(mail.getMessage());
-		
+
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 		mailSender.setProtocol(protocol);
 		mailSender.setHost(host);
 		mailSender.setPort(port);
 		mailSender.setUsername(username);
 		mailSender.setPassword(password);
-		
+
 		Properties prop = new Properties();
 		prop.setProperty("mail.smtp.auth", "true");
 		prop.setProperty("mail.smtp.starttls.enable", "true");
