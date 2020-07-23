@@ -15,58 +15,84 @@
       @sliding-end="onSlideEnd"
     >
       <!-- Text slides with image -->
-      <b-carousel-slide
-        caption="First slide"
-        text="Nulla vitae elit libero, a pharetra augue mollis interdum."
-        img-src="https://picsum.photos/1024/480/?image=52"
-      ></b-carousel-slide>
-
-      <!-- Slides with custom text -->
-      <b-carousel-slide img-src="https://picsum.photos/1024/480/?image=54">
-        <h1>Hello world!</h1>
-      </b-carousel-slide>
-
-      <!-- Slides with image only -->
-      <b-carousel-slide img-src="https://picsum.photos/1024/480/?image=58"></b-carousel-slide>
-
-      <!-- Slides with img slot -->
-      <!-- Note the classes .d-block and .img-fluid to prevent browser default image alignment -->
       <b-carousel-slide>
         <template v-slot:img>
           <img
-            class="d-block img-fluid w-100"
-            width="1024"
-            height="480"
-            src="https://picsum.photos/1024/480/?image=55"
+            class="d-block img-fluid"
+            style="width:100%; height:90vh;"
+            src="../assets/12314.png"
+            alt="image slot"
+          >
+        </template>
+      </b-carousel-slide>
+
+      <!-- Slides with custom text -->
+      <b-carousel-slide text="같이 공부할 친구들도 찾고">
+        <template v-slot:img>
+          <img
+            class="d-block img-fluid"
+            style="width:100%; height:90vh;"
+            src="../assets/first.jpg"
+            alt="image slot"
+          >
+        </template>
+      </b-carousel-slide>
+
+      <!-- Slides with image only -->
+      <b-carousel-slide text="이런 멋진 장소도 대여해서">
+        <template v-slot:img>
+          <img
+            class="d-block img-fluid"
+            style="width:100%; height:90vh;"
+            src="../assets/second.jpg"
+            alt="image slot"
+          >
+        </template>
+      </b-carousel-slide>
+
+      <!-- Slides with img slot -->
+      <!-- Note the classes .d-block and .img-fluid to prevent browser default image alignment -->
+      <b-carousel-slide text="성공적인 스터디를 해보자">
+        <template v-slot:img>
+          <img
+            class="d-block img-fluid"
+            style="width:100%; height:90vh;"
+            src="../assets/third.jpg"
             alt="image slot"
           >
         </template>
       </b-carousel-slide>
 
       <!-- Slide with blank fluid image to maintain slide aspect ratio -->
-      <b-carousel-slide caption="Blank Image" img-blank img-alt="Blank image">
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse eros felis, tincidunt
-          a tincidunt eget, convallis vel est. Ut pellentesque ut lacus vel interdum.
-        </p>
+      <b-carousel-slide text="성공적인 스터디를 위해">
+        <template v-slot:img>
+          <img
+            class="d-block img-fluid"
+            style="width:100%; height:90vh;"
+            src="../assets/7e2565951387291c85127b653e4c9919.jpg"
+            alt="image slot"
+          >
+        </template>
       </b-carousel-slide>
     </b-carousel>
 
-    <p class="mt-4">
+    <p class="mt-4 d-none">
       Slide #: {{ slide }}<br>
       Sliding: {{ sliding }}
     </p>
     </div>
     <div id="bot-div" ref="porto">
-      <HelloWorld msg="Welcome to Your Vue.js App"/>
-      <TeamListItem v-for="team in TeamList" :key="team"></TeamListItem>
+      <b-container class="bv-example-row">
+        <b-row>
+          <TeamListItem class="col-4" v-for="team in TeamList" :key="team"></TeamListItem>
+        </b-row>
+      </b-container>
     </div>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
 import TeamListItem from '../components/TeamlistItem.vue'
 // 팀 리스트 조회 뜨면 밑에 주석 제거 하고 axios과정 추가
 // import Axios from 'axios
@@ -74,7 +100,6 @@ import TeamListItem from '../components/TeamlistItem.vue'
 export default {
   name: 'Home',
   components: {
-    HelloWorld,
     TeamListItem
   },
   methods: {
@@ -102,7 +127,7 @@ export default {
   },
   data () {
     return {
-      TeamList: [],
+      TeamList: [0,0,0,0,0,0,0,0,0],
     }
   },
   created () {

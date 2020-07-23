@@ -47,7 +47,7 @@ export default new Vuex.Store({
       dispatch('postAuthData', loginData)
     },
 
-    Signup (state, event) {
+    signup (state, event) {
       console.log('email:', event.target[0].value)
       console.log('password:', event.target[1].value)
       
