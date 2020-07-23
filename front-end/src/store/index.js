@@ -89,6 +89,7 @@ export default new Vuex.Store({
       VueCookies.remove("auth-token"); // cookie 에서는 삭제
       router.push({ name: "Home" });
     },
+    createTeam() {},
   },
   modules: {},
 });
