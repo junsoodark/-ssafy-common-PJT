@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.web.blog.model.auth.Mail;
 
+import lombok.*;
+
 @Service
 public class MailServiceImpl implements MailService{
 	@Value("${spring.mail.protocol}")
