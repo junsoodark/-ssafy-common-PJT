@@ -17,5 +17,4 @@ public class Verify {
 	@Id
 	private String email;
 	private String code;
-
 }
