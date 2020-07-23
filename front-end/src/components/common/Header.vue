@@ -1,10 +1,10 @@
 <template>
   <div>
-    <b-navbar toggleable="lg" type="dark" variant="info">
-      <router-link to="/" class="ml-2 mr-5">Home</router-link>
+    <b-navbar toggleable="lg" style="background-color: rgb(24,44,141)" type="dark">
+      <router-link to="/" class="ml-2 mr-5 text-decoration-none text-light"><img src="../../assets/logo.png" style="height:30px">Home</router-link>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
         <b-collapse id="nav-collapse" is-nav>
-        <router-link to="/study/list">스터디 팀들</router-link>
+        <router-link class="text-decoration-none text-light" to="/study/list">스터디 팀들</router-link>
 
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
@@ -14,13 +14,13 @@
           </b-nav-form>
 
             <!-- Using 'button-content' slot -->
-          <div v-if="IsLoggedIn">
+          <div v-if="isLoggedIn" class="ml-3">
             <a>회원정보</a> |
-            <a @click="Logout">로그아웃</a>
+            <router-link v-if="isLoggedIn" :to="{ name: 'Logout' }">Logout</router-link>
           </div>
-          <div v-else>
-            <router-link to="/login">Login</router-link> |
-            <router-link to="/signup">Signup</router-link>
+          <div v-else class="ml-3">
+            <router-link class="text-decoration-none text-light" to="/login">Login</router-link> |
+            <router-link class="text-decoration-none text-light" to="/signup">Signup</router-link>
           </div>
         </b-navbar-nav>
       </b-collapse>
@@ -29,17 +29,12 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
-    props: {
-        IsLoggedIn: Boolean
-    },
-    methods: {
-        Logout () {
-            this.$cookies.remove('auth-token')
-            this.$emit('try-logout')
-            this.$store.dispatch('Logout')
-        }
-    }
+  computed: {
+    ...mapGetters(['isLoggedIn'])
+  }
 }
 </script>
 
