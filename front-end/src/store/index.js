@@ -71,10 +71,6 @@ export default new Vuex.Store({
       // });
     },
 
-    Logout() {
-      this.commit("Logout");
-      this.$cookies.remove("auth-token");
-    },
     logout({ commit }) {
       // Axios.post('http://localhost:3000/accounts/logout', null, getters.config)
       //   .then(() => {  // Django DB 에서는 삭제 | cookie, state 에는 남아있음
