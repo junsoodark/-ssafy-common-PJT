@@ -1,54 +1,75 @@
 package com.web.blog.service;
 
-import java.sql.SQLException;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.Errors;
+import org.springframework.validation.FieldError;
 
 import com.web.blog.dao.user.UserDao;
-import com.web.blog.model.user.SignupRequest;
 import com.web.blog.model.user.User;
 
 @Service
 public class UserServiceImpl implements UserService {
-
 	@Autowired
 	UserDao userDao;
 
 	@Override
-	public User login(String uid, String upw) throws SQLException {
-		return userDao.findUserByUidAndPassword(uid, upw);
+	public Map<String, Object> findUserByEmail(final String email) {
+		Optional<User> userOpt = userDao.findUserByEmail(email);
+		if(userOpt.isPresent()==false) return null;
+
+		User user = userOpt.get();
+		Map<String, Object> ret = new HashMap<>();
+		ret.put("email", user.getEmail());
+		ret.put("name", user.getName());
+		ret.put("age", user.getAge());
+		ret.put("sex", user.getSex());
+		return ret;
 	}
 
 	@Override
-	public void join(SignupRequest request) {
-		User u = new User();
-		u.setEmail(request.getEmail());
-		u.setPassword(request.getPassword());
-		u.setName(request.getNickname());
-		userDao.save(u);
+	public Map<String, String> getErrorMessage(final Errors errors) {
+		Map<String, String> ret = new HashMap<>();
+		for(FieldError error : errors.getFieldErrors())
+			ret.put(error.getField(), error.getDefaultMessage());
+		return ret;
 	}
 
 	@Override
-	public void update(User user) {
+	public boolean create(final User user) {
+		if(userDao.findUserByEmail(user.getEmail()).isPresent()) return false;
 		userDao.save(user);
-
+		return true;
+	}
+	
+	@Override
+	public boolean update(final User user) {
+		Optional<User> userOpt = userDao.findUserByEmail(user.getEmail());
+		if(userOpt.isPresent()==false) return false;
+		
+		userOpt.ifPresent(u->{
+			u.setPassword(user.getPassword());
+			u.setName(user.getName());
+			u.setAge(user.getAge());
+			u.setSex(user.getSex());
+			userDao.save(u);
+		});
+		
+		return true;
 	}
 
 	@Override
-	public void delete(String uid) {
-		userDao.delete(userDao.getUserByUid(uid));
+	public boolean delete(final String email) {
+		Optional<User> userOpt = userDao.findUserByEmail(email);
+		if(userOpt.isPresent()==false) return false;
+		
+		userOpt.ifPresent(user->{
+			userDao.delete(user);
+		});
+		return true;
 	}
-
-	@Override
-	public User search(String uid) {
-		return userDao.getUserByUid(uid);
-	}
-
-	@Override
-	public List<User> searchAll() {
-		return userDao.findAll();
-	}
-
 }
