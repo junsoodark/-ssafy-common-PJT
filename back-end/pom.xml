@@ -16,7 +16,6 @@
 
 	<properties>
 		<java.version>1.8</java.version>
-		<m2e.apt.activation>disabled</m2e.apt.activation>
 	</properties>
 
 	<dependencies>

@@ -1,48 +1,39 @@
 <template>
-  <b-container class="bv-example-row my-5">
-    <div style="max-width:450px;" class="mx-auto middle">
-      <h1>회원가입창입니다</h1>
-      
-      <b-form @submit.prevent="signup">
-        <b-form-group
-          id="input-group-1"
-          label="이메일:"
-          label-for="input-1"
-          description="인증 번호를 받을 수 있는 이메일을 입력해주세요"
-        >
-          <b-form-input
-            id="input-1"
-            v-model="email"
-            type="email"
-            required
-            placeholder="이메일을 입력해주세요"
-          ></b-form-input>
-        </b-form-group>
-
-        <b-form-group id="input-group-2" label="비밀번호:" label-for="input-2">
-          <b-form-input
-            id="input-2"
-            v-model="password"
-            type="password"
-            required
-            placeholder="비밀번호를 입력해주세요"
-          ></b-form-input>
-        </b-form-group>
-
-        <b-form-group id="input-group-3" label="비밀번호 확인:" label-for="input-3">
-          <b-form-input
-            id="input-3"
-            v-model="passwordConfirmType"
-            type="password"
-            required
-            placeholder="위에 입력한 비밀번호와 똑같이 입력해주세요"
-          ></b-form-input>
-        </b-form-group>
-
-        <b-button type="submit" variant="primary">회원가입</b-button>
-      </b-form>
+  <form @submit.prevent="signup" class="middle">
+    <h1>회원가입</h1>
+    <div class="form-wrap">
+      <div class="input-wrap">
+        <input v-model="email" id="email" placeholder="이메일을 입력해주세요" type="email" />
+      </div>
+      <div class="input-wrap password-wrap">
+        <input v-model="password" id="password" :type="passwordType" placeholder="비밀번호를 입력해주세요" />
+        <span :class="{active : passwordType==='text'}">
+          <i class="fas fa-eye"></i>
+        </span>
+      </div>
+      <div class="input-wrap password-wrap">
+        <input
+          v-model="passwordConfirm"
+          id="password-confirm"
+          :type="passwordConfirmType"
+          placeholder="비밀번호를 한번 더 입력해주세요"
+        />
+        <span :class="{active : passwordConfirmType==='text'}">
+          <i class="fas fa-eye"></i>
+        </span>
+      </div>
+      <div class="input-wrap">
+        <input v-model="nickname" type="text" id="nickname" placeholder="닉네임을 입력해주세요" />
+      </div>
     </div>
-  </b-container>
+    <label>
+      <input v-model="isTerm" type="checkbox" id="term" />
+      <span>약관에 동의 합니다</span>
+    </label>
+    <button class="btn" type="submit">
+      <span>가입하기</span>
+    </button>
+  </form>
 </template>
 
 <script>
@@ -74,7 +65,7 @@ export default {
         alert("이메일 형식을 사용해야합니다!");
         return false;
       }
-      this.$store.dispatch("signup", { email, password });
+      this.$store.dispatch("signup", { email, password, passwordConfirm });
     }
   }
 };
