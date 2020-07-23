@@ -21,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import io.swagger.annotations.ApiResponse;
@@ -51,7 +52,7 @@ public class UserController {
 	@Autowired
 	private JwtService jwtService;
 
-	@RequestMapping(path = "/signup/send", method = RequestMethod.POST)
+	@RequestMapping(path = "/email/signup/send", method = RequestMethod.POST)
 	private Object sendEmailVerification(@RequestParam(required = true) final String email) {
 		System.out.println("?????");
 		SignUpEmail se = emailService.sendEmailVerification(email);
@@ -60,6 +61,16 @@ public class UserController {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		} else
 			return new ResponseEntity<>(null, HttpStatus.OK);
+	}
+
+	@RequestMapping(path = "/email/signup/check", method=RequestMethod.POST)
+	@ResponseBody
+	private Object checkEmailVerification(@RequestParam(required = true) final String email, @RequestParam(required = true) final String code) {
+		SignUpEmail se = emailService.check(email,code);
+		if(se==null) {
+			return  new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}else return  new ResponseEntity<>(null, HttpStatus.OK);
+			
 	}
 
 	@GetMapping("/account/login")
