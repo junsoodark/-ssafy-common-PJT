@@ -10,13 +10,10 @@ import { mapGetters } from 'vuex'
 import Header from './components/common/Header.vue'
 
 export default {
-  name: 'App',
+  name: "App",
 
   computed: {
-    ...mapGetters(['isLoggedIn'])
-  },
-
-  methods: {
+    ...mapGetters(["isLoggedIn"])
   },
 
   components: {
@@ -24,6 +21,8 @@ export default {
   }
 }
 
+  methods: {}
+};
 </script>
 <style>
 #app {
