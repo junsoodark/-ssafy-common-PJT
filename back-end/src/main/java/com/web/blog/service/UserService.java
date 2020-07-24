@@ -1,22 +1,15 @@
 package com.web.blog.service;
 
-import java.sql.SQLException;
-import java.util.List;
+import java.util.Map;
 
-import com.web.blog.model.user.SignupRequest;
+import org.springframework.validation.Errors;
+
 import com.web.blog.model.user.User;
 
 public interface UserService {
-	public User login(String uid, String upw) throws SQLException;
-
-	public void join(SignupRequest request);
-
-	public void update(User user);
-
-	public void delete(String uid);
-
-	public User search(String uid);
-
-	public List<User> searchAll();
-
+	public Map<String, Object> findUserByEmail(final String email);
+	public Map<String, String> getErrorMessage(final Errors errors);
+	public boolean create(final User user);
+	public boolean update(final User user);
+	public boolean delete(final String email);
 }
