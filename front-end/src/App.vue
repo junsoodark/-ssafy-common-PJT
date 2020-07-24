@@ -18,11 +18,10 @@ export default {
 
   components: {
     Header
-  }
-}
+  },
 
   methods: {}
-};
+}
 </script>
 <style>
 #app {
