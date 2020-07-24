@@ -1,35 +1,39 @@
 <template>
-  <div style="max-width:450px;">
-    <h1>로그인창입니다</h1>
-		
+  <b-container style="max-width:450px;">
+        <h1>로그인</h1>
+		<br>
     <b-form @submit.prevent="login(loginData)">
-      <b-form-group
-        id="input-group-1"
-        label="Email address:"
-        label-for="input-1"
-        description="We'll never share your email with anyone else."
-      >
+      <b-row>이메일 아이디</b-row>
+      <b-row>
         <b-form-input
           id="input-1"
           v-model="loginData.email"
           type="email"
           required
-          placeholder="Enter email"
+          placeholder="이메일 아이디를 입력하세요"
         ></b-form-input>
-      </b-form-group>
-
-      <b-form-group id="input-group-2" label="Your password:" label-for="input-2">
+      </b-row>
+      <br>
+      <b-row>비밀번호</b-row>
+      <b-row>
         <b-form-input
           id="input-2"
           v-model="loginData.password"
           required
-          placeholder="Enter password"
+          placeholder="비밀번호를 입력하세요"
         ></b-form-input>
-      </b-form-group>
-
-      <b-button type="submit" variant="primary">Submit</b-button>
+      </b-row>
+      <b-row>
+        <b-col class="text-right py-1 pr-1" >
+          <router-link :to="{ name: Signup }">아이디/비밀번호 찾기</router-link>
+        </b-col>
+      </b-row>
+      <br>
+      <b-row>
+        <b-button type="submit" block variant="info" size="lg">로그인</b-button>
+      </b-row>
     </b-form>
-  </div>
+  </b-container>
 </template>
 
 <script>
