@@ -18,22 +18,27 @@ public class VerifyServiceImpl implements VerifyService {
 	
 	@Autowired
 	private VerifyDao verifyDao;
-	
+
 	@Autowired
 	private UserDao userDao;
-
+	
 	@Override
-	public boolean isDuplicated(String email) {
+	public boolean isDuplicated(final String email) {
 		return userDao.findUserByEmail(email).isPresent();
 	}
 
 	@Override
-	public boolean isValid(String email, String code) {
+	public boolean isValidUser(final String email, final String password) {
+		return userDao.findUserByEmailAndPassword(email, password).isPresent();
+	}
+
+	@Override
+	public boolean isValidCode(final String email, final String code) {
 		return verifyDao.findVerifyByEmailAndCode(email, code).isPresent();
 	}
 
 	@Override
-	public Mail generateVerifyMail(String email) {
+	public Mail generateVerifyMail(final String email) {
 		String code = generateCode();
 		verifyDao.save(new Verify(email, code));
 		
