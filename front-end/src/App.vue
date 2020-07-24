@@ -1,33 +1,27 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> |
-      <router-link v-if="!isLoggedIn" to="/login"> Login |</router-link>
-      <router-link v-if="!isLoggedIn" to="/signup"> Signup |</router-link>
-      <router-link v-if="isLoggedIn" :to="{ name: 'Logout' }"> Logout |</router-link>
-      <router-link v-if="isLoggedIn" :to="{ name: 'Mypage' }"> Mypage |</router-link>
-      <router-link to="/study/list"> StudyList |</router-link>
-
-    </div>
+    <Header />
     <router-view />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import Header from './components/common/Header.vue'
 
 export default {
-  name: 'App',
+  name: "App",
 
   computed: {
-    ...mapGetters(['isLoggedIn'])
+    ...mapGetters(["isLoggedIn"])
   },
 
-  methods: {
+  components: {
+    Header
   },
+
+  methods: {}
 }
-
 </script>
 <style>
 #app {
