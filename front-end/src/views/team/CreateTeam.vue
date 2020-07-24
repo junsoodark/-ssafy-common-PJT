@@ -1,6 +1,6 @@
 <template>
   <b-container>
-    <b-form @submit="createTeam" @reset="onReset" v-if="show">
+    <b-form @submit.prevent="createTeam" @reset="onReset" v-if="show">
       <b-form-group id="input-group-1" label="스터디 이름:" label-for="input-1">
         <b-form-input
           id="input-1"
@@ -40,7 +40,7 @@
         <b-button id="input-5">추후협의</b-button>
         <b-form-spinbutton
           id="input-5"
-          v-model="count"
+          v-model="form.count"
           :option="counts"
           min="1"
           max="7"
@@ -62,9 +62,18 @@
         <b-button id="input-7">추후협의</b-button>
       </b-form-group>
 
-      <b-form-froup id="input-group-8" label="스터디 기간:" laebl-for="input-8">
+      <b-form-group id="input-group-8" label="스터디 기간:" laebl-for="input-8">
         <v-md-date-range-picker></v-md-date-range-picker>
-      </b-form-froup>
+      </b-form-group>
+
+      <b-form-group id="input-group-9" label="인원:" laebl-for="input-9">
+        <vue-slider
+          v-model="form.value"
+          :min="1"
+          :max="30"
+          :interval="1"
+        ></vue-slider>
+      </b-form-group>
 
       <b-button type="submit" variant="primary">Submit</b-button>
       <b-button type="reset" variant="danger">Reset</b-button>
@@ -73,7 +82,14 @@
 </template>
 
 <script>
+import VueSlider from "vue-slider-component";
+import "vue-slider-component/theme/default.css";
+import { mapActions } from "vuex";
+
 export default {
+  components: {
+    VueSlider,
+  },
   data() {
     return {
       form: {
@@ -81,7 +97,7 @@ export default {
         field: null,
         area: null,
         count: null,
-        checked: [],
+        value: 0,
       },
       fields: [
         { text: "원하는 분야를 선택해주세요", value: null },
@@ -99,10 +115,7 @@ export default {
     };
   },
   methods: {
-    createTeam(evt) {
-      evt.preventDefault();
-      alert(JSON.stringify(this.form));
-    },
+    ...mapActions(["createTeam"]),
     onReset(evt) {
       evt.preventDefault();
       // Reset our form values

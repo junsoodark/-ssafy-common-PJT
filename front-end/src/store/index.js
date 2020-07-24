@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import Axios from 'axios'
+import Axios from "axios";
 import router from "@/router";
 import VueCookies from "vue-cookies";
 Vue.use(Vuex);
@@ -49,25 +49,25 @@ export default new Vuex.Store({
       dispatch("postAuthData", loginData);
     },
 
-    signup (state, {code, age, email, nickname, password, sex}) {
-      var params = new URLSearchParams()
-      params.append('code',code)
-      var form = new FormData()
-      form.append('age',age)
-      form.append('email',email)
-      form.append('name',nickname)
-      form.append('password',password)
-      form.append('sex',sex)
-      Axios.post('http://localhost:3000/user',params,form)
-      .then(res => {
-        alert("회원가입 성공!")
-        console.log(res)
-        router.push({ name: 'Login' })
-      })
-      .catch((err) => {
-        alert("가입실패!");
-        console.log(err);
-      });
+    signup(state, { code, age, email, nickname, password, sex }) {
+      var params = new URLSearchParams();
+      params.append("code", code);
+      var form = new FormData();
+      form.append("age", age);
+      form.append("email", email);
+      form.append("name", nickname);
+      form.append("password", password);
+      form.append("sex", sex);
+      Axios.post("http://localhost:3000/user", params, form)
+        .then((res) => {
+          alert("회원가입 성공!");
+          console.log(res);
+          router.push({ name: "Login" });
+        })
+        .catch((err) => {
+          alert("가입실패!");
+          console.log(err);
+        });
     },
 
     logout({ commit }) {
@@ -82,7 +82,17 @@ export default new Vuex.Store({
       VueCookies.remove("auth-token"); // cookie 에서는 삭제
       router.push({ name: "Home" });
     },
-    createTeam() {},
+    createTeam(state, form) {
+      Axios.post("http://localhost:3000/study/create", form)
+        .then((res) => {
+          alert("스터디 생성");
+          console.log(res);
+        })
+        .catch((err) => {
+          alert("생성 실패!");
+          console.log(err);
+        });
+    },
   },
   modules: {},
 });
