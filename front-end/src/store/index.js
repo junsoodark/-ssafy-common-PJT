@@ -52,13 +52,15 @@ export default new Vuex.Store({
     signup (state, {code, age, email, nickname, password, sex}) {
       var params = new URLSearchParams()
       params.append('code',code)
-      var form = new FormData()
-      form.append('age',age)
-      form.append('email',email)
-      form.append('name',nickname)
-      form.append('password',password)
-      form.append('sex',sex)
-      Axios.post('http://localhost:3000/user',params,form)
+      var form = {
+        'age': age,
+        'email': email,
+        'name': nickname,
+        'password': password,
+        'sex': sex
+      }
+      var JsonForm = JSON.stringify(form)
+      Axios({method:'POST',url:'http://localhost:3000/user',params:params,data:JsonForm,headers:{'Content-Type': 'application/json; charset=utf-8'}})
       .then(res => {
         alert("회원가입 성공!")
         console.log(res)
