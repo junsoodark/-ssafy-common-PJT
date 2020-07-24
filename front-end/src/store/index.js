@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-// import Axios from 'axios'
+import Axios from 'axios'
 import router from "@/router";
 import VueCookies from "vue-cookies";
 Vue.use(Vuex);
@@ -49,28 +49,25 @@ export default new Vuex.Store({
       dispatch("postAuthData", loginData);
     },
 
-    signup (state, event) {
-      console.log('email:', event.target[0].value)
-      console.log('password:', event.target[1].value)
-      
-      if (event.target[1].value != event.target[0].value) {
-        alert("비밀번호와 비밀번호 확인이 다릅니다.");
-        return false;
-      }
-
-      // console.log(input)
-
-      // Axios.post('http://localhost:3000/accounts/signup', {
-      //   params: {
-      //     email: email,
-      //     password: password,
-      //     // 등등
-      //   }
-      // })
-      // .catch((err) => {
-      //   alert("가입실패!");
-      //   console.log(err);
-      // });
+    signup (state, {code, age, email, nickname, password, sex}) {
+      var params = new URLSearchParams()
+      params.append('code',code)
+      var form = new FormData()
+      form.append('age',age)
+      form.append('email',email)
+      form.append('name',nickname)
+      form.append('password',password)
+      form.append('sex',sex)
+      Axios.post('http://localhost:3000/user',params,form)
+      .then(res => {
+        alert("회원가입 성공!")
+        console.log(res)
+        router.push({ name: 'Login' })
+      })
+      .catch((err) => {
+        alert("가입실패!");
+        console.log(err);
+      });
     },
 
     logout({ commit }) {
