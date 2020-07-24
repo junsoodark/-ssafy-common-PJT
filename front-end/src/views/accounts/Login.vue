@@ -48,7 +48,7 @@ export default {
 	data () {
 		return {
       loginData: {
-        username: null,
+        email: null,
         password: null
 			},
 		}

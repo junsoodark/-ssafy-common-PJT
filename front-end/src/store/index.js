@@ -9,7 +9,6 @@ export default new Vuex.Store({
   state: {
     email: null,
     password: null,
-    passwordConfirm: null,
     authToken: VueCookies.get("auth-token"),
   },
   getters: {
@@ -46,6 +45,8 @@ export default new Vuex.Store({
     },
 
     login({ dispatch }, loginData) {
+      this.state.email = loginData.email
+      this.state.password = loginData.password
       dispatch("postAuthData", loginData);
     },
 
@@ -82,7 +83,30 @@ export default new Vuex.Store({
       //   .catch(err => console.log(err.response.data))
       commit("SET_TOKEN", null); // state 에서도 삭제
       VueCookies.remove("auth-token"); // cookie 에서는 삭제
+      this.state.email = null
+      this.state.password = null
       router.push({ name: "Home" });
+    },
+
+    authDelete({ state }, {email,password}) {
+      if (state.email != email || state.password != password) {
+        alert('삭제 실패! 이메일과 패스워드를 확인해주세요!')
+        return false
+      }
+      var params = new URLSearchParams()
+      params.append('email',email)
+      params.append('password',password)
+      Axios.delete('http://localhost:3000/user',params)
+      .then(res => {
+        console.log(res)
+        alert('삭제 완료!')
+        router.push({ name: "Home" })
+      })
+      .catch(err => {
+        console.log(err)
+        alert('삭제 실패!')
+        router.push({ name: "Home" })
+      })
     },
     createTeam() {},
   },
