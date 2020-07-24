@@ -58,12 +58,11 @@ const routes = [
     name: 'StudyDetail',
     component: TeamDetail
   },
-  
   {
     path: "/study/create",
     name: "CreateTeam",
     component: CreateTeam,
-  }
+  },
 ]
 
 const router = new VueRouter({
@@ -73,7 +72,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const publicPages = ['Login', 'Signup', 'Home', 'About', 'StudyList', 'StudyDetail', 'Mypage']  // Login 안해도 됨
+  const publicPages = ['Login', 'Signup', 'Home', 'About', 'StudyList', 'StudyDetail', 'Mypage', 'CreateTeam']  // Login 안해도 됨
   const authPages = ['Login', 'Signup']  // Login 되어있으면 안됨
   
   const authRequired = !publicPages.includes(to.name)  // 로그인 해야 함.
