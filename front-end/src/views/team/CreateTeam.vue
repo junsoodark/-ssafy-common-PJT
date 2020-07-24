@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <b-container>
     <b-form @submit="createTeam" @reset="onReset" v-if="show">
       <b-form-group id="input-group-1" label="스터디 이름:" label-for="input-1">
         <b-form-input
@@ -69,7 +69,7 @@
       <b-button type="submit" variant="primary">Submit</b-button>
       <b-button type="reset" variant="danger">Reset</b-button>
     </b-form>
-  </div>
+  </b-container>
 </template>
 
 <script>

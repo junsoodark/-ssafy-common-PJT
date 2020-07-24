@@ -2,6 +2,7 @@
   <div>
     <!-- <TeamListItem v-for="team in teamList" :key="team"></TeamListItem> -->
     <h1>TeamList</h1>
+    <router-link :to="{ name: 'CreateTeam'}">스터디 만들기</router-link>
     <div>
       <b-card
         title="Card Title"

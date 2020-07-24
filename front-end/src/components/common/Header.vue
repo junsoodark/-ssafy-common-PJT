@@ -15,12 +15,12 @@
 
             <!-- Using 'button-content' slot -->
           <div v-if="isLoggedIn" class="ml-3">
-            <a>회원정보</a> |
-            <router-link v-if="isLoggedIn" :to="{ name: 'Logout' }">Logout</router-link>
+            <router-link class="text-light mx-1" :to="{ name: 'Logout' }">Logout</router-link>
+            <router-link class="text-light ml-2" :to="{ name: 'Mypage' }">마이페이지</router-link>
           </div>
           <div v-else class="ml-3">
-            <router-link class="text-decoration-none text-light" to="/login">Login</router-link> |
-            <router-link class="text-decoration-none text-light" to="/signup">Signup</router-link>
+            <router-link class="text-decoration-none text-light mx-1" to="/login">Login</router-link>
+            <router-link class="text-decoration-none text-light ml-2" to="/signup">Signup</router-link>
           </div>
         </b-navbar-nav>
       </b-collapse>
