@@ -49,10 +49,10 @@ export default new Vuex.Store({
       dispatch("postAuthData", loginData);
     },
 
-    Signup(state, event) {
-      console.log("email:", event.target[0].value);
-      console.log("password:", event.target[1].value);
-
+    signup (state, event) {
+      console.log('email:', event.target[0].value)
+      console.log('password:', event.target[1].value)
+      
       if (event.target[1].value != event.target[0].value) {
         alert("비밀번호와 비밀번호 확인이 다릅니다.");
         return false;
@@ -73,10 +73,6 @@ export default new Vuex.Store({
       // });
     },
 
-    Logout() {
-      this.commit("Logout");
-      this.$cookies.remove("auth-token");
-    },
     logout({ commit }) {
       // Axios.post('http://localhost:3000/accounts/logout', null, getters.config)
       //   .then(() => {  // Django DB 에서는 삭제 | cookie, state 에는 남아있음
