@@ -1,11 +1,14 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-
+//accounts
 import Login from '../views/accounts/Login.vue'
 import Signup from '../views/accounts/Signup.vue'
 import Logout from '../views/accounts/Logout.vue'
+import Mypage from '../views/accounts/Mypage.vue'
+//team
 import TeamList from '../views/team/TeamList.vue'
+import TeamDetail from '../views/team/TeamDetail.vue'
 
 Vue.use(VueRouter);
 
@@ -40,10 +43,20 @@ const routes = [
     component: Logout,
   },
   {
+    path: '/mypage',
+    name: 'Mypage',
+    component: Mypage,
+  },
+  {
     path: '/study/list',
     name: 'StudyList',
     component: TeamList
-  }
+  },
+  {
+    path: '/study/detail',
+    name: 'StudyDetail',
+    component: TeamDetail
+  },
 ]
 
 const router = new VueRouter({
@@ -53,7 +66,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const publicPages = ['Login', 'Signup', 'Home']  // Login 안해도 됨
+  const publicPages = ['Login', 'Signup', 'Home', 'About', 'StudyList', 'StudyDetail', 'Mypage']  // Login 안해도 됨
   const authPages = ['Login', 'Signup']  // Login 되어있으면 안됨
   
   const authRequired = !publicPages.includes(to.name)  // 로그인 해야 함.
