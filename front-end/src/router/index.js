@@ -72,11 +72,6 @@ const router = new VueRouter({
   routes,
 });
 
-<<<<<<< front-end/src/router/index.js
-// router.beforeEach((to, from, next) => {
-//   const publicPages = ["Login", "Signup", "Home"]; // Login 안해도 됨
-//   const authPages = ["Login", "Signup"]; // Login 되어있으면 안됨
-=======
 router.beforeEach((to, from, next) => {
   const publicPages = ['Login', 'Signup', 'Home', 'About', 'StudyList', 'StudyDetail', 'Mypage']  // Login 안해도 됨
   const authPages = ['Login', 'Signup']  // Login 되어있으면 안됨
@@ -84,16 +79,11 @@ router.beforeEach((to, from, next) => {
   const authRequired = !publicPages.includes(to.name)  // 로그인 해야 함.
   const unauthRequired = authPages.includes(to.name)  // 로그인 해서는 안됨
   const isLoggedIn = !!Vue.$cookies.isKey('auth-token')
->>>>>>> front-end/src/router/index.js
 
-//   const authRequired = !publicPages.includes(to.name); // 로그인 해야 함.
-//   const unauthRequired = authPages.includes(to.name); // 로그인 해서는 안됨
-//   const isLoggedIn = !!Vue.$cookies.isKey("auth-token");
-
-//   if (unauthRequired && isLoggedIn) {
-//     next("/");
-//   }
-//   authRequired && !isLoggedIn ? next({ name: "Login" }) : next();
-// });
+  if (unauthRequired && isLoggedIn) {
+    next("/");
+  }
+  authRequired && !isLoggedIn ? next({ name: "Login" }) : next();
+});
 
 export default router;
