@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 public interface StudyServiece {
     public void update(Study study);
 
-    public void delete(int study_id);
+    public void delete(Study study);
 
     public void create(Study study);
 
