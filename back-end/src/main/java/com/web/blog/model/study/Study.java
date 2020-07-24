@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 
 import com.sun.istack.NotNull;
 import com.web.blog.model.address.Address;
+import com.web.blog.model.user.User;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
