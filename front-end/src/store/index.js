@@ -100,6 +100,8 @@ export default new Vuex.Store({
       .then(res => {
         console.log(res)
         alert('삭제 완료!')
+        state.email = null
+        state.password = null
         router.push({ name: "Home" })
       })
       .catch(err => {
