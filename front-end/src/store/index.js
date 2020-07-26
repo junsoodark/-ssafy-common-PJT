@@ -29,6 +29,7 @@ export default new Vuex.Store({
     },
 
     Logout(state) {
+      console.log(state)
       VueCookies.remove("auth-token");
       VueCookies.remove("auth-user")
       VueCookies.remove("auth-user-what")
