@@ -54,7 +54,7 @@
           <br>
           <b-row align-h="end" class="text-right">
             <b-col cols="2"><b-button variant="warning">회원정보 수정</b-button></b-col>
-            <b-col cols="2"><b-button variant="danger">회원탈퇴</b-button></b-col>
+            <b-col cols="2"><b-button variant="danger" v-b-modal.my-modal>회원탈퇴</b-button></b-col>
           </b-row>
       </b-media>
       
@@ -77,11 +77,37 @@
         ></b-table>
       </b-row>
     </div>
+    <b-modal id="my-modal">
+      <b-form id="checkemail" @submit.prevent="authDelete(deleteInfo)">
+        <h1>정말 삭제를 원하시면 이메일과 비밀번호를 한번 더 입력해주세요</h1>
+        <b-row>이메일 아이디</b-row>
+        <b-row>
+          <b-form-input
+            id="input-1"
+            v-model="deleteInfo.email"
+            type="email"
+            required
+            placeholder="이메일 아이디를 입력하세요"
+          ></b-form-input>
+        </b-row>
+        <br>
+        <b-row>비밀번호</b-row>
+        <b-row>
+          <b-form-input
+            id="input-2"
+            v-model="deleteInfo.password"
+            required
+            placeholder="비밀번호를 입력하세요"
+          ></b-form-input>
+        </b-row>
+        <b-button type="submit" block variant="danger" size="lg">정말 삭제하기</b-button>
+      </b-form>
+    </b-modal>
   </b-container>
 </template>
 
 <script>
-import {mapState} from 'vuex'
+import {mapState,mapActions} from 'vuex'
 import MD5 from 'md5'
 import Axios from 'axios'
 export default {
@@ -103,6 +129,10 @@ export default {
         sex: null,
         name: null,
         age: null
+      },
+      deleteInfo: {
+        email: null,
+        password: null
       }
     }
   },
@@ -130,6 +160,7 @@ export default {
       })
       .catch( err => {console.log(err)} )
     },
+    ...mapActions(['authDelete']),
   }
 }
 </script>

@@ -94,25 +94,24 @@ export default new Vuex.Store({
     },
 
     authDelete({ state }, {email,password}) {
-      if (state.email != email || state.password != password) {
+      if (state.email != MD5(email) || state.password != MD5(password)) {
         alert('삭제 실패! 이메일과 패스워드를 확인해주세요!')
         return false
       }
       var params = new URLSearchParams()
       params.append('email',email)
       params.append('password',password)
-      Axios.delete('http://localhost:3000/user',params)
+      Axios({method:'DELETE',url:'http://localhost:3000/user',params:params,headers:{'Content-Type': 'application/json; charset=utf-8'}})
       .then(res => {
-        console.log(res)
-        alert('삭제 완료!')
-        state.email = null
-        state.password = null
+        alert(res.data)
+        VueCookies.remove("auth-token")
+        VueCookies.remove("auth-user")
+        VueCookies.remove("auth-user-what")
         router.push({ name: "Home" })
       })
       .catch(err => {
         console.log(err)
         alert('삭제 실패!')
-        router.push({ name: "Home" })
       })
     },
     createTeam() {},
