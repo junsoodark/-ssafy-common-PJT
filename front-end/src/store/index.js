@@ -3,12 +3,13 @@ import Vuex from "vuex";
 import Axios from 'axios'
 import router from "@/router";
 import VueCookies from "vue-cookies";
+import MD5 from 'md5'
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    email: null,
-    password: null,
+    email: VueCookies.get("auth-user"),
+    password: VueCookies.get("auth-user-what"),
     authToken: VueCookies.get("auth-token"),
   },
   getters: {
@@ -42,11 +43,13 @@ export default new Vuex.Store({
 
       commit("SET_TOKEN", "qwer" + loginData);
       router.push({ name: "Home" });
+      this.state.email = MD5(loginData.email)
+      this.state.password = MD5(loginData.password)
+      VueCookies.set("auth-user",MD5(loginData.email))
+      VueCookies.set("auth-user-what",MD5(loginData.password))
     },
 
     login({ dispatch }, loginData) {
-      this.state.email = loginData.email
-      this.state.password = loginData.password
       dispatch("postAuthData", loginData);
     },
 
@@ -83,31 +86,32 @@ export default new Vuex.Store({
       //   .catch(err => console.log(err.response.data))
       commit("SET_TOKEN", null); // state 에서도 삭제
       VueCookies.remove("auth-token"); // cookie 에서는 삭제
+      VueCookies.remove("auth-user")
+      VueCookies.remove("auth-user-what")
       this.state.email = null
       this.state.password = null
       router.push({ name: "Home" });
     },
 
     authDelete({ state }, {email,password}) {
-      if (state.email != email || state.password != password) {
+      if (state.email != MD5(email) || state.password != MD5(password)) {
         alert('삭제 실패! 이메일과 패스워드를 확인해주세요!')
         return false
       }
       var params = new URLSearchParams()
       params.append('email',email)
       params.append('password',password)
-      Axios.delete('http://localhost:3000/user',params)
+      Axios({method:'DELETE',url:'http://localhost:3000/user',params:params,headers:{'Content-Type': 'application/json; charset=utf-8'}})
       .then(res => {
-        console.log(res)
-        alert('삭제 완료!')
-        state.email = null
-        state.password = null
+        alert(res.data)
+        VueCookies.remove("auth-token")
+        VueCookies.remove("auth-user")
+        VueCookies.remove("auth-user-what")
         router.push({ name: "Home" })
       })
       .catch(err => {
         console.log(err)
         alert('삭제 실패!')
-        router.push({ name: "Home" })
       })
     },
     createTeam() {},
