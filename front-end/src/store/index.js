@@ -29,7 +29,12 @@ export default new Vuex.Store({
     },
 
     Logout(state) {
-      state.authToken = null;
+      VueCookies.remove("auth-token");
+      VueCookies.remove("auth-user")
+      VueCookies.remove("auth-user-what")
+      this.state.email = null
+      this.state.password = null
+      this.state.authToken = null
     },
   },
   actions: {
@@ -90,6 +95,7 @@ export default new Vuex.Store({
       VueCookies.remove("auth-user-what")
       this.state.email = null
       this.state.password = null
+      this.state.authToken = null
       router.push({ name: "Home" });
     },
 
@@ -104,9 +110,12 @@ export default new Vuex.Store({
       Axios({method:'DELETE',url:'http://localhost:3000/user',params:params,headers:{'Content-Type': 'application/json; charset=utf-8'}})
       .then(res => {
         alert(res.data)
-        VueCookies.remove("auth-token")
+        VueCookies.remove("auth-token");
         VueCookies.remove("auth-user")
         VueCookies.remove("auth-user-what")
+        this.state.email = null
+        this.state.password = null
+        this.state.authToken = null
         router.push({ name: "Home" })
       })
       .catch(err => {
