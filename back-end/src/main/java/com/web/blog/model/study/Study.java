@@ -1,6 +1,8 @@
 package com.web.blog.model.study;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -9,8 +11,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import com.web.blog.model.address.Address;
+import com.web.blog.model.user.StudyUser;
 import com.web.blog.model.user.User;
 
 import lombok.AllArgsConstructor;
@@ -24,6 +28,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Study {
+	
 	@Id
 	@GeneratedValue
 	private int study_id;
@@ -38,6 +43,13 @@ public class Study {
 	private String content;
 	private Date startDate;
 	private Date endDate;
-	private String si;
-	private String gu;
+	
+	@OneToMany(mappedBy="study")
+	private List<StudyUser> studyUsers = new ArrayList<>();
+	
+	
+	
+	
+	
+	
 }
