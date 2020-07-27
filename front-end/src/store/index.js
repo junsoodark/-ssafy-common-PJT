@@ -4,13 +4,40 @@ import Axios from 'axios'
 import router from "@/router";
 import VueCookies from "vue-cookies";
 import MD5 from 'md5'
+
+import createPersistedState from 'vuex-persistedstate'
+import moduleName from './test_moduleName'
+
 Vue.use(Vuex);
+
+const modules = {
+  moduleName
+};
+const plugins = [
+  createPersistedState({
+    paths: [
+      'moduleName',
+    ]
+  })
+];
 
 export default new Vuex.Store({
   state: {
     email: VueCookies.get("auth-user"),
     password: VueCookies.get("auth-user-what"),
     authToken: VueCookies.get("auth-token"),
+    userInfo: {
+      email: "",
+      password: "",
+      passwordConfirm: "",
+      nickname: "",
+      isTerm: false,
+      passwordType: "password",
+      passwordConfirmType: "password",
+      code: "",
+      age: 0,
+      sex: 1,
+    }
   },
   getters: {
     // auth
@@ -27,7 +54,6 @@ export default new Vuex.Store({
       state.authToken = token;
       VueCookies.set("auth-token", token);
     },
-
     Logout(state) {
       console.log(state)
       VueCookies.remove("auth-token");
@@ -125,6 +151,11 @@ export default new Vuex.Store({
       })
     },
     createTeam() {},
+    // fetchUserInfo({ commit }, ) {
+    //   Axios.get()
+    // },
   },
-  modules: {},
+  modules,
+  plugins,
+  namespaced: true
 });

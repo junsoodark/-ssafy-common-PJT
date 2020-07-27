@@ -1,6 +1,6 @@
 <template>
   <b-container style="max-width:450px;">
-        <h1>로그인</h1>
+    <h1>로그인</h1>
 		<br>
     <b-form @submit.prevent="login(loginData)">
       <b-row>이메일 아이디</b-row>
@@ -30,7 +30,8 @@
       </b-row>
       <br>
       <b-row>
-        <b-button type="submit" block variant="info" size="lg">로그인</b-button>
+        <!-- <b-button @click="update_email(loginData.email)">test</b-button> -->
+        <b-button @click="update_email(loginData.email)"  type="submit" block variant="info" size="lg">로그인</b-button>
       </b-row>
       <b-row>
         <b-col class="text-right py-1 pr-1">
@@ -54,7 +55,8 @@ export default {
 		}
 	},
 	methods: {
-		...mapActions(['login']),
+    ...mapActions(['login', 'update_email']),
+     
 	}
 }
 </script>
