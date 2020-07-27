@@ -20,8 +20,6 @@ import io.swagger.annotations.ApiOperation;
 
 @RestController
 public class StudyController {
-    @Autowired
-    StudyService studyService;
 
     @Autowired
     StudyDao studyDao;
