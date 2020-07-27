@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -31,13 +32,16 @@ public class Study {
 	
 	@Id
 	@GeneratedValue
-	private int study_id;
+	@Column(name = "study_id")
+	private int studyId;
 	
 	@ManyToOne(targetEntity = User.class)
-	private int mgr_id;
+	@Column(name = "mgr_id")
+	private int mgrId;
 	
 	@ManyToOne(targetEntity = Address.class)
-	private int address_id;
+	@Column(name = "address_id")
+	private int addressId;
 	
 	private String title;
 	private String content;
