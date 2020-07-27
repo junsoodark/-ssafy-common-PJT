@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import Axios from 'axios'
+import Axios from "axios";
 import router from "@/router";
 import VueCookies from "vue-cookies";
 import MD5 from 'md5'
@@ -84,7 +84,6 @@ export default new Vuex.Store({
     login({ dispatch }, loginData) {
       dispatch("postAuthData", loginData);
     },
-
     signup (state, {code, age, email, nickname, password, sex}) {
       var params = new URLSearchParams()
       params.append('code',code)
@@ -125,7 +124,17 @@ export default new Vuex.Store({
       this.state.authToken = null
       router.push({ name: "Home" });
     },
-
+    createTeam(state, form) {
+      Axios.post("http://localhost:3000/study/create", form)
+        .then((res) => {
+          alert("스터디 생성");
+          console.log(res);
+        })
+        .catch((err) => {
+          alert("생성 실패!");
+          console.log(err);
+        });
+    },
     authDelete({ state }, {email,password}) {
       if (state.email != MD5(email) || state.password != MD5(password)) {
         alert('삭제 실패! 이메일과 패스워드를 확인해주세요!')

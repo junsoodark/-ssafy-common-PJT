@@ -1,6 +1,6 @@
 <template>
   <b-container>
-    <b-form @submit="createTeam" @reset="onReset" v-if="show">
+    <b-form @submit.prevent="createTeam" @reset="onReset" v-if="show">
       <b-form-group id="input-group-1" label="스터디 이름:" label-for="input-1">
         <b-form-input
           id="input-1"
@@ -20,9 +20,13 @@
         ></b-form-select>
       </b-form-group>
 
-      <b-form-group id="input-group-3" label="방식:" label-for="input-3">
-        <b-button id="input-3">오프라인</b-button>
-        <b-button id="input-3">온라인</b-button>
+      <b-form-group id="input-group-3" label="방식:" label-for="input-5">
+        <b-form-radio-group
+          id="input-3"
+          v-model="form.contact"
+          :options="contacts"
+        >
+        </b-form-radio-group>
       </b-form-group>
 
       <b-form-group id="input-group-4" label="지역:" label-for="input-4">
@@ -35,13 +39,16 @@
       </b-form-group>
 
       <b-form-group id="input-group-5" label="스터디 일정:" label-for="input-5">
-        <b-button id="input-5">매월</b-button>
-        <b-button id="input-5">매주</b-button>
-        <b-button id="input-5">추후협의</b-button>
+        <b-form-radio-group
+          id="input-5"
+          v-model="form.schedule"
+          :options="schedules"
+        >
+        </b-form-radio-group>
         <b-form-spinbutton
           id="input-5"
-          v-model="count"
-          :option="counts"
+          v-model="form.count"
+          :options="counts"
           min="1"
           max="7"
           required
@@ -49,22 +56,36 @@
       </b-form-group>
 
       <b-form-group id="input-group-6" label="요일:" label-for="input-6">
-        <b-button id="input-6">평일</b-button>
-        <b-button id="input-6">주말</b-button>
-        <b-button id="input-6">혼합</b-button>
-        <b-button id="input-6">추후협의</b-button>
+        <b-form-radio-group id="input-6" v-model="form.day" :options="days">
+        </b-form-radio-group>
       </b-form-group>
 
       <b-form-group id="input-group-7" label="시간대:" label-for="input-7">
-        <b-button id="input-7">오전</b-button>
-        <b-button id="input-7">오후</b-button>
-        <b-button id="input-7">저녁</b-button>
-        <b-button id="input-7">추후협의</b-button>
+        <b-form-radio-group id="input-7" v-model="form.time" :options="times">
+        </b-form-radio-group>
       </b-form-group>
 
-      <b-form-froup id="input-group-8" label="스터디 기간:" laebl-for="input-8">
+      <!-- <b-form-group id="input-group-8" label="스터디 기간:" laebl-for="input-8">
         <v-md-date-range-picker></v-md-date-range-picker>
-      </b-form-froup>
+      </b-form-group> -->
+
+      <b-form-group id="input-group-8" label="스터디 기간:" laebl-for="input-8">
+        <b-calendar
+          v-model="value"
+          :min="min"
+          :max="max"
+          locale="en"
+        ></b-calendar>
+      </b-form-group>
+
+      <b-form-group id="input-group-9" label="인원:" laebl-for="input-9">
+        <vue-slider
+          v-model="form.value"
+          :min="1"
+          :max="30"
+          :interval="1"
+        ></vue-slider>
+      </b-form-group>
 
       <b-button type="submit" variant="primary">Submit</b-button>
       <b-button type="reset" variant="danger">Reset</b-button>
@@ -73,15 +94,49 @@
 </template>
 
 <script>
+import VueSlider from "vue-slider-component";
+import "vue-slider-component/theme/default.css";
+import { mapActions } from "vuex";
+
 export default {
+  components: {
+    VueSlider,
+  },
   data() {
     return {
+      calendarData() {
+        const now = new Date();
+        const today = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate()
+        );
+        // 15th two months prior
+        const minDate = new Date(today);
+        minDate.setMonth(minDate.getMonth() - 2);
+        minDate.setDate(15);
+        // 15th in two months
+        const maxDate = new Date(today);
+        maxDate.setMonth(maxDate.getMonth() + 2);
+        maxDate.setDate(15);
+
+        return {
+          value: "",
+          min: minDate,
+          max: maxDate,
+        };
+      },
       form: {
         studyname: "",
         field: null,
+        contact: null,
         area: null,
+        schedule: null,
         count: null,
-        checked: [],
+        day: null,
+        time: null,
+        period: null,
+        value: 0,
       },
       fields: [
         { text: "원하는 분야를 선택해주세요", value: null },
@@ -94,22 +149,39 @@ export default {
         "강북구",
         "종로구",
       ],
+      contacts: [
+        { text: "오프라인", value: "오프라인" },
+        { text: "온라인", value: "온라인" },
+      ],
+      schedules: [
+        { text: "매월", value: "매월" },
+        { text: "매주", value: "매주" },
+        { text: "추후협의", value: "추후협의" },
+      ],
+      days: [
+        { text: "평일", value: "평일" },
+        { text: "주말", value: "주말" },
+        { text: "혼합", value: "혼합" },
+        { text: "추후협희", value: "추후협희" },
+      ],
+      times: [
+        { text: "오전", value: "오전" },
+        { text: "오후", value: "오후" },
+        { text: "저녁", value: "저녁" },
+        { text: "추후협의", value: "추후협의" },
+      ],
       counts: [{ text: "횟수", value: null }],
       show: true,
     };
   },
   methods: {
-    createTeam(evt) {
-      evt.preventDefault();
-      alert(JSON.stringify(this.form));
-    },
+    ...mapActions(["createTeam"]),
     onReset(evt) {
       evt.preventDefault();
       // Reset our form values
       this.form.email = "";
       this.form.name = "";
       this.form.food = null;
-      this.form.checked = [];
       // Trick to reset/clear native browser form validation state
       this.show = false;
       this.$nextTick(() => {

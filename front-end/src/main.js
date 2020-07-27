@@ -23,6 +23,12 @@ Vue.config.productionTip = false;
 import VMdDateRangePicker from "v-md-date-range-picker";
 Vue.use(VMdDateRangePicker);
 
+//vue-slider
+import VueSlider from "vue-slider-component";
+import "vue-slider-component/theme/default.css";
+
+Vue.component("VueSlider", VueSlider);
+
 new Vue({
   router,
   store,
