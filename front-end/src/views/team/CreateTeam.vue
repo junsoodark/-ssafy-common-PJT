@@ -21,8 +21,12 @@
       </b-form-group>
 
       <b-form-group id="input-group-3" label="방식:" label-for="input-3">
-        <b-button id="input-3">오프라인</b-button>
-        <b-button id="input-3">온라인</b-button>
+        <b-form-radio v-model="form.contact" name="some-radios" value="오프라인"
+          >오프라인</b-form-radio
+        >
+        <b-form-radio v-model="form.contact" name="some-radios" value="온라인"
+          >온라인</b-form-radio
+        >
       </b-form-group>
 
       <b-form-group id="input-group-4" label="지역:" label-for="input-4">
@@ -35,9 +39,12 @@
       </b-form-group>
 
       <b-form-group id="input-group-5" label="스터디 일정:" label-for="input-5">
-        <b-button id="input-5">매월</b-button>
-        <b-button id="input-5">매주</b-button>
-        <b-button id="input-5">추후협의</b-button>
+        <b-form-radio-group
+          id="input-5"
+          v-model="form.schedule"
+          :options="schedules"
+        >
+        </b-form-radio-group>
         <b-form-spinbutton
           id="input-5"
           v-model="form.count"
@@ -95,8 +102,13 @@ export default {
       form: {
         studyname: "",
         field: null,
+        contact: null,
         area: null,
+        schedule: "",
         count: null,
+        day: null,
+        time: null,
+        period: null,
         value: 0,
       },
       fields: [
@@ -110,6 +122,11 @@ export default {
         "강북구",
         "종로구",
       ],
+      schedules: [
+        { text: "매월", value: "first" },
+        { text: "매주", value: "second" },
+        { text: "추후협의", value: "third" },
+      ],
       counts: [{ text: "횟수", value: null }],
       show: true,
     };
@@ -122,7 +139,6 @@ export default {
       this.form.email = "";
       this.form.name = "";
       this.form.food = null;
-      this.form.checked = [];
       // Trick to reset/clear native browser form validation state
       this.show = false;
       this.$nextTick(() => {
