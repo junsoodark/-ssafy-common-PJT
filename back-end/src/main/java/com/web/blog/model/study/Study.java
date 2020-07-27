@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -36,11 +37,11 @@ public class Study {
 	private int studyId;
 	
 	@ManyToOne(targetEntity = User.class)
-	@Column(name = "mgr_id")
+	@JoinColumn(name = "mgr_id")
 	private int mgrId;
 	
 	@ManyToOne(targetEntity = Address.class)
-	@Column(name = "address_id")
+	@JoinColumn(name = "address_id")
 	private int addressId;
 	
 	private String title;
@@ -48,8 +49,74 @@ public class Study {
 	private Date startDate;
 	private Date endDate;
 	
-	@OneToMany(mappedBy="study")
-	private List<StudyUser> studyUsers = new ArrayList<>();
+	/*
+	 * @OneToMany(mappedBy="study") private List<StudyUser> studyUsers = new
+	 * ArrayList<>();
+	 */
+
+	public int getStudyId() {
+		return studyId;
+	}
+
+	public void setStudyId(int studyId) {
+		this.studyId = studyId;
+	}
+
+	public int getMgrId() {
+		return mgrId;
+	}
+
+	public void setMgrId(int mgrId) {
+		this.mgrId = mgrId;
+	}
+
+	public int getAddressId() {
+		return addressId;
+	}
+
+	public void setAddressId(int addressId) {
+		this.addressId = addressId;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+	/*
+	 * public List<StudyUser> getStudyUsers() { return studyUsers; }
+	 * 
+	 * public void setStudyUsers(List<StudyUser> studyUsers) { this.studyUsers =
+	 * studyUsers; }
+	 */
+
+	
 	
 	
 	
