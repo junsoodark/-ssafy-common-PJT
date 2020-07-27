@@ -73,7 +73,9 @@ export default new Vuex.Store({
       var JsonForm = JSON.stringify(params)
       Axios({method:'POST',url:'http://localhost:3000/login',params:params,data:JsonForm,headers:{'Content-Type': 'application/json; charset=utf-8'}})
         .then(res => {
-          commit('SET_TOKEN', res.data.key)
+          console.log(res)
+          commit('SET_TOKEN', res.data)
+          alert("로그인 성공")
           router.push({ name: 'Home' })
         })
         .catch(err => console.log(err.response.data))
