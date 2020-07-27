@@ -66,19 +66,24 @@ export default new Vuex.Store({
   },
   actions: {
     postAuthData({ commit }, loginData) {
-      // Axios.post('http://localhost:3000/accounts/login', loginData)
-      //   .then(res => {
-      //     commit('SET_TOKEN', res.data.key)
-      //     router.push({ name: 'Home' })
-      //   })
-      //   .catch(err => console.log(err.response.data))
+      const params = {
+        'email' : loginData.email,
+        'password' : loginData.password
+      }
+      var JsonForm = JSON.stringify(params)
+      Axios({method:'POST',url:'http://localhost:3000/login',params:params,data:JsonForm,headers:{'Content-Type': 'application/json; charset=utf-8'}})
+        .then(res => {
+          commit('SET_TOKEN', res.data.key)
+          router.push({ name: 'Home' })
+        })
+        .catch(err => console.log(err.response.data))
 
-      commit("SET_TOKEN", "qwer" + loginData);
-      router.push({ name: "Home" });
-      this.state.email = MD5(loginData.email)
-      this.state.password = MD5(loginData.password)
-      VueCookies.set("auth-user",MD5(loginData.email))
-      VueCookies.set("auth-user-what",MD5(loginData.password))
+      // commit("SET_TOKEN", "qwer" + loginData);
+      // router.push({ name: "Home" });
+      // this.state.email = MD5(loginData.email)
+      // this.state.password = MD5(loginData.password)
+      // VueCookies.set("auth-user",MD5(loginData.email))
+      // VueCookies.set("auth-user-what",MD5(loginData.password))
     },
 
     login({ dispatch }, loginData) {
@@ -159,10 +164,6 @@ export default new Vuex.Store({
         alert('삭제 실패!')
       })
     },
-    createTeam() {},
-    // fetchUserInfo({ commit }, ) {
-    //   Axios.get()
-    // },
   },
   modules,
   plugins,
