@@ -1,4 +1,4 @@
-package com.web.blog.service;
+package com.web.blog.service.auth;
 
 import java.util.Date;
 
@@ -18,8 +18,8 @@ public class JwtServiceImpl implements JwtService {
 	private Long expMin;
 	
 	@Override
-	public String generateToken(final String id) {
-		Claims claims = Jwts.claims().setSubject(id);
+	public String generateToken(final String email) {
+		Claims claims = Jwts.claims().setSubject(email);
 		Date now = new Date();
 		return Jwts.builder()
 				   .setHeaderParam("typ", "JWT")
@@ -30,8 +30,8 @@ public class JwtServiceImpl implements JwtService {
 				   .compact();
 	}
 	@Override
-	public boolean validCheck(final String token, final String id) throws Exception{
+	public boolean isValidToken(final String token, final String email) throws Exception{
 		Claims claims =  Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
-		return claims.getSubject().equals(id);
+		return claims.getSubject().equals(email);
 	}
 }

@@ -12,6 +12,7 @@
     "bootstrap": "^4.5.0",
     "bootstrap-vue": "^2.15.0",
     "core-js": "^3.6.5",
+    "md5": "^2.2.1",
     "v-md-date-range-picker": "^2.6.0",
     "vue": "^2.6.11",
     "vue-cookies": "^1.7.2",
