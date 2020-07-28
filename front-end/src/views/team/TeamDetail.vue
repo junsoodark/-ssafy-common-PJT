@@ -3,9 +3,9 @@
   <h1>디테일 페이지</h1>
   <b-container>
     <b-row>
-      <b-col class="totheleft" cols="8"><h1>알고리즘 초급 스터디(코드 리뷰)</h1></b-col>
-      <b-col class="totheright" cols="4">
-        <b-button v-b-modal.modal-prevent-closing variant="info">가입신청</b-button>
+      <b-col class="totheleft text-center" cols="12"><h1>알고리즘 초급 스터디(코드 리뷰)</h1></b-col>
+      <b-col class="totheright my-3 text-center" offset="8" cols="4">
+        <b-button  v-if="isLoggedIn" v-b-modal.modal-prevent-closing variant="info">가입신청</b-button>
 
 
         <b-modal
@@ -121,6 +121,7 @@
 
 <script>
 // import Axios from 'axios'
+import { mapGetters } from 'vuex'
 
 export default {
   data() {
@@ -167,7 +168,10 @@ export default {
   //     console.log(err)
   //     this.$router.push({ name: "Home" })
   //     })
-  // }
+  // },
+  computed: {
+    ...mapGetters(['isLoggedIn'])
+  }
 }
 </script>
 
