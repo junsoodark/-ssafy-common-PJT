@@ -183,15 +183,20 @@ export default {
         return false;
       }
       Axios.post("http://localhost:3000/verify", params)
-        .then((res) => {
-          console.log(res);
+        .then(() => {
           const EmailWindow = document.querySelector("#email-window");
           EmailWindow.className = "d-none";
           const SignUpWindow = document.querySelector("#signup-window");
           SignUpWindow.className = "mx-auto middle";
         })
         .catch((err) => {
-          console.log(err);
+          if (err.response.status === 409) {
+            alert('이미 사용중인 이메일 입니다!')
+            return false
+          } else {
+            alert('오류가 발생했습니다! 다시 실행해주세요!')
+            return false
+          }
         });
     },
   },

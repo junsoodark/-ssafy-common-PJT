@@ -10,7 +10,7 @@
         <b-row>
           <b-col class="text-left"><h3>{{ email }}</h3></b-col>
           <b-col class="text-left"><h3>{{ name }}</h3></b-col>
-          <b-col class="text-left"><h3>{{ sex }}</h3></b-col>
+          <b-col class="text-left"><h3 v-if="sex == 1">남자</h3><h3 v-if="sex == 2">여자</h3></b-col>
           <b-col class="text-left"><h3>{{ age }}</h3></b-col>
         </b-row>
           <b-row align-h="start" class="text-left">
