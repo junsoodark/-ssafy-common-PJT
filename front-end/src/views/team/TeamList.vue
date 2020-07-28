@@ -1,11 +1,10 @@
 <template>
   <div>
-    <!-- <TeamListItem v-for="team in teamList" :key="team"></TeamListItem> -->
     <h1>TeamList</h1>
-    <router-link :to="{ name: 'CreateTeam'}">스터디 만들기</router-link>
+    <router-link v-if="isLoggedIn" :to="{ name: 'CreateTeam'}">스터디 만들기</router-link>
     <b-container class="bv-example-row">
       <b-row>
-          <TeamListItem class="col-4" v-for="team in TeamList" :key="team"></TeamListItem>
+        <TeamListItem class="col-4" v-for="team in TeamList" :key="team" v-bind:team="team"></TeamListItem>
       </b-row>
     </b-container>
   </div>
@@ -13,16 +12,21 @@
 
 <script>
 import TeamListItem from '../../components/TeamlistItem.vue'
+import { mapGetters } from 'vuex'
+
 export default {
   components: {
       TeamListItem
   },
   data () {
       return {
-          TeamList: [0,0,0,0,0,0,0,0,0]
+          TeamList: [0,1,2,3,4,5,6,7,8]
       }
   },
   created () {
+  },
+  computed: {
+    ...mapGetters(['isLoggedIn'])
   }
 }
 </script>
