@@ -30,7 +30,6 @@
       </b-row>
       <br>
       <b-row>
-        <!-- <b-button @click="update_email(loginData.email)">test</b-button> -->
         <b-button @click="update_email(loginData.email)"  type="submit" block variant="info" size="lg">로그인</b-button>
       </b-row>
       <b-row>

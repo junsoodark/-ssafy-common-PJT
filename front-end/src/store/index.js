@@ -79,13 +79,6 @@ export default new Vuex.Store({
           router.push({ name: 'Home' })
         })
         .catch(err => console.log(err.response.data))
-
-      // commit("SET_TOKEN", "qwer" + loginData);
-      // router.push({ name: "Home" });
-      // this.state.email = MD5(loginData.email)
-      // this.state.password = MD5(loginData.password)
-      // VueCookies.set("auth-user",MD5(loginData.email))
-      // VueCookies.set("auth-user-what",MD5(loginData.password))
     },
 
     login({ dispatch }, loginData) {
