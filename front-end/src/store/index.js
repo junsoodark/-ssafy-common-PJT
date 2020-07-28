@@ -17,7 +17,7 @@ const plugins = [
     paths: ["moduleName"],
   }),
 ];
-const API_URL = process.env.VUE_APP_LOCAL_URI
+const API_URL = process.env.VUE_APP_LOCAL_URL
 export default new Vuex.Store({
   state: {
     authToken: VueCookies.get("auth-token"),
@@ -39,6 +39,7 @@ export default new Vuex.Store({
   },
   actions: {
     login({ commit }, loginData) {
+      console.log(API_URL)
       const params = {
         'email' : loginData.email,
         'password' : loginData.password

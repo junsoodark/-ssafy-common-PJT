@@ -82,6 +82,7 @@ import { mapState, mapActions } from 'vuex'
 import Axios from 'axios';
 import router from "@/router";
 import VueCookies from "vue-cookies";
+const API_URL = process.env.VUE_APP_LOCAL_URI
 
 export default {
   data() {
@@ -117,7 +118,7 @@ export default {
         email: this.email,
         password: data,
       }
-      Axios({method:'DELETE', url:'http://localhost:3000/user',params:params,headers:{'Content-Type': 'application/json; charset=utf-8'}})
+      Axios({method:'DELETE', url:`${API_URL}user`,params:params,headers:{'Content-Type': 'application/json; charset=utf-8'}})
       .then(res => {
         alert(res.data)
         VueCookies.remove("auth-token")
