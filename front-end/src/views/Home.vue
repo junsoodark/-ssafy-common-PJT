@@ -84,7 +84,7 @@
     <div id="bot-div" ref="porto">
       <b-container class="bv-example-row">
         <b-row>
-          <TeamListItem class="col-4" v-for="team in TeamList" :key="team"></TeamListItem>
+          <TeamListItem class="col-4" v-for="team in TeamList" :key="team" v-bind:team="team"></TeamListItem>
         </b-row>
       </b-container>
     </div>
@@ -95,7 +95,7 @@
 // @ is an alias to /src
 import TeamListItem from '../components/TeamlistItem.vue'
 // 팀 리스트 조회 뜨면 밑에 주석 제거 하고 axios과정 추가
-// import Axios from 'axios
+import Axios from 'axios'
 
 export default {
   name: 'Home',
@@ -127,11 +127,16 @@ export default {
   },
   data () {
     return {
-      TeamList: [0,0,0,0,0,0,0,0,0],
+      TeamList: [0,1,2,3,4,5,6,7,8],
+      i: 0
     }
   },
-  created () {
-
+  created() {
+    for (var j=0; j<this.TeamList.length; j++) {
+      Axios.get(`http://localhost:3000/study/{study_id}?study_id=${this.i+j}`)
+      .then(res => {console.log(res)})
+      .catch(err => {console.log(err)})
+    }
   }
 }
 </script>

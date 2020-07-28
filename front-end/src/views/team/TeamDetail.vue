@@ -120,12 +120,15 @@
 </template>
 
 <script>
+// import Axios from 'axios'
+
 export default {
   data() {
     return {
       name: '',
       nameState: null,
-      submittedNames: []
+      submittedNames: [],
+      study_id: this.$route.params.id
     }
   },
   methods: {
@@ -156,7 +159,15 @@ export default {
         this.$bvModal.hide('modal-prevent-closing')
       })
     }
-  }
+  },
+  // created() {
+  //   Axios.get(`http://localhost:3000/study/{study_id}?study_id=${this.study_id}`)
+  //   .then(res => {console.log(res)})
+  //   .catch(err => {
+  //     console.log(err)
+  //     this.$router.push({ name: "Home" })
+  //     })
+  // }
 }
 </script>
 
