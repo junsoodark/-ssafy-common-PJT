@@ -14,18 +14,16 @@
 <script>
 import TeamListItem from '../../components/TeamlistItem.vue'
 export default {
-    components: {
-        TeamListItem
-    },
-    data () {
-        return {
-            TeamList: [0,0,0,0,0,0,0,0,0]
-        }
-    },
-    created () {
-
-    }
+  components: {
+      TeamListItem
   },
+  data () {
+      return {
+          TeamList: [0,0,0,0,0,0,0,0,0]
+      }
+  },
+  created () {
+  }
 }
 </script>
 

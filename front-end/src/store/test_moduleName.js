@@ -13,6 +13,12 @@ const mutations = {
     state.age = value.data.age
     state.name = value.data.name
     state.sex = value.data.sex
+  },
+  deleteUserInfo(state) {
+    state.email = ''
+    state.age = ''
+    state.name = ''
+    state.sex = ''
   }
 };
 
@@ -25,7 +31,7 @@ const actions = {
       commit('UPDATE_EMAIL', res)
     })
     .catch( err => {console.log(err)} )
-  }
+  },
 };
 
 export default {
