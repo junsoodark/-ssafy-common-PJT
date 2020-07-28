@@ -16,13 +16,12 @@ const mutations = {
     state.name = value.data.name
     state.sex = value.data.sex
   },
-  // deleteUserInfo(state) {
-  //   console.log('로그아웃')
-  //   state.email = ''
-  //   state.age = ''
-  //   state.name = ''
-  //   state.sex = ''
-  // }
+  deleteUserInfo(state , value) {
+    state.email = value
+    state.age = value
+    state.name = value
+    state.sex = value
+  },
   EDIT_USER_INFO(state, value) {
     state.email = value.email
     state.age = value.age
@@ -30,7 +29,7 @@ const mutations = {
     state.sex = value.sex
     console.log('vvvvalue', value)
     router.push({ name: 'Mypage' })
-  }
+  },
 };
 
 const actions = {
@@ -42,24 +41,19 @@ const actions = {
     })
     .catch( err => {console.log(err)} )
   },
-  // delete_email({commit}) {
-  //   alert('delete email')
-  //   commit('deleteUserInfo')
-  // },
 
   update_user_info(params) {
     console.log(params)
-      
-      Axios.put("http://localhost:3000/user", params)
-      .then((res) => {
-        alert(res.data)
-        console.log(res)
-      })
-      .catch((err) => {
-        alert("비밀번호를 확인해주세요")
-        console.log(err)
-      })
-  }
+    Axios.put("http://localhost:3000/user", params)
+    .then((res) => {
+      alert(res.data)
+      console.log(res)
+    })
+    .catch((err) => {
+      alert("비밀번호를 확인해주세요")
+      console.log(err)
+    })
+  },
 };
 
 export default {

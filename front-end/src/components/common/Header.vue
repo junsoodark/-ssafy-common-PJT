@@ -19,8 +19,8 @@
             <router-link class="text-light ml-2" :to="{ name: 'Mypage' }">마이페이지</router-link>
           </div>
           <div v-else class="ml-3">
-            <router-link class="text-decoration-none text-light mx-1" to="/login">Login</router-link>
-            <router-link class="text-decoration-none text-light ml-2" to="/signup">Signup</router-link>
+            <router-link class="text-light mx-1" to="/login">Login</router-link>
+            <router-link class="text-light ml-2" to="/signup">Signup</router-link>
           </div>
         </b-navbar-nav>
       </b-collapse>

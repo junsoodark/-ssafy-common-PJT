@@ -58,25 +58,16 @@
     </div>
 
     <b-modal id="my-modal">
-      <b-form id="checkemail" @submit.prevent="authDelete(deleteInfo)">
-        <h1>정말 삭제를 원하시면 이메일과 비밀번호를 한번 더 입력해주세요</h1>
-        <b-row>이메일 아이디</b-row>
-        <b-row>
-          <b-form-input
-            id="input-1"
-            v-model="deleteInfo.email"
-            type="email"
-            required
-            placeholder="이메일 아이디를 입력하세요"
-          ></b-form-input>
-        </b-row>
+      <b-form id="checkemail" @submit.prevent="deleteUserAccount(confirmPassword)">
+        <h1>정말 삭제를 원하시면 비밀번호를 입력해주세요</h1>
         <br>
         <b-row>비밀번호</b-row>
         <b-row>
           <b-form-input
             id="input-2"
-            v-model="deleteInfo.password"
             required
+            type="password"
+            v-model="confirmPassword"
             placeholder="비밀번호를 입력하세요"
           ></b-form-input>
         </b-row>
@@ -87,7 +78,10 @@
 </template>
 
 <script>
-import {mapState,mapActions} from 'vuex'
+import { mapState, mapActions } from 'vuex'
+import Axios from 'axios';
+import router from "@/router";
+import VueCookies from "vue-cookies";
 
 export default {
   data() {
@@ -102,10 +96,7 @@ export default {
         { 상태: '가입', 스터디명: '즐거운 vuex', '진행 기간': '2020-03-01 ~ 2020-04-03', '버튼': '탈퇴'},
         { 상태: '가입', 스터디명: '같이해요 spring', '진행 기간': '2020-03-01 ~ 2020-04-03', '버튼': '탈퇴'}
       ],
-      deleteInfo: {
-        email: null,
-        password: null
-      }
+      confirmPassword: null,
     }
   },
 
@@ -121,6 +112,23 @@ export default {
 
   methods: {
     ...mapActions(['authDelete']),
+    deleteUserAccount(data) {
+      const params = {
+        email: this.email,
+        password: data,
+      }
+      Axios({method:'DELETE', url:'http://localhost:3000/user',params:params,headers:{'Content-Type': 'application/json; charset=utf-8'}})
+      .then(res => {
+        alert(res.data)
+        VueCookies.remove("auth-token")
+        this.$store.dispatch('logout')
+        router.push({ name: "Home" })
+      })
+      .catch(err => {
+        console.log(err)
+        alert('삭제 실패. 비밀번호를 확인해주세요!')
+      })
+    },
   }
 
 }
