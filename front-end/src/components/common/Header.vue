@@ -16,7 +16,6 @@
             <!-- Using 'button-content' slot -->
           <div v-if="isLoggedIn" class="ml-3">
             <router-link class="text-light mx-1" :to="{ name: 'Logout' }">Logout</router-link>
-            <!-- <a class="text-light mx-1" router :to="{ name: 'Logout' }">Logouzz</a> -->
             <router-link class="text-light ml-2" :to="{ name: 'Mypage' }">마이페이지</router-link>
           </div>
           <div v-else class="ml-3">
@@ -30,7 +29,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 
 export default {
   computed: {
@@ -38,7 +37,8 @@ export default {
 
   },
   methods: {
-    // ...mapMutations()
+    ...mapMutations(['deleteUserInfo']),
+    ...mapActions(['delete_email'])
   }
 }
 </script>
