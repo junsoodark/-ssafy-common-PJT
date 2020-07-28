@@ -11,6 +11,8 @@ import UpdateUserInfo from '../views/accounts/UpdateUserInfo.vue'
 import TeamList from '../views/team/TeamList.vue'
 import TeamDetail from '../views/team/TeamDetail.vue'
 import CreateTeam from "../views/team/CreateTeam.vue"
+//error
+import NotFound from '../views/error/NotFound.vue'
 
 Vue.use(VueRouter);
 
@@ -60,15 +62,20 @@ const routes = [
     component: TeamList
   },
   {
-    path: '/study/detail',
+    path: '/study/detail/:id',
     name: 'StudyDetail',
-    component: TeamDetail
+    component: TeamDetail,
   },
   {
     path: "/study/create",
     name: "CreateTeam",
     component: CreateTeam,
   },
+  {
+    path: "*",
+    name: "NotFound",
+    component: NotFound,
+  }
 ]
 
 const router = new VueRouter({
@@ -78,7 +85,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const publicPages = ['Login', 'Signup', 'Home', 'About', 'StudyList', 'StudyDetail', 'Mypage', 'CreateTeam', 'UpdateUserInfo']  // Login 안해도 됨
+  const publicPages = ['Login', 'Signup', 'Home', 'About', 'StudyList', 'StudyDetail', 'Mypage', 'CreateTeam', 'UpdateUserInfo','NotFound']  // Login 안해도 됨
   const authPages = ['Login', 'Signup']  // Login 되어있으면 안됨
   
   const authRequired = !publicPages.includes(to.name)  // 로그인 해야 함.

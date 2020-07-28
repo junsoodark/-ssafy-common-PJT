@@ -3,9 +3,9 @@
   <h1>디테일 페이지</h1>
   <b-container>
     <b-row>
-      <b-col class="totheleft" cols="8"><h1>알고리즘 초급 스터디(코드 리뷰)</h1></b-col>
-      <b-col class="totheright" cols="4">
-        <b-button v-b-modal.modal-prevent-closing variant="info">가입신청</b-button>
+      <b-col class="totheleft text-center" cols="12"><h1>알고리즘 초급 스터디(코드 리뷰)</h1></b-col>
+      <b-col class="totheright my-3 text-center" offset="8" cols="4">
+        <b-button  v-if="isLoggedIn" v-b-modal.modal-prevent-closing variant="info">가입신청</b-button>
 
 
         <b-modal
@@ -120,12 +120,16 @@
 </template>
 
 <script>
+// import Axios from 'axios'
+import { mapGetters } from 'vuex'
+// const API_URL = process.env.VUE_APP_LOCAL_URI
 export default {
   data() {
     return {
       name: '',
       nameState: null,
-      submittedNames: []
+      submittedNames: [],
+      study_id: this.$route.params.id
     }
   },
   methods: {
@@ -156,6 +160,17 @@ export default {
         this.$bvModal.hide('modal-prevent-closing')
       })
     }
+  },
+  // created() {
+  //   Axios.get(`${API_URL}study/{study_id}?study_id=${this.study_id}`)
+  //   .then(res => {console.log(res)})
+  //   .catch(err => {
+  //     console.log(err)
+  //     this.$router.push({ name: "Home" })
+  //     })
+  // },
+  computed: {
+    ...mapGetters(['isLoggedIn'])
   }
 }
 </script>

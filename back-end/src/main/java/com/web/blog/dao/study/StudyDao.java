@@ -8,4 +8,5 @@ import com.web.blog.model.study.Study;
 
 public interface StudyDao extends JpaRepository<Study, String> {
 	Optional<Study> findStudyByStudyId(final int studyId);
+	Study findStudyByTitle(String title);
 }

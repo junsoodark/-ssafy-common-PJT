@@ -1,61 +1,54 @@
 package com.web.blog.model.study;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 import com.web.blog.model.address.Address;
-import com.web.blog.model.user.StudyUser;
 import com.web.blog.model.user.User;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class Study {
-	
+
 	@Id
 	@GeneratedValue
 	@Column(name = "study_id")
 	private int studyId;
-	
-	@ManyToOne(targetEntity = User.class)
+
+	@ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "mgr_id")
 	private int mgrId;
-	
-	@ManyToOne(targetEntity = Address.class)
+
+	@ManyToOne(targetEntity = Address.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "address_id")
 	private int addressId;
-	
+
 	private String title;
 	private String content;
 	private Date startDate;
 	private Date endDate;
-	
-	/*
-	 * @OneToMany(mappedBy="study") private List<StudyUser> studyUsers = new
-	 * ArrayList<>();
-	 */
+
+	public Study() {
+	}
+
+	public Study(int studyId, int mgrId, int addressId, String title, String content, Date startDate, Date endDate) {
+		this.studyId = studyId;
+		this.mgrId = mgrId;
+		this.addressId = addressId;
+		this.title = title;
+		this.content = content;
+		this.startDate = startDate;
+		this.endDate = endDate;
+	}
 
 	public int getStudyId() {
-		return studyId;
+		return this.studyId;
 	}
 
 	public void setStudyId(int studyId) {
@@ -63,7 +56,7 @@ public class Study {
 	}
 
 	public int getMgrId() {
-		return mgrId;
+		return this.mgrId;
 	}
 
 	public void setMgrId(int mgrId) {
@@ -71,7 +64,7 @@ public class Study {
 	}
 
 	public int getAddressId() {
-		return addressId;
+		return this.addressId;
 	}
 
 	public void setAddressId(int addressId) {
@@ -79,7 +72,7 @@ public class Study {
 	}
 
 	public String getTitle() {
-		return title;
+		return this.title;
 	}
 
 	public void setTitle(String title) {
@@ -87,7 +80,7 @@ public class Study {
 	}
 
 	public String getContent() {
-		return content;
+		return this.content;
 	}
 
 	public void setContent(String content) {
@@ -95,7 +88,7 @@ public class Study {
 	}
 
 	public Date getStartDate() {
-		return startDate;
+		return this.startDate;
 	}
 
 	public void setStartDate(Date startDate) {
@@ -103,12 +96,18 @@ public class Study {
 	}
 
 	public Date getEndDate() {
-		return endDate;
+		return this.endDate;
 	}
 
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
+
+	/*
+	 * @OneToMany(mappedBy="study") private List<StudyUser> studyUsers = new
+	 * ArrayList<>();
+	 */
+
 	/*
 	 * public List<StudyUser> getStudyUsers() { return studyUsers; }
 	 * 
@@ -116,11 +115,4 @@ public class Study {
 	 * studyUsers; }
 	 */
 
-	
-	
-	
-	
-	
-	
-	
 }

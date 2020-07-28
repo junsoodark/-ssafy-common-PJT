@@ -25,8 +25,7 @@
           id="input-3"
           v-model="form.contact"
           :options="contacts"
-        >
-        </b-form-radio-group>
+        ></b-form-radio-group>
       </b-form-group>
 
       <b-form-group id="input-group-4" label="지역:" label-for="input-4">
@@ -43,8 +42,7 @@
           id="input-5"
           v-model="form.schedule"
           :options="schedules"
-        >
-        </b-form-radio-group>
+        ></b-form-radio-group>
         <b-form-spinbutton
           id="input-5"
           v-model="form.count"
@@ -56,26 +54,38 @@
       </b-form-group>
 
       <b-form-group id="input-group-6" label="요일:" label-for="input-6">
-        <b-form-radio-group id="input-6" v-model="form.day" :options="days">
-        </b-form-radio-group>
+        <b-form-radio-group
+          id="input-6"
+          v-model="form.day"
+          :options="days"
+        ></b-form-radio-group>
       </b-form-group>
 
       <b-form-group id="input-group-7" label="시간대:" label-for="input-7">
-        <b-form-radio-group id="input-7" v-model="form.time" :options="times">
-        </b-form-radio-group>
+        <b-form-radio-group
+          id="input-7"
+          v-model="form.time"
+          :options="times"
+        ></b-form-radio-group>
       </b-form-group>
 
       <!-- <b-form-group id="input-group-8" label="스터디 기간:" laebl-for="input-8">
         <v-md-date-range-picker></v-md-date-range-picker>
-      </b-form-group> -->
+      </b-form-group>-->
 
       <b-form-group id="input-group-8" label="스터디 기간:" laebl-for="input-8">
-        <b-calendar
-          v-model="value"
-          :min="min"
-          :max="max"
-          locale="en"
-        ></b-calendar>
+        <label for="start-datepicker">시작날짜</label>
+        <b-form-datepicker
+          id="start-datepicker"
+          v-model="form.startdate"
+          class="mb-2"
+        ></b-form-datepicker>
+        <label for="end-datepicker">종료날짜</label>
+        <b-form-datepicker
+          id="end-datepicker"
+          v-model="form.enddate"
+          class="mb-2"
+        ></b-form-datepicker>
       </b-form-group>
 
       <b-form-group id="input-group-9" label="인원:" laebl-for="input-9">
@@ -137,6 +147,8 @@ export default {
         time: null,
         period: null,
         value: 0,
+        startdate: null,
+        enddate: null,
       },
       fields: [
         { text: "원하는 분야를 선택해주세요", value: null },

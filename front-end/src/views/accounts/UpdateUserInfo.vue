@@ -94,7 +94,7 @@
 <script>
 import { mapState } from 'vuex';
 import Axios from 'axios';
-
+const API_URL = process.env.VUE_APP_LOCAL_URI
 export default {
   data() {
     return {
@@ -171,7 +171,8 @@ export default {
         params.age = this.newAge
       )
       
-      Axios.put("http://localhost:3000/user", params)
+      console.log(params)
+      Axios.put(`${API_URL}user`, params)
       .then((res) => {
         alert(res.data)
         this.$store.commit('EDIT_USER_INFO', params)
