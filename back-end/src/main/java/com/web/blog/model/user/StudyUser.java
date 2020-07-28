@@ -9,24 +9,51 @@ import javax.persistence.ManyToOne;
 
 import com.web.blog.model.study.Study;
 
-import lombok.Getter;
-import lombok.Setter;
-
 @Entity
-@Getter
-@Setter
 public class StudyUser {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
-	
-	
+
 	@ManyToOne
 	@JoinColumn(name = "study_id")
 	private Study study;
-	
+
+	public StudyUser() {
+	}
+
+	public StudyUser(Long id, User user, Study study) {
+		this.id = id;
+		this.user = user;
+		this.study = study;
+	}
+
+	public Long getId() {
+		return this.id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public User getUser() {
+		return this.user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Study getStudy() {
+		return this.study;
+	}
+
+	public void setStudy(Study study) {
+		this.study = study;
+	}
+
 }

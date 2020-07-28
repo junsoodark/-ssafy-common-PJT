@@ -20,8 +20,6 @@ import io.swagger.annotations.ApiOperation;
 
 @RestController
 public class StudyController {
-    @Autowired
-    StudyService studyService;
 
     @Autowired
     StudyDao studyDao;
@@ -40,11 +38,13 @@ public class StudyController {
         studyDao.save(study);
     }
 
-    @GetMapping("/study/{study_id}")
+    @GetMapping("/study")
     @ApiOperation(value = "study_id로 study를 반환하는 api 입니다.")
     public Study read(int study_id) {
-        Optional<Study> study = studyDao.findStudyByStudyId(study_id);
-        return study.get();
+        // Optional<Study> study = studyDao.findStudyByStudyId(study_id);
+        // return study.get();
+        Study study = studyDao.findStudyByTitle("스터디1");
+        return study;
     }
 
     @PutMapping("/study")
