@@ -122,7 +122,7 @@
 <script>
 // import Axios from 'axios'
 import { mapGetters } from 'vuex'
-
+// const API_URL = process.env.VUE_APP_LOCAL_URI
 export default {
   data() {
     return {
@@ -162,7 +162,7 @@ export default {
     }
   },
   // created() {
-  //   Axios.get(`http://localhost:3000/study/{study_id}?study_id=${this.study_id}`)
+  //   Axios.get(`${API_URL}study/{study_id}?study_id=${this.study_id}`)
   //   .then(res => {console.log(res)})
   //   .catch(err => {
   //     console.log(err)

@@ -18,7 +18,7 @@ const plugins = [
     paths: ["moduleName"],
   }),
 ];
-
+const API_URL = process.env.VUE_APP_LOCAL_URI
 export default new Vuex.Store({
   state: {
     email: VueCookies.get("auth-user"),
@@ -71,7 +71,7 @@ export default new Vuex.Store({
       var JsonForm = JSON.stringify(params);
       Axios({
         method: "POST",
-        url: "http://localhost:3000/login",
+        url: `${API_URL}login`,
         params: params,
         data: JsonForm,
         headers: { "Content-Type": "application/json; charset=utf-8" },
@@ -108,7 +108,7 @@ export default new Vuex.Store({
       var JsonForm = JSON.stringify(form);
       Axios({
         method: "POST",
-        url: "http://localhost:3000/user",
+        url: `${API_URL}user`,
         params: params,
         data: JsonForm,
         headers: { "Content-Type": "application/json; charset=utf-8" },
@@ -125,7 +125,7 @@ export default new Vuex.Store({
     },
 
     logout({ commit }) {
-      // Axios.post('http://localhost:3000/accounts/logout', null, getters.config)
+      // Axios.post(`${API_URL}accounts/logout`, null, getters.config)
       //   .then(() => {  // Django DB 에서는 삭제 | cookie, state 에는 남아있음
       //     commit('SET_TOKEN', null)  // state 에서도 삭제
       //     cookies.remove('auth-token')  // cookie 에서는 삭제
@@ -142,7 +142,7 @@ export default new Vuex.Store({
       router.push({ name: "Home" });
     },
     createTeam(state, form) {
-      Axios.post("http://localhost:3000/study/create", form)
+      Axios.post(`${API_URL}study/create`, form)
         .then((res) => {
           alert("스터디 생성");
           console.log(res);
@@ -162,7 +162,7 @@ export default new Vuex.Store({
       params.append("password", password);
       Axios({
         method: "DELETE",
-        url: "http://localhost:3000/user",
+        url: `${API_URL}user`,
         params: params,
         headers: { "Content-Type": "application/json; charset=utf-8" },
       })

@@ -130,6 +130,7 @@
 
 <script>
 import Axios from "axios";
+const API_URL = process.env.VUE_APP_LOCAL_URI
 export default {
   data() {
     return {
@@ -182,7 +183,7 @@ export default {
         alert("이메일 형식을 사용해야 합니다!");
         return false;
       }
-      Axios.post("http://localhost:3000/verify", params)
+      Axios.post(`${API_URL}verify`, params)
         .then(() => {
           const EmailWindow = document.querySelector("#email-window");
           EmailWindow.className = "d-none";
