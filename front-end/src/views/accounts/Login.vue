@@ -20,6 +20,7 @@
           id="input-2"
           v-model="loginData.password"
           required
+          type="password"
           placeholder="비밀번호를 입력하세요"
         ></b-form-input>
       </b-row>

@@ -80,6 +80,7 @@
             <b-form-input
               id="password-input"
               v-model="password"
+              type="password"
               :state="passwordState"
               required
             ></b-form-input>
@@ -174,7 +175,6 @@ export default {
       Axios.put(`${API_URL}user`, params)
       .then((res) => {
         alert(res.data)
-        console.log('들어오는데이터', res)
         this.$store.commit('EDIT_USER_INFO', params)
       })
       .catch((err) => {
