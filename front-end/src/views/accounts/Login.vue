@@ -1,5 +1,6 @@
 <template>
   <b-container style="max-width:450px;">
+    <br>
     <h1>로그인</h1>
 		<br>
     <b-form @submit.prevent="login(loginData)">

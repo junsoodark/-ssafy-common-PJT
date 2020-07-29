@@ -32,14 +32,12 @@ export default new Vuex.Store({
   },
   mutations: {
     SET_TOKEN(state, token) {
-      console.log(token);
-      state.authToken = token;
-      VueCookies.set("auth-token", token);
+      state.authToken = token
+      VueCookies.set("auth-token", token)
     },
   },
   actions: {
     login({ commit }, loginData) {
-      console.log(API_URL)
       const params = {
         'email' : loginData.email,
         'password' : loginData.password

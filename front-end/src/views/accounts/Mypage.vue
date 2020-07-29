@@ -1,18 +1,28 @@
 <template>
   <b-container>
+    <br>
     <h1>마이페이지</h1>
-    
-    <div >
+    <div>
+      <hr>
       <b-media>
         <template v-slot:aside>
           <b-img blank blank-color="#abc" width="150" rounded="circle" alt="placeholder"></b-img>
         </template>
         <b-row>
-          <b-col class="text-left"><h3>{{ email }}</h3></b-col>
-          <b-col class="text-left"><h3>{{ name }}</h3></b-col>
-          <b-col class="text-left"><h3 v-if="sex == 1">남자</h3><h3 v-if="sex == 2">여자</h3></b-col>
-          <b-col class="text-left"><h3>{{ age }}</h3></b-col>
+          <b-col cols="2" class="text-center font-weight-bold"><p>이메일</p> </b-col>
+          <b-col cols="10" class="text-center"><p>{{ email }}</p></b-col>
         </b-row>
+        <hr>
+        <b-row>
+          <b-col cols="2" class="text-center font-weight-bold"><p>이름</p> </b-col>
+          <b-col cols="10" class="text-center"><p>{{ name }}</p></b-col>
+        </b-row>
+        <hr>
+        <b-row>
+          <b-col cols="2" class="text-center font-weight-bold"><p v-if="sex == 1">남자</p><p v-if="sex == 2">여자</p></b-col>
+          <b-col cols="10"><p class="text-center">{{ age }}</p></b-col>
+        </b-row>
+        <hr>
           <b-row align-h="start" class="text-left">
             <b-col cols="4">참여중인 스터디 0</b-col>
             <b-col cols="4">개설한 스터디 0</b-col>
@@ -32,19 +42,23 @@
           </b-row>
           <br>
           <b-row align-h="end" class="text-right">
-            <b-col cols="2"><b-button route :to="{name: 'UpdateUserInfo'}" variant="warning">회원정보 수정</b-button></b-col>
-            <b-col cols="2"><b-button variant="danger" v-b-modal.my-modal>회원탈퇴</b-button></b-col>
+            <div class="badge text-wrap mr-2" style="width: 9rem;"><b-button route :to="{name: 'UpdateUserInfo'}" variant="warning">회원정보 수정</b-button></div>
+            <div class="badge text-wrap mr-2" style="width: 7rem;"><b-button variant="danger" v-b-modal.my-modal>회원탈퇴</b-button></div>
           </b-row>
       </b-media>
-      
+      <hr>
+      </div>
+      <div>
       <b-row class="text-left">
         <h3>내 스터디</h3>
       </b-row>
+      <br>
       <b-row>
         <b-col class="text-left">
           <h6>현재 스터디가 없습니다.</h6>
         </b-col>
       </b-row>
+      <br>
       <b-row class="text-left">
         <h3>스터디 요청</h3>
       </b-row>
@@ -59,7 +73,7 @@
 
     <b-modal id="my-modal">
       <b-form id="checkemail" @submit.prevent="deleteUserAccount(confirmPassword)">
-        <h1>정말 삭제를 원하시면 비밀번호를 입력해주세요</h1>
+        <h3 class="text-center">비밀번호를 입력해주세요</h3>
         <br>
         <b-row>비밀번호</b-row>
         <b-row>
