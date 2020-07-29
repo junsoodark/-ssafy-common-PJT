@@ -84,6 +84,8 @@
     <div id="bot-div" ref="porto">
       <b-container class="bv-example-row">
         <b-row>
+          <h2 class="col-12">지금도 {{TeamCnt}}개의 스터디 팀이 활동하는 중!</h2>
+          <h2 class="col-12">최근 만들어진 팀들</h2>
           <TeamListItem class="col-4" v-for="team in TeamList" :key="team" v-bind:team="team"></TeamListItem>
         </b-row>
       </b-container>
@@ -133,17 +135,24 @@ export default {
   },
   data () {
     return {
-      TeamList: [0,1,2,3,4,5,6,7,8],
+      TeamList: [],
+      TeamCnt: 0,
       slide: 0,
       sliding: null
     }
   },
   created() {
-    for (var j=0; j<this.TeamList.length; j++) {
-      Axios.get(`${API_URL}study/{study_id}?study_id=${this.i+j}`)
-      .then(res => {console.log(res)})
-      .catch(err => {console.log(err)})
-    }
+    Axios.get(`${API_URL}study/all`)
+    .then(res => {
+      this.TeamList = res.data.reverse()
+      this.TeamCnt = this.TeamList.length
+      if (this.TeamList.length>=6) {
+        this.TeamList = this.TeamList.slice(5)
+      }
+    })
+    .catch(err => {
+      console.log(err)
+    })
   }
 }
 </script>
