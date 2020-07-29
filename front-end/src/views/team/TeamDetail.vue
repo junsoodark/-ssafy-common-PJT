@@ -1,9 +1,8 @@
 <template>
   <div>
-  <h1>디테일 페이지</h1>
   <b-container>
     <b-row>
-      <b-col class="totheleft text-center" cols="12"><h1>알고리즘 초급 스터디(코드 리뷰)</h1></b-col>
+      <b-col class="totheleft text-center" cols="12"><h1>{{team.title}} 팀의 상세 정보</h1></b-col>
       <b-col class="totheright my-3 text-center" offset="8" cols="4">
         <b-button  v-if="isLoggedIn" v-b-modal.modal-prevent-closing variant="info">가입신청</b-button>
 
@@ -89,7 +88,7 @@
         <template v-slot:header>
           <b-icon icon="calendar3" aria-hidden="true"></b-icon> 진행기간
         </template>
-        <b-card-text>2020-03-01 ~ 2020-04-30</b-card-text>
+        <b-card-text>{{team.startDate}} ~ {{team.endDate}}</b-card-text>
       </b-card>
       <b-card header-tag="header" footer-tag="footer">
         <template v-slot:header>
@@ -120,16 +119,17 @@
 </template>
 
 <script>
-// import Axios from 'axios'
+import Axios from 'axios'
 import { mapGetters } from 'vuex'
-// const API_URL = process.env.VUE_APP_LOCAL_URL
+const API_URL = process.env.VUE_APP_LOCAL_URL
 export default {
   data() {
     return {
       name: '',
       nameState: null,
       submittedNames: [],
-      study_id: this.$route.params.id
+      study_id: this.$route.params.id,
+      team: []
     }
   },
   methods: {
@@ -161,14 +161,16 @@ export default {
       })
     }
   },
-  // created() {
-  //   Axios.get(`${API_URL}study/{study_id}?study_id=${this.study_id}`)
-  //   .then(res => {console.log(res)})
-  //   .catch(err => {
-  //     console.log(err)
-  //     this.$router.push({ name: "Home" })
-  //     })
-  // },
+  created() {
+    Axios.get(`${API_URL}study/${this.study_id}`)
+    .then(res => {
+      this.team = res.data
+    })
+    .catch(err => {
+      console.log(err)
+      this.$router.push({ name: "Home" })
+      })
+  },
   computed: {
     ...mapGetters(['isLoggedIn'])
   }

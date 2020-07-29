@@ -13,7 +13,7 @@
         {{team.content}}
       </b-card-text>
 
-      <router-link :to="{ name: 'StudyDetail', params: {id:team} }" variant="primary" tag="b-button">{{team.title}}팀의 상세정보</router-link>
+      <router-link :to="{ name: 'StudyDetail', params: {id:team.studyId} }" variant="primary" tag="b-button">{{team.title}}팀의 상세정보</router-link>
     </b-card>
   </div>
 </template>
