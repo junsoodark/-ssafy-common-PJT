@@ -10,4 +10,5 @@ public interface StudyService {
 	public Map<String, Object> Study2Map(final Study study);
 	public List<Map<String, Object>> findAllStudies();
 	public void create(final Study study);
+	public Study delete(final int studyId);
 }
