@@ -1,6 +1,12 @@
 package com.web.blog.model.study;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -36,6 +43,9 @@ public class Study {
 	@JoinColumn(name = "mgr_id")
 	private User user;
 
+	@ManyToMany(mappedBy="studies")
+	private Set<User> members;
+	
 	@JsonIgnore
 	@ManyToOne(targetEntity = Address.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "address_id")
@@ -45,4 +55,23 @@ public class Study {
 	private String content;
 	private LocalDate startDate;
 	private LocalDate endDate;
+	
+	public void addMember(User member) {
+		if(!this.members.contains(member))
+			this.members.add(member);
+		
+		if(!member.getStudies().contains(this))
+			member.getStudies().add(this);
+	}
+	
+	public List<Map<String, Object>> getMemberList(){
+		List<Map<String, Object>> ret = new ArrayList<>();
+		for(User member : members) {
+			Map<String, Object> info = new HashMap<>();
+			info.put("email", member.getEmail());
+			info.put("name",  member.getName());
+			ret.add(info);
+		}
+		return ret;
+	}
 }
