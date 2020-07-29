@@ -159,7 +159,7 @@ export default {
       if (password != passwordConfirm) {
         alert("비밀번호 확인과 비밀번호가 다릅니다!");
         return false;
-      } else if (!isTerm) {
+      } else if (isTerm !== "accepted") {
         alert("동의를 해주세요!");
         return false;
       } else if (email.indexOf("@") === -1) {
