@@ -52,4 +52,14 @@ public class StudyServiceImpl implements StudyService {
 	public void create(Study study) {
 		studyDao.save(study);
 	}
+
+	@Override
+	public Study delete(final int studyId) {
+		Study study = findStudyByStudyId(studyId);
+		if (study != null) {
+			studyDao.delete(study);
+		}
+		return study;
+
+	}
 }
