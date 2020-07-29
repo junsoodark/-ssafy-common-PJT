@@ -1,61 +1,81 @@
 package com.web.blog.controller.study;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Optional;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 
-import com.web.blog.dao.study.StudyDao;
+import com.web.blog.model.address.Address;
 import com.web.blog.model.study.Study;
+import com.web.blog.model.user.User;
+import com.web.blog.service.address.AddressService;
 import com.web.blog.service.study.StudyService;
+import com.web.blog.service.user.UserService;
 
 import io.swagger.annotations.ApiOperation;
 
 @RestController
 public class StudyController {
+	@Autowired
+	StudyService studyService;
 
-    @Autowired
-    StudyDao studyDao;
-    //
-    // @GetMapping
-    // @ApiOperation(value="테스트를 위한 임시 api 입니다.")
-    // public ResponseEntity test(@RequestParam final int study_id) {
-    // Study study = studyService.findStudyByStudyId(study_id);
-    // if(study==null) return new ResponseEntity(null, HttpStatus.FORBIDDEN);
-    // return new ResponseEntity(study, HttpStatus.OK);
-    // }
+	@Autowired
+	UserService userService;
+	
+	@Autowired
+	AddressService addressService;
+	
+	@GetMapping("/study/all")
+	@ApiOperation(value="모든 스터디의 리스트를 반환합니다.")
+	public ResponseEntity findAll() {
+		List<Map<String, Object>> res = studyService.findAllStudies();
+		return new ResponseEntity(res, HttpStatus.OK);
+	}
+	
+	@GetMapping("/study/{studyId}")
+	@ApiOperation(value="스터디 아이디를 입력받아 일치하는 스터디의 정보를 반환합니다.")
+	public ResponseEntity read(@PathVariable final int studyId) {
+		Study res = studyService.findStudyByStudyId(studyId);
+		if(res==null) return new ResponseEntity("존재하지 않는 스터디입니다.", HttpStatus.NOT_FOUND);
+		return new ResponseEntity(res, HttpStatus.OK);
+	}
+	
+	@PostMapping("/study")
+	@ApiOperation(value="")
+	public ResponseEntity create(@RequestParam final String email,
+								 @RequestParam final String title,
+								 @RequestParam final String content,
+								 @DateTimeFormat(iso=ISO.DATE) @RequestParam final LocalDate startDate,
+								 @DateTimeFormat(iso=ISO.DATE) @RequestParam final LocalDate endDate,
+								 @RequestParam final String si,
+								 @RequestParam final String gu) {
+		final User user = userService.findUserByEmail(email);
+		if(user==null) return new ResponseEntity("존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND);
+		
+		final Address address = addressService.findAddressBySiAndGu(si, gu);
+		if(address==null) return new ResponseEntity("존재하지 않는 주소입니다.", HttpStatus.NOT_FOUND);
 
-    @PostMapping("/study")
-    @ApiOperation(value = "스터디 정보를 입력받아 생성")
-    public void create(Study study) {
-        studyDao.save(study);
-    }
+		if(endDate.compareTo(startDate)<0) return new ResponseEntity("종료일은 시작일 보다 빠를수 없습니다", HttpStatus.FORBIDDEN);
 
-    @GetMapping("/study")
-    @ApiOperation(value = "study_id로 study를 반환하는 api 입니다.")
-    public Study read(int study_id) {
-        // Optional<Study> study = studyDao.findStudyByStudyId(study_id);
-        // return study.get();
-        Study study = studyDao.findStudyByTitle("스터디1");
-        return study;
-    }
-
-    @PutMapping("/study")
-    @ApiOperation(value = "스터디 정보를 입력받아 기존의 스터디 수정")
-    public void update(Study study) {
-        studyDao.save(study);
-    }
-
-    @DeleteMapping("/study")
-    @ApiOperation(value = "스터디 아이디를 입력받아 스터디 삭제")
-    public void delete(int study_id) {
-        studyDao.delete(studyDao.findStudyByStudyId(study_id).get());
-    }
+		Study study = new Study();
+		study.setUser(user);
+		study.setAddress(address);
+		study.setTitle(title);
+		study.setContent(content);
+		study.setStartDate(startDate);
+		study.setEndDate(endDate);
+		studyService.create(study);
+		
+		return new ResponseEntity("스터디 생성에 성공했습니다.", HttpStatus.OK);
+	}
 }

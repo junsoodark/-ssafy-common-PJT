@@ -1,4 +1,4 @@
-package com.web.blog.service;
+package com.web.blog.service.user;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,11 +18,13 @@ public class UserServiceImpl implements UserService {
 	UserDao userDao;
 
 	@Override
-	public Map<String, Object> findUserByEmail(final String email) {
+	public User findUserByEmail(final String email) {
 		Optional<User> userOpt = userDao.findUserByEmail(email);
-		if(userOpt.isPresent()==false) return null;
-
-		User user = userOpt.get();
+		return userOpt.isPresent() ? userOpt.get() : null;
+	}
+	
+	@Override
+	public Map<String, Object> User2Map(User user) {
 		Map<String, Object> ret = new HashMap<>();
 		ret.put("email", user.getEmail());
 		ret.put("name", user.getName());
@@ -30,7 +32,7 @@ public class UserServiceImpl implements UserService {
 		ret.put("sex", user.getSex());
 		return ret;
 	}
-
+	
 	@Override
 	public Map<String, String> getErrorMessage(final Errors errors) {
 		Map<String, String> ret = new HashMap<>();

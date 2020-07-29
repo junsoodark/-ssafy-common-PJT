@@ -5,8 +5,8 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import com.web.blog.model.user.User;
-import com.web.blog.service.UserService;
 import com.web.blog.service.auth.VerifyService;
+import com.web.blog.service.user.UserService;
 
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
@@ -43,9 +43,9 @@ public class UserController {
 	@GetMapping("/user/{email}")
 	@ApiOperation(value="이메일을 입력받아 일치하는 사용자의 정보를 반환합니다.")
 	public ResponseEntity read(@PathVariable final String email) {
-		Map<String, Object> res = userService.findUserByEmail(email);
-		if(res==null) return new ResponseEntity("존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND);
-		return new ResponseEntity(res, HttpStatus.OK);
+		User user = userService.findUserByEmail(email);
+		if(user==null) return new ResponseEntity("존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND);
+		return new ResponseEntity(userService.User2Map(user), HttpStatus.OK);
 	}
 	
 	@PutMapping("/user")
