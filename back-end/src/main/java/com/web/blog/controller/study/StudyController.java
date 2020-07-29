@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -89,5 +90,30 @@ public class StudyController {
 			return new ResponseEntity("해당 스터디가 존재하지 않습니다.", HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity("스터디 삭제에 성공했습니다.", HttpStatus.OK);
+	}
+
+	@PutMapping("/study")
+	@ApiOperation(value = "")
+	public ResponseEntity update(@RequestParam final int studyId, @RequestParam final String email,
+			@RequestParam final String title, @RequestParam final String content,
+			@DateTimeFormat(iso = ISO.DATE) @RequestParam final LocalDate startDate,
+			@DateTimeFormat(iso = ISO.DATE) @RequestParam final LocalDate endDate, @RequestParam final String si,
+			@RequestParam final String gu) {
+		Study study = studyService.findStudyByStudyId(studyId);
+		final Address address = addressService.findAddressBySiAndGu(si, gu);
+		final User user = userService.findUserByEmail(email);
+		if (address == null)
+			return new ResponseEntity("존재하지 않는 주소입니다.", HttpStatus.NOT_FOUND);
+
+		if (endDate.compareTo(startDate) < 0)
+			return new ResponseEntity("종료일은 시작일 보다 빠를수 없습니다", HttpStatus.FORBIDDEN);
+		study.setUser(user);
+		study.setAddress(address);
+		study.setTitle(title);
+		study.setContent(content);
+		study.setStartDate(startDate);
+		study.setEndDate(endDate);
+		studyService.create(study);
+		return new ResponseEntity("스터디 수정에 성공했습니다.", HttpStatus.OK);
 	}
 }
