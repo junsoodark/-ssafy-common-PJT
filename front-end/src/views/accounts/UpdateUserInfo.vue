@@ -2,6 +2,7 @@
   <b-container class="bv-example-row my-5">
     <h1>회원정보 수정 페이지</h1>
     <br>
+    <!-- 이메일 -->
     <b-row>
       <b-col class="input-group input-group-lg">
         <div class="input-group-prepend">
@@ -11,16 +12,18 @@
       </b-col>
     </b-row>
     <br>
+    <!-- 이름 -->
     <b-form>
       <b-row>
         <b-col class="input-group input-group-lg">
           <div class="input-group-prepend">
-            <span class="input-group-text" style="width: 9rem;" id="inputGroup-sizing-default">닉네임</span>
+            <span class="input-group-text" style="width: 9rem;" id="inputGroup-sizing-default">이름</span>
           </div>
           <input :value="newName" @input="updateNickname" type="text" class="form-control text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
         </b-col>
       </b-row>
       <br>
+      <!-- 나이 -->
       <b-row>
         <b-col class="input-group input-group-lg">
           <div class="input-group-prepend">
@@ -30,15 +33,29 @@
         </b-col>
       </b-row>
       <br>
-      <div class="input-group">
-        <div class="input-group-prepend">
-          <div class="input-group-text">
-            <input type="radio" aria-label="Radio button for following text input">
+      <!-- 성별 -->
+      <b-row>
+        <b-col class="input-group input-group-lg">
+          <div class="input-group-prepend">
+            <span class="input-group-text" style="width: 9rem;" id="inputGroup-sizing-default">성별</span>
           </div>
-        </div>
-        <input type="text" class="form-control" aria-label="Text input with radio button">
-      </div>
 
+
+          <b-form-radio v-model="newSex" type="number" name="some-radios" value="1" v-if="newSex == 1" class="form-control text-center"
+            >남자</b-form-radio
+          >
+          <b-form-radio value="1" @input="updateSex" type="number" name="some-radios" v-if="newSex == 2" class="form-control text-center"
+            >남자</b-form-radio
+          >
+          <b-form-radio v-model="newSex" type="number" name="some-radios" value="2" v-if="newSex == 2" class="form-control text-center"
+            >여자</b-form-radio
+          >
+          <b-form-radio value="2" @input="updateSex" type="number" name="some-radios" v-if="newSex == 1" class="form-control text-center"
+            >여자</b-form-radio
+          >
+
+        </b-col>
+      </b-row>
 
       <br>
       <b-button v-b-modal.modal-prevent-closing block size="lg" variant="info">수정하기</b-button>
@@ -85,7 +102,9 @@ export default {
         name : '',
         sex : '',
         age : '',
-      }
+      },
+      tempSex: '',
+      selected: null,
     };
   },
   computed: {
@@ -103,7 +122,8 @@ export default {
       this.form.name = e.target.value
     },
     updateSex(e) {
-      this.form.sex = e.target.value
+      console.log(e)
+      this.form.sex = e
     },
     updateAge(e) {
       this.form.age = e.target.value
