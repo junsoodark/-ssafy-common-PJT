@@ -13,6 +13,9 @@
 <script>
 import TeamListItem from '../../components/TeamlistItem.vue'
 import { mapGetters } from 'vuex'
+import Axios from 'axios'
+
+const API_URL = process.env.VUE_APP_LOCAL_URL
 
 export default {
   components: {
@@ -20,10 +23,17 @@ export default {
   },
   data () {
       return {
-          TeamList: [0,1,2,3,4,5,6,7,8]
+          TeamList: []
       }
   },
   created () {
+    Axios.get(`${API_URL}study/all`)
+    .then(res => {
+      this.TeamList = res.data.reverse()
+    })
+    .catch(err => {
+      console.log(err)
+    })
   },
   computed: {
     ...mapGetters(['isLoggedIn'])
