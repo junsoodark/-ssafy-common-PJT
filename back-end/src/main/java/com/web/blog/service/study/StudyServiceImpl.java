@@ -13,7 +13,7 @@ import com.web.blog.dao.study.StudyDao;
 import com.web.blog.model.study.Study;
 
 @Service
-public class StudyServiceImpl implements StudyService{
+public class StudyServiceImpl implements StudyService {
 	@Autowired
 	StudyDao studyDao;
 
@@ -24,8 +24,9 @@ public class StudyServiceImpl implements StudyService{
 	}
 
 	@Override
-	public Map<String, Object> Study2Map(final Study study){
+	public Map<String, Object> Study2Map(final Study study) {
 		Map<String, Object> ret = new HashMap<>();
+		ret.put("studyId", study.getStudyId());
 		ret.put("title", study.getTitle());
 		ret.put("content", study.getContent());
 		ret.put("si", study.getAddress().getSi());
@@ -36,12 +37,14 @@ public class StudyServiceImpl implements StudyService{
 		ret.put("mgrName", study.getUser().getName());
 		return ret;
 	}
-	
+
 	@Override
 	public List<Map<String, Object>> findAllStudies() {
 		List<Map<String, Object>> ret = new ArrayList<>();
-		for(Study study: studyDao.findAll())
+		for (Study study : studyDao.findAll()) {
 			ret.add(Study2Map(study));
+			System.out.println(study.getStudyId());
+		}
 		return ret;
 	}
 
