@@ -103,11 +103,17 @@ export default {
     TeamListItem
   },
   methods: {
-    scrollMeTo(refName) {
+    scrollMeTo (refName) {
     var element = this.$refs[refName];
     var top = element.offsetTop;
     window.focus()
     window.scrollTo({top:top,left:0,behavior:'smooth'});
+    },
+    onSlideStart () {
+      this.sliding = true
+    },
+    onSlideEnd () {
+      this.sliding = false
     }
   },
   mounted () {
@@ -128,6 +134,8 @@ export default {
   data () {
     return {
       TeamList: [0,1,2,3,4,5,6,7,8],
+      slide: 0,
+      sliding: null
     }
   },
   created() {
