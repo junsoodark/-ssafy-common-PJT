@@ -77,8 +77,7 @@ export default new Vuex.Store({
           router.push({ name: "Login" });
         })
         .catch((err) => {
-          alert("가입실패!");
-          console.log(err);
+          alert(err.response.data);
         });
     },
 
@@ -96,8 +95,7 @@ export default new Vuex.Store({
           console.log(res);
         })
         .catch((err) => {
-          alert("생성 실패!");
-          console.log(err);
+          alert(err.response.data);
         });
     },
   },
