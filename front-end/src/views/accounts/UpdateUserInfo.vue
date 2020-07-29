@@ -94,7 +94,7 @@
 <script>
 import { mapState } from 'vuex';
 import Axios from 'axios';
-const API_URL = process.env.VUE_APP_LOCAL_URI
+const API_URL = process.env.VUE_APP_LOCAL_URL
 export default {
   data() {
     return {

@@ -82,7 +82,7 @@ import { mapState, mapActions } from 'vuex'
 import Axios from 'axios';
 import router from "@/router";
 import VueCookies from "vue-cookies";
-const API_URL = process.env.VUE_APP_LOCAL_URI
+const API_URL = process.env.VUE_APP_LOCAL_URL
 
 export default {
   data() {

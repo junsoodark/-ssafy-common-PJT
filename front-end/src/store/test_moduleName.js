@@ -1,6 +1,6 @@
 import Axios from "axios";
 import router from "@/router";
-const API_URL = process.env.VUE_APP_LOCAL_URI
+const API_URL = process.env.VUE_APP_LOCAL_URL
 
 const initialState = {
   email: '',

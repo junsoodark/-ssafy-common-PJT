@@ -96,7 +96,7 @@
 import TeamListItem from '../components/TeamlistItem.vue'
 // 팀 리스트 조회 뜨면 밑에 주석 제거 하고 axios과정 추가
 import Axios from 'axios'
-const API_URL = process.env.VUE_APP_LOCAL_URI
+const API_URL = process.env.VUE_APP_LOCAL_URL
 export default {
   name: 'Home',
   components: {
