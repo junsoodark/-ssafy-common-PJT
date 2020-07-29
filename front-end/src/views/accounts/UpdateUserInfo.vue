@@ -1,66 +1,47 @@
 <template>
   <b-container class="bv-example-row my-5">
     <h1>회원정보 수정 페이지</h1>
-    
+    <br>
     <b-row>
-      <b-col cols="2">이메일 : </b-col>
-      <b-col cols='10'>
-        <b-list-group>
-          <b-list-group-item>{{ email }}</b-list-group-item>
-        </b-list-group>
+      <b-col class="input-group input-group-lg">
+        <div class="input-group-prepend">
+          <span class="input-group-text" style="width: 9rem;" id="inputGroup-sizing-default">이메일</span>
+        </div>
+        <p class="form-control text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">{{ email }}</p>
       </b-col>
     </b-row>
     <br>
-    <b-form >
+    <b-form>
       <b-row>
-        <b-col cols="2">닉네임 : </b-col>
-        <b-col cols="10">
-          <input :value="newName" @input="updateNickname">
-          <!-- <b-form-input
-            id="input-6"
-            :value="newName"
-            type="text"
-            required
-            size="lg"
-            placeholder="닉네임을 입력해주세요"
-            @input="updateNickname"
-          ></b-form-input> -->
+        <b-col class="input-group input-group-lg">
+          <div class="input-group-prepend">
+            <span class="input-group-text" style="width: 9rem;" id="inputGroup-sizing-default">닉네임</span>
+          </div>
+          <input :value="newName" @input="updateNickname" type="text" class="form-control text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
         </b-col>
       </b-row>
       <br>
       <b-row>
-        <b-col cols="2">나이 : </b-col>
-        <b-col cols="10">
-          <input :value="newAge" @input="updateAge">
-          <!-- <b-form-group id="input-group-7">
-            <b-form-input
-              id="input-7"
-              :value="newAge"
-              type="number"
-              required
-              size="lg"
-              placeholder="나이를 입력해주세요"
-            ></b-form-input>
-          </b-form-group> -->
+        <b-col class="input-group input-group-lg">
+          <div class="input-group-prepend">
+            <span class="input-group-text" style="width: 9rem;" id="inputGroup-sizing-default">나이</span>
+          </div>
+          <input :value="newAge" @input="updateAge" type="number" class="form-control text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
         </b-col>
       </b-row>
       <br>
-      <b-row>
-        <b-col cols="2">성별 : </b-col>
-        <b-col cols="5">
-          <b-form-group id="input-group-8">
-            <b-form-radio v-model="newSex" type="number" name="some-radios" value="1">남자</b-form-radio>
-          </b-form-group>
-        </b-col>
-        <b-col cols="5">
-          <b-form-group id="input-group-8">
-            <b-form-radio v-model="newSex" type="number" name="some-radios" value="2">여자</b-form-radio>
-          </b-form-group>
-        </b-col>
-      </b-row>
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <input type="radio" aria-label="Radio button for following text input">
+          </div>
+        </div>
+        <input type="text" class="form-control" aria-label="Text input with radio button">
+      </div>
+
 
       <br>
-      <b-button v-b-modal.modal-prevent-closing variant="primary">수정하기</b-button>
+      <b-button v-b-modal.modal-prevent-closing block size="lg" variant="info">수정하기</b-button>
 
       <b-modal
         id="modal-prevent-closing"
