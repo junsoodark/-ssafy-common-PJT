@@ -57,7 +57,7 @@
         <template v-slot:header>
           <b-icon icon="people" aria-hidden="true"></b-icon> 인원
         </template>
-        <b-card-text>4 / 5명</b-card-text>
+        <b-card-text>{{team.numMembers}}</b-card-text>
       </b-card>
       
       <b-card header-tag="header" footer-tag="footer">
@@ -77,7 +77,7 @@
         <template v-slot:header>
           <b-icon icon="house" aria-hidden="true"></b-icon> 진행장소
         </template>
-        <b-card-text>온라인</b-card-text>
+        <b-card-text>{{team.si}} {{team.gu}}</b-card-text>
       </b-card>
     </b-card-group>
     <br>
@@ -253,6 +253,7 @@ export default {
       console.log(err)
       this.$router.push({ name: "NotFound" })
     })
+    console.log(`${API_URL}study/member/${this.study_id}`)
   },
   components: {
     Caffe
