@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,10 +45,8 @@ public class StudyServiceImpl implements StudyService {
 	@Override
 	public List<Map<String, Object>> findAllStudies() {
 		List<Map<String, Object>> ret = new ArrayList<>();
-		for (Study study : studyDao.findAll()) {
+		for (Study study : studyDao.findAll())
 			ret.add(Study2Map(study));
-			System.out.println(study.getStudyId());
-		}
 		return ret;
 	}
 
