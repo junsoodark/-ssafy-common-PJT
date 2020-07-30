@@ -2,7 +2,10 @@ package com.web.blog.model.study;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,11 +15,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.web.blog.model.address.Address;
 import com.web.blog.model.user.User;
@@ -42,16 +44,36 @@ public class Study {
 	@JoinColumn(name = "mgr_id")
 	private User user;
 
+	@JsonBackReference
+	@ManyToMany(mappedBy="studies", cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.DETACH})
+	private Set<User> members;
+	
 	@JsonIgnore
 	@ManyToOne(targetEntity = Address.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "address_id")
 	private Address address;
-	
+
 	private String title;
 	private String content;
 	private LocalDate startDate;
 	private LocalDate endDate;
 	
-	@OneToMany(mappedBy="study")
-	private List <StudyMember> studies = new ArrayList<StudyMember>();
+	public void addMember(User member) {
+		if(!this.members.contains(member))
+			this.members.add(member);
+		
+		if(!member.getStudies().contains(this))
+			member.getStudies().add(this);
+	}
+	
+	public List<Map<String, Object>> getMemberList(){
+		List<Map<String, Object>> ret = new ArrayList<>();
+		for(User member : members) {
+			Map<String, Object> info = new HashMap<>();
+			info.put("email", member.getEmail());
+			info.put("name",  member.getName());
+			ret.add(info);
+		}
+		return ret;
+	}
 }

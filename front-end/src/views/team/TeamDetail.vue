@@ -1,11 +1,11 @@
 <template>
   <div>
   <b-container>
+    <br>
     <b-row>
-      <b-col class="totheleft text-center" cols="12"><h1>{{team.title}} 팀의 상세 정보</h1></b-col>
-      <b-col class="totheright my-3 text-center" offset="8" cols="4">
-        <b-button  v-if="isLoggedIn" v-b-modal.modal-prevent-closing variant="info">가입신청</b-button>
-
+      <b-col class="totheleft text-center" cols="12"><h1>{{ team.title }}</h1></b-col>
+      <b-col class="totheright my-3 text-center" offset="10" cols="2">
+        <b-button v-if="isLoggedIn" v-b-modal.modal-prevent-closing variant="info">가입신청</b-button>
 
         <b-modal
           id="modal-prevent-closing"
@@ -13,7 +13,7 @@
           title="스터디를 신청하시겠습니까?"
           @show="resetModal"
           @hidden="resetModal"
-          @ok="handleOk"
+          @ok="deleteOk(data)"
         >
           <form ref="form" @submit.stop.prevent="handleSubmit">
             <b-form-group
@@ -34,7 +34,7 @@
             <!-- <b>Custom Footer</b> -->
             <!-- Emulate built in modal footer ok and cancel button actions -->
             <b-button size="sm" variant="success" @click="ok()">
-              신청
+              삭제
             </b-button>
             <b-button size="sm" variant="danger" @click="cancel()">
               취소
@@ -109,9 +109,54 @@
         <template v-slot:header>
           <b-icon icon="info-square-fill" aria-hidden="true"></b-icon> 스터디 소개
         </template>
-        <b-card-text>매일 깃 허브에 1문제 이상 풀이해서 올리고, 행아웃을 통해 코드 리뷰를 함께 하실 스터디원을 모집하고 있습니다.</b-card-text>
+        <b-card-text>{{ team.content }}</b-card-text>
       </b-card>
     </b-card-group>
+
+    <b-row>
+      <b-col class="totheright my-3 text-center" offset="10" cols="2">
+        <b-button v-if="isLoggedIn" @click="$bvModal.show('modal-scoped')" variant="danger">스터디 삭제</b-button>
+
+        <b-modal
+          id="modal-scoped"
+          ref="modal"
+          title="스터디를 삭제 하시겠습니까?"
+          @show="resetDeleteModal"
+          @hidden="resetDeleteModal"
+          @ok="deleteOk"
+        >
+          <form ref="form" @submit.stop.prevent="deleteSubmit">
+            <b-form-group
+              label="다음 글을 옮겨 적으세요"
+              label-for="delete-input"
+              invalid-feedback="message is required"
+            >
+              
+              <div class="input-group input-group">
+                <p class="form-control text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">해당 스터디를 삭제하겠습니다.</p>
+              </div>
+              <b-form-input
+                id="delete-input"
+                v-model="checkDelete"
+                required
+                class="text-center"
+              ></b-form-input>
+            </b-form-group>
+          </form>
+          <template v-slot:modal-footer="{ ok, cancel }">
+            <!-- <b>Custom Footer</b> -->
+            <!-- Emulate built in modal footer ok and cancel button actions -->
+            <b-button size="sm" variant="success" @click="ok()">
+              신청
+            </b-button>
+            <b-button size="sm" variant="danger" @click="cancel()">
+              취소
+            </b-button>
+            <!-- Button with custom close trigger value -->
+          </template>
+        </b-modal>
+      </b-col>
+    </b-row>
   </b-container>
   <h3 class="mt-3">해당 지역 카페</h3>
   <Caffe class="mt-3 mb-5"></Caffe>
@@ -124,6 +169,7 @@ import Axios from 'axios'
 import { mapGetters } from 'vuex'
 import Caffe from '../../components/Caffe.vue'
 const API_URL = process.env.VUE_APP_LOCAL_URL
+
 export default {
   data() {
     return {
@@ -131,10 +177,38 @@ export default {
       nameState: null,
       submittedNames: [],
       study_id: this.$route.params.id,
-      team: []
+      team: [],
+      checkDelete: '',
+      checkDeleteForm: '해당 스터디를 삭제하겠습니다.'
     }
   },
   methods: {
+    deleteOk(bvModalEvt) {
+      // Prevent modal from closing
+      bvModalEvt.preventDefault()
+      // Trigger submit handler
+      this.deleteSubmit()
+    },
+    deleteSubmit() {
+      console.log(this.checkDelete)
+      if (this.checkDelete === this.checkDeleteForm) {
+        Axios.delete(`${API_URL}study/${this.study_id}`)
+        .then(res => {
+          alert('스터트가 삭제되었습니다.')
+          console.log(res)
+          this.$router.push({ name: "TeamList" })
+        })
+        .catch(err => {
+          console.log(err)
+          this.$router.push({ name: "NotFound" })
+        })
+      } else {
+        alert('일치하지 않습니다.')
+      }
+    },
+    resetDeleteModal() {
+      this.checkDelete = ''
+    },
     checkFormValidity() {
       const valid = this.$refs.form.checkValidity()
       this.nameState = valid
@@ -166,12 +240,13 @@ export default {
   created() {
     Axios.get(`${API_URL}study/${this.study_id}`)
     .then(res => {
+      console.log(res)
       this.team = res.data
     })
     .catch(err => {
       console.log(err)
-      // this.$router.push({ name: "NotFound" })
-      })
+      this.$router.push({ name: "NotFound" })
+    })
   },
   computed: {
     ...mapGetters(['isLoggedIn'])

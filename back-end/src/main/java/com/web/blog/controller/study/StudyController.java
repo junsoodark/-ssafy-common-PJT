@@ -47,10 +47,9 @@ public class StudyController {
 	@GetMapping("/study/{studyId}")
 	@ApiOperation(value = "스터디 아이디를 입력받아 일치하는 스터디의 정보를 반환합니다.")
 	public ResponseEntity read(@PathVariable final int studyId) {
-		Study res = studyService.findStudyByStudyId(studyId);
-		if (res == null)
-			return new ResponseEntity("존재하지 않는 스터디입니다.", HttpStatus.NOT_FOUND);
-		return new ResponseEntity(res, HttpStatus.OK);
+		Study study = studyService.findStudyByStudyId(studyId);
+		if (study==null) return new ResponseEntity("존재하지 않는 스터디입니다.", HttpStatus.NOT_FOUND);
+		return new ResponseEntity(studyService.Study2DetailInfo(study), HttpStatus.OK);
 	}
 
 	@PostMapping("/study")
@@ -115,5 +114,21 @@ public class StudyController {
 		study.setEndDate(endDate);
 		studyService.create(study);
 		return new ResponseEntity("스터디 수정에 성공했습니다.", HttpStatus.OK);
+	}
+	
+	@PostMapping("/study/join")
+	@ApiOperation(value = "스터디 아이디와 사용자 이메일을 입력받아, 해당 스터디의 멤버에 전달받은 사용자를 추가합니다.")
+	public ResponseEntity join(@RequestParam final int studyId, @RequestParam final String email) {
+		final User user = userService.findUserByEmail(email);
+		if(user==null) return new ResponseEntity("존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND);
+		
+		if(studyService.join(studyId, user)==false) return new ResponseEntity("스터디에 가입할 수 없습니다.", HttpStatus.FORBIDDEN);
+		return new ResponseEntity("스터디에 가입되었습니다.", HttpStatus.OK);
+	}
+	
+	@GetMapping("/study/member/{studyId}")
+	@ApiOperation(value = "스터디 아이디를 입력받아, 해당 스터디의 멤버 이름과 이메일을 담은 리스트를 반환합니다.")
+	public ResponseEntity test(@PathVariable final int studyId) {
+		return new ResponseEntity(studyService.findMembers(studyId), HttpStatus.OK);
 	}
 }
