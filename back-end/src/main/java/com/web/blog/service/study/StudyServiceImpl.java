@@ -6,13 +6,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.web.blog.dao.study.StudyDao;
 import com.web.blog.model.study.Study;
+import com.web.blog.model.user.User;
 
 @Service
+@Transactional
 public class StudyServiceImpl implements StudyService {
 	@Autowired
 	StudyDao studyDao;
@@ -61,5 +66,23 @@ public class StudyServiceImpl implements StudyService {
 		}
 		return study;
 
+	}
+
+	@Override
+	public boolean join(final int studyId, User user) {
+		Optional<Study> studyOpt = studyDao.findStudyByStudyId(studyId);
+		if(studyOpt.isPresent()) {
+			studyOpt.get().addMember(user);
+			return true;
+		}
+		else return false;
+	}
+
+	@Override
+	public List<Map<String, Object>> findMembers(final int studyId) {
+		List<Map<String, Object>> ret = null;
+		Optional<Study> studyOpt = studyDao.findStudyByStudyId(studyId);
+		if(studyOpt.isPresent()) ret = studyOpt.get().getMemberList();
+		return ret;
 	}
 }

@@ -1,12 +1,22 @@
 package com.web.blog.model.user;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+
+import com.web.blog.model.study.Study;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -40,4 +50,17 @@ public class User {
 	@NotNull(message = "성별은 필수 항목입니다.")
 	@Pattern(regexp = "^[12]{1}$", message = "성별은 1 또는 2의 값을 가져야 합니다.")
 	private String sex; // 1: man, 2: woman
+	
+	@ManyToMany
+	@JoinTable(name = "study_member",
+			   joinColumns = @JoinColumn(name="user_id"),
+			   inverseJoinColumns = @JoinColumn(name="study_id"))
+	private Set<Study> studies = new HashSet<>();
+	
+	public void addStudy(Study study) {
+		if(!this.studies.contains(study))
+			this.studies.add(study);
+		if(!study.getMembers().contains(this))
+			study.getMembers().add(this);
+	}
 }
