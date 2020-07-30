@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -58,7 +59,7 @@ public class StudyMemberController {
 		return new ResponseEntity("스터디에서 탈퇴되었습니다.", HttpStatus.OK);
 	}
 	
-	@GetMapping("/study/{email}")
+	@GetMapping("/study/email")
 	@ApiOperation(value="사용자의 이메일을 입력받아, 사용자가 가입한 모든 스터디의 목록을 반환합니다.")
 	public ResponseEntity findStudiesByEmail(@RequestParam final String email) {
 		User user = userService.findUserByEmail(email);
