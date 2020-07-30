@@ -112,7 +112,7 @@
         <b-card-text>매일 깃 허브에 1문제 이상 풀이해서 올리고, 행아웃을 통해 코드 리뷰를 함께 하실 스터디원을 모집하고 있습니다.</b-card-text>
       </b-card>
     </b-card-group>
-
+    <Caffe class="mt-3 mb-5"></Caffe>
   </b-container>
 
 </div>
@@ -121,6 +121,7 @@
 <script>
 import Axios from 'axios'
 import { mapGetters } from 'vuex'
+import Caffe from '../../components/Caffe.vue'
 const API_URL = process.env.VUE_APP_LOCAL_URL
 export default {
   data() {
@@ -168,11 +169,14 @@ export default {
     })
     .catch(err => {
       console.log(err)
-      this.$router.push({ name: "NotFound" })
+      // this.$router.push({ name: "NotFound" })
       })
   },
   computed: {
     ...mapGetters(['isLoggedIn'])
+  },
+  components: {
+    Caffe
   }
 }
 </script>
