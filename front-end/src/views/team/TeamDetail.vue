@@ -115,31 +115,33 @@
 
     <b-row>
       <b-col class="totheright my-3 text-center" offset="10" cols="2">
-        <b-button v-if="isLoggedIn" v-b-modal.modal-prevent-closing variant="danger">스터디 삭제</b-button>
+        <b-button v-if="isLoggedIn" @click="$bvModal.show('modal-scoped')" variant="danger">스터디 삭제</b-button>
 
         <b-modal
-          id="modal-prevent-closing"
+          id="modal-scoped"
           ref="modal"
           title="스터디를 삭제 하시겠습니까?"
-          @show="resetModal"
-          @hidden="resetModal"
+          @show="resetDeleteModal"
+          @hidden="resetDeleteModal"
           @ok="deleteOk"
         >
           <form ref="form" @submit.stop.prevent="deleteSubmit">
             <b-form-group
-              :state="nameState"
               label="다음 글을 옮겨 적으세요"
-              label-for="name-input"
+              label-for="delete-input"
               invalid-feedback="message is required"
             >
+              
+              <div class="input-group input-group">
+                <p class="form-control text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">해당 스터디를 삭제하겠습니다.</p>
+              </div>
               <b-form-input
-                id="name-input"
+                id="delete-input"
                 v-model="checkDelete"
-                :state="nameState"
                 required
+                class="text-center"
               ></b-form-input>
             </b-form-group>
-            <p>해당 스터디를 삭제하겠습니다.</p>
           </form>
           <template v-slot:modal-footer="{ ok, cancel }">
             <!-- <b>Custom Footer</b> -->
@@ -191,7 +193,7 @@ export default {
         .then(res => {
           alert('스터트가 삭제되었습니다.')
           console.log(res)
-          this.$router.push({ name: "StudyList" })
+          this.$router.push({ name: "TeamList" })
         })
         .catch(err => {
           console.log(err)
@@ -200,6 +202,9 @@ export default {
       } else {
         alert('일치하지 않습니다.')
       }
+    },
+    resetDeleteModal() {
+      this.checkDelete = ''
     },
     checkFormValidity() {
       const valid = this.$refs.form.checkValidity()
