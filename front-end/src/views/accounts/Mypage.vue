@@ -60,12 +60,8 @@
       <br>
       <b-row>
         <b-col class="text-left">
-          <h6>현재 스터디가 없습니다.</h6>
+          <h6>현재 스터디</h6>
         </b-col>
-      </b-row>
-      <br>
-      <b-row class="text-left">
-        <h3>스터디 요청</h3>
       </b-row>
       <b-row>
         <b-table
@@ -157,6 +153,15 @@ export default {
         alert('삭제 실패. 비밀번호를 확인해주세요!')
       })
     },
+  },
+
+  created () {
+    Axios.get(`${API_URL}study/{email}?email=${this.email}`)
+    .then(res => {
+      this.items = res.data
+      this.fields = ['studyId','title']
+    })
+    .catch(err => {console.log(err)})
   }
 
 }

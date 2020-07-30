@@ -134,7 +134,7 @@ export default {
       this.TeamList = res.data.reverse()
       this.TeamCnt = this.TeamList.length
       if (this.TeamList.length>=6) {
-        this.TeamList = this.TeamList.slice(5)
+        this.TeamList = this.TeamList.slice(0,6)
       }
     })
     .catch(err => {
