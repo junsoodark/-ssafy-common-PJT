@@ -89,6 +89,7 @@ export default new Vuex.Store({
       router.push({ name: "Home" });
     },
     createTeam(state, form) {
+      console.log('fffff', form)
       Axios.post(`${API_URL}study/create`, form)
         .then((res) => {
           alert("스터디 생성");
