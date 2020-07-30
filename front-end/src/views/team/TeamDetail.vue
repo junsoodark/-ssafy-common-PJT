@@ -13,19 +13,17 @@
           title="스터디를 신청하시겠습니까?"
           @show="resetModal"
           @hidden="resetModal"
-          @ok="deleteOk(data)"
+          @ok="joinOk"
         >
           <form ref="form" @submit.stop.prevent="handleSubmit">
             <b-form-group
-              :state="nameState"
               label="신청 메시지"
               label-for="name-input"
               invalid-feedback="message is required"
             >
               <b-form-input
                 id="name-input"
-                v-model="name"
-                :state="nameState"
+                v-model="joinMsg"
                 required
               ></b-form-input>
             </b-form-group>
@@ -34,7 +32,7 @@
             <!-- <b>Custom Footer</b> -->
             <!-- Emulate built in modal footer ok and cancel button actions -->
             <b-button size="sm" variant="success" @click="ok()">
-              삭제
+              신청
             </b-button>
             <b-button size="sm" variant="danger" @click="cancel()">
               취소
@@ -165,31 +163,33 @@
 
 <script>
 import Axios from 'axios'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import Caffe from '../../components/Caffe.vue'
 const API_URL = process.env.VUE_APP_LOCAL_URL
 
 export default {
   data() {
     return {
-      name: '',
-      nameState: null,
-      submittedNames: [],
+      joinMsg: '',
       study_id: this.$route.params.id,
       team: [],
       checkDelete: '',
       checkDeleteForm: '해당 스터디를 삭제하겠습니다.',
     }
   },
+  computed: {
+    ...mapState({
+      email: state => state.moduleName.email,
+    }),
+    ...mapGetters(['isLoggedIn']),
+  },
   methods: {
+    // 삭제 모달
     deleteOk(bvModalEvt) {
-      // Prevent modal from closing
       bvModalEvt.preventDefault()
-      // Trigger submit handler
       this.deleteSubmit()
     },
     deleteSubmit() {
-      console.log(this.checkDelete)
       if (this.checkDelete === this.checkDeleteForm) {
         Axios.delete(`${API_URL}study/${this.study_id}`)
         .then(res => {
@@ -208,29 +208,37 @@ export default {
     resetDeleteModal() {
       this.checkDelete = ''
     },
-    checkFormValidity() {
-      const valid = this.$refs.form.checkValidity()
-      this.nameState = valid
-      return valid
-    },
+    // 가입 신청 모달
     resetModal() {
-      this.name = ''
-      this.nameState = null
+      this.joinMsg = ''
     },
-    handleOk(bvModalEvt) {
+    joinOk(bvModalEvt) {
       // Prevent modal from closing
       bvModalEvt.preventDefault()
       // Trigger submit handler
-      this.handleSubmit()
+      this.joinSubmit()
     },
-    handleSubmit() {
-      // Exit when the form isn't valid
-      if (!this.checkFormValidity()) {
-        return
+    joinSubmit() {
+      const params = {
+        email: this.email,
+        studyId: this.study_id
       }
-      // Push the name to submitted names
-      this.submittedNames.push(this.name)
-      // Hide the modal manually
+
+      Axios({
+        method: "POST",
+        url: `${API_URL}study/member/join`,
+        params: params,
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+      })
+      .then(res => {
+        alert(res.data)
+      })
+      .catch(err => {
+        alert('이미 가입된 멤버입니다.')
+        console.log('aaaa', err)
+      })
+
+
       this.$nextTick(() => {
         this.$bvModal.hide('modal-prevent-closing')
       })
@@ -239,16 +247,12 @@ export default {
   created() {
     Axios.get(`${API_URL}study/${this.study_id}`)
     .then(res => {
-      console.log(res)
       this.team = res.data
     })
     .catch(err => {
       console.log(err)
       this.$router.push({ name: "NotFound" })
     })
-  },
-  computed: {
-    ...mapGetters(['isLoggedIn'])
   },
   components: {
     Caffe
