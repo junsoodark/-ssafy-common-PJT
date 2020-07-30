@@ -1,5 +1,5 @@
 <template>
-  <b-container style="max-width:450px;">
+  <b-container style="max-width:450px;background: url('~@/assets/second.jpg');">
     <br>
     <h1>로그인</h1>
 		<br>

@@ -158,6 +158,7 @@
       </b-col>
     </b-row>
   </b-container>
+  <Caffe class="mt-3 mb-5"></Caffe>
 
 </div>
 </template>
@@ -165,6 +166,7 @@
 <script>
 import Axios from 'axios'
 import { mapGetters } from 'vuex'
+import Caffe from '../../components/Caffe.vue'
 const API_URL = process.env.VUE_APP_LOCAL_URL
 
 export default {
@@ -247,6 +249,9 @@ export default {
   },
   computed: {
     ...mapGetters(['isLoggedIn'])
+  },
+  components: {
+    Caffe
   }
 }
 </script>
