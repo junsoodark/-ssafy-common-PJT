@@ -6,22 +6,22 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import Header from './components/common/Header.vue'
+import { mapGetters } from "vuex";
+import Header from "./components/common/Header.vue";
 
 export default {
   name: "App",
 
   computed: {
-    ...mapGetters(["isLoggedIn"])
+    ...mapGetters(["isLoggedIn"]),
   },
 
   components: {
-    Header
+    Header,
   },
 
-  methods: {}
-}
+  methods: {},
+};
 </script>
 <style>
 #app {
