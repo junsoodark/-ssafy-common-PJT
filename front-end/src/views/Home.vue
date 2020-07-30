@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <div id="top-carousel" ref="toporto" class="mb-3">
+    <div id="top-carousel" class="mb-3">
     <b-carousel
       id="carousel-1"
       v-model="slide"
@@ -81,7 +81,7 @@
       Sliding: {{ sliding }}
     </p>
     </div>
-    <div id="bot-div" ref="porto">
+    <div id="bot-div">
       <b-container class="bv-example-row">
         <b-row>
           <h2 class="col-12">지금도 {{TeamCnt}}개의 스터디 팀이 활동하는 중!</h2>
@@ -119,19 +119,6 @@ export default {
     }
   },
   mounted () {
-    const topWindow = document.querySelector('#top-carousel')
-    let scrollMeTo = this.scrollMeTo
-    topWindow.addEventListener('mousewheel',function(event){
-      if (event.deltaY>0) {
-        setTimeout(function(){scrollMeTo('porto')},0)
-      } 
-    })
-    const botWindow = document.querySelector('#bot-div')
-    botWindow.addEventListener('mousewheel',function(event){
-      if (event.deltaY<0) {
-        setTimeout(function(){scrollMeTo('toporto')},0)
-      } 
-    })
   },
   data () {
     return {
