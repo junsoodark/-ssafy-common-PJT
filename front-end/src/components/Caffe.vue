@@ -24,13 +24,15 @@ const KAKAO_KEY = process.env.VUE_APP_KAKAO_MAP_KEY
 export default {
     data () {
         return {
-            si: '서울',
-            gu: '관악구',
             search: null
         }
     },
+    props: {
+        si: String,
+        gu: String
+    },
     created() {
-        this.search = this.si + this.gu + '카페'
+        this.search = this.si + this.gu + '스터디 카페'
     },
     mounted() {
         if (window.kakao && window.kakao.maps) {

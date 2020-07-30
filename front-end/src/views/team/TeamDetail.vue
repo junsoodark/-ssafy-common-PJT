@@ -147,7 +147,8 @@
       </b-col>
     </b-row>
   </b-container>
-  <Caffe class="mt-3 mb-5"></Caffe>
+  <h3 class="mt-3">해당 지역 카페</h3>
+  <Caffe class="mt-3 mb-5" v-bind:si="team.si" v-bind:gu="team.gu"></Caffe>
 
         <b-card header-tag="header" footer-tag="footer">
           <template v-slot:header>
@@ -198,7 +199,7 @@
 
 <script>
 import Axios from 'axios'
-import { mapGetters } from 'vuex'
+import { mapGetters,mapState } from 'vuex'
 import Caffe from '../../components/Caffe.vue'
 const API_URL = process.env.VUE_APP_LOCAL_URL
 
@@ -211,7 +212,8 @@ export default {
       study_id: this.$route.params.id,
       team: [],
       checkDelete: '',
-      checkDeleteForm: '해당 스터디를 삭제하겠습니다.'
+      checkDeleteForm: '해당 스터디를 삭제하겠습니다.',
+      member: [],
     }
   },
   methods: {
@@ -261,13 +263,23 @@ export default {
       if (!this.checkFormValidity()) {
         return;
       }
-      // Push the name to submitted names
-      this.submittedNames.push(this.name);
-      // Hide the modal manually
-      this.$nextTick(() => {
-        this.$bvModal.hide("modal-prevent-closing");
-      });
-    },
+      var params = new URLSearchParams();
+      params.append("email",this.email)
+      params.append("studyId",this.study_id)
+      Axios({method:'POST',url:`${API_URL}login`,params:params,headers:{'Content-Type': 'application/json; charset=utf-8'}})
+      .then(res => {
+        alert(res.response.data)
+        // Push the name to submitted names
+        this.submittedNames.push(this.name)
+        // Hide the modal manually
+        this.$nextTick(() => {
+          this.$bvModal.hide('modal-prevent-closing')
+        })
+      })
+      .catch(err => {
+        alert(err)
+      })
+    }
   },
   created() {
     Axios.get(`${API_URL}study/${this.study_id}`)
@@ -279,9 +291,19 @@ export default {
       console.log(err)
       this.$router.push({ name: "NotFound" })
     })
+    Axios.get(`${API_URL}study/member/${this.study_id}`)
+    .then(res => {
+      this.member = res.data
+    })
+    .catch(err => {
+      console.log(err)
+    })
   },
   computed: {
-    ...mapGetters(['isLoggedIn'])
+    ...mapGetters(['isLoggedIn']),
+    ...mapState({
+      email: state => state.moduleName.email,
+    })
   },
   components: {
     Caffe
