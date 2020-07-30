@@ -62,22 +62,28 @@ public class Study {
 	private LocalDate startDate;
 	private LocalDate endDate;
 
-	public void addMember(User member) {
-		if (!this.members.contains(member))
+	public boolean addMember(User member) {
+		if (!this.members.contains(member)) {
 			this.members.add(member);
-
-		// if (!member.getStudies().contains(this))
-		// member.getStudies().add(this);
+			return true;
+		} return false;
+	}
+	
+	public boolean removeMember(User member) {
+		if (this.members.contains(member)) {
+			this.members.remove(member);
+			return true;
+		} return false;
 	}
 
-	public List<Map<String, Object>> getMemberList() {
-		List<Map<String, Object>> ret = new ArrayList<>();
-		for (User member : members) {
-			Map<String, Object> info = new HashMap<>();
-			info.put("email", member.getEmail());
-			info.put("name", member.getName());
-			ret.add(info);
-		}
-		return ret;
-	}
+//	public List<Map<String, Object>> getMemberList() {
+//		List<Map<String, Object>> ret = new ArrayList<>();
+//		for (User member : members) {
+//			Map<String, Object> info = new HashMap<>();
+//			info.put("email", member.getEmail());
+//			info.put("name", member.getName());
+//			ret.add(info);
+//		}
+//		return ret;
+//	}
 }

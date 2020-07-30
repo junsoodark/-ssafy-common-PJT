@@ -57,10 +57,17 @@ public class User {
 	@JoinTable(name = "study_member", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "study_id"))
 	private Set<Study> studies = new HashSet<>();
 
-	public void addStudy(Study study) {
-		if (!this.studies.contains(study))
+	public boolean addStudy(Study study) {
+		if (!this.studies.contains(study)) {
 			this.studies.add(study);
-		if (!study.getMembers().contains(this))
-			study.getMembers().add(this);
+			return true;
+		} return false;
+	}
+	
+	public boolean removeStudy(Study study) {
+		if (this.studies.contains(study)) {
+			this.studies.remove(study);
+			return true;
+		} return false;
 	}
 }
