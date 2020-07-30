@@ -15,7 +15,9 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.web.blog.model.study.Study;
 
 import lombok.AllArgsConstructor;
@@ -51,7 +53,6 @@ public class User {
 	@Pattern(regexp = "^[12]{1}$", message = "성별은 1 또는 2의 값을 가져야 합니다.")
 	private String sex; // 1: man, 2: woman
 
-	@JsonManagedReference
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH })
 	@JoinTable(name = "study_member", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "study_id"))
 	private Set<Study> studies = new HashSet<>();

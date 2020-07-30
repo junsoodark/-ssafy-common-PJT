@@ -15,11 +15,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.web.blog.model.address.Address;
 import com.web.blog.model.user.User;
 
@@ -44,10 +47,11 @@ public class Study {
 	@JoinColumn(name = "mgr_id")
 	private User user;
 
-	@JsonBackReference
-	@ManyToMany(mappedBy="studies", cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.DETACH})
+	@JsonIgnore
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH })
+	@JoinTable(name = "study_member", joinColumns = @JoinColumn(name = "study_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
 	private Set<User> members;
-	
+
 	@JsonIgnore
 	@ManyToOne(targetEntity = Address.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "address_id")
@@ -57,21 +61,21 @@ public class Study {
 	private String content;
 	private LocalDate startDate;
 	private LocalDate endDate;
-	
+
 	public void addMember(User member) {
-		if(!this.members.contains(member))
+		if (!this.members.contains(member))
 			this.members.add(member);
-		
-		if(!member.getStudies().contains(this))
-			member.getStudies().add(this);
+
+		// if (!member.getStudies().contains(this))
+		// member.getStudies().add(this);
 	}
-	
-	public List<Map<String, Object>> getMemberList(){
+
+	public List<Map<String, Object>> getMemberList() {
 		List<Map<String, Object>> ret = new ArrayList<>();
-		for(User member : members) {
+		for (User member : members) {
 			Map<String, Object> info = new HashMap<>();
 			info.put("email", member.getEmail());
-			info.put("name",  member.getName());
+			info.put("name", member.getName());
 			ret.add(info);
 		}
 		return ret;
