@@ -11,6 +11,7 @@ import UpdateUserInfo from '../views/accounts/UpdateUserInfo.vue'
 import TeamList from '../views/team/TeamList.vue'
 import TeamDetail from '../views/team/TeamDetail.vue'
 import CreateTeam from "../views/team/CreateTeam.vue"
+import UpdateTeam from "../views/team/UpdateTeam.vue"
 //error
 import NotFound from '../views/error/NotFound.vue'
 
@@ -70,6 +71,11 @@ const routes = [
     path: "/study/create",
     name: "CreateTeam",
     component: CreateTeam,
+  },
+  {
+    path: "/study/update/:id",
+    name: "UpdateTeam",
+    component: UpdateTeam
   },
   {
     path: "*",

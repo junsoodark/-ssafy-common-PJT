@@ -156,12 +156,14 @@ export default {
   },
 
   created () {
-    Axios.get(`${API_URL}study/{email}?email=${this.email}`)
+    Axios.get(`${API_URL}study/email?email=${this.email}`)
     .then(res => {
       this.items = res.data
       this.fields = ['studyId','title']
     })
-    .catch(err => {console.log(err)})
+    .catch(err => {
+      console.log(err)
+      })
   }
 
 }
