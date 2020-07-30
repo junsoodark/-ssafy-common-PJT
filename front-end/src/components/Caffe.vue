@@ -24,15 +24,15 @@ const KAKAO_KEY = process.env.VUE_APP_KAKAO_MAP_KEY
 export default {
     data () {
         return {
-            search: null
+            si: '서울',
+            search: this.gu,
         }
     },
     props: {
-        si: String,
         gu: String
     },
-    created() {
-        this.search = this.si + this.gu + '스터디 카페'
+    created () {
+        this.serch = this.si + this.search
     },
     mounted() {
         if (window.kakao && window.kakao.maps) {
@@ -72,7 +72,7 @@ searchPlaces();
 function searchPlaces() {
 
     var keyword = document.getElementById('keyword').value;
-
+    console.log(keyword)
     if (!keyword.replace(/^\s+|\s+$/g, '')) {
         alert('키워드를 입력해주세요!');
         return false;

@@ -172,7 +172,7 @@ export default {
         content: this.form.content,
         email: this.email,
         endDate: this.form.enddate,
-        gu: this.form.area,
+        gu: this.form.guArea,
         si: "서울",
         startDate: this.form.startdate,
         title: this.form.studyname,
