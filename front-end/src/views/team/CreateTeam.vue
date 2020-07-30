@@ -11,38 +11,21 @@
         ></b-form-input>
       </b-form-group>
 
-      <b-form-group id="input-group-2" label="분야:" label-for="input-2">
-        <b-form-select
-          id="input-2"
-          v-model="form.field"
-          :options="fields"
-          required
-        ></b-form-select>
-      </b-form-group>
+      <!-- <b-form-group id="input-group-2" label="분야:" label-for="input-2">
+        <b-form-select id="input-2" v-model="form.field" :options="fields" required></b-form-select>
+      </b-form-group>-->
 
-      <b-form-group id="input-group-3" label="방식:" label-for="input-5">
-        <b-form-radio-group
-          id="input-3"
-          v-model="form.contact"
-          :options="contacts"
-        ></b-form-radio-group>
-      </b-form-group>
+      <!-- <b-form-group id="input-group-3" label="방식:" label-for="input-5">
+        <b-form-radio-group id="input-3" v-model="form.contact" :options="contacts"></b-form-radio-group>
+      </b-form-group>-->
 
       <b-form-group id="input-group-4" label="지역:" label-for="input-4">
-        <b-form-select
-          id="input-4"
-          v-model="form.area"
-          :options="areas"
-          required
-        ></b-form-select>
+        <b-form-select id="input-4" v-model="form.siArea" :options="siAreas" required></b-form-select>
+        <b-form-select id="input-4" v-model="form.guArea" :options="guAreas" required></b-form-select>
       </b-form-group>
 
-      <b-form-group id="input-group-5" label="스터디 일정:" label-for="input-5">
-        <b-form-radio-group
-          id="input-5"
-          v-model="form.schedule"
-          :options="schedules"
-        ></b-form-radio-group>
+      <!-- <b-form-group id="input-group-5" label="스터디 일정:" label-for="input-5">
+        <b-form-radio-group id="input-5" v-model="form.schedule" :options="schedules"></b-form-radio-group>
         <b-form-spinbutton
           id="input-5"
           v-model="form.count"
@@ -51,50 +34,35 @@
           max="7"
           required
         ></b-form-spinbutton>
-      </b-form-group>
+      </b-form-group>-->
 
-      <b-form-group id="input-group-6" label="요일:" label-for="input-6">
-        <b-form-radio-group
-          id="input-6"
-          v-model="form.day"
-          :options="days"
-        ></b-form-radio-group>
-      </b-form-group>
+      <!-- <b-form-group id="input-group-6" label="요일:" label-for="input-6">
+        <b-form-radio-group id="input-6" v-model="form.day" :options="days"></b-form-radio-group>
+      </b-form-group>-->
 
-      <b-form-group id="input-group-7" label="시간대:" label-for="input-7">
-        <b-form-radio-group
-          id="input-7"
-          v-model="form.time"
-          :options="times"
-        ></b-form-radio-group>
-      </b-form-group>
-
-      <!-- <b-form-group id="input-group-8" label="스터디 기간:" laebl-for="input-8">
-        <v-md-date-range-picker></v-md-date-range-picker>
+      <!-- <b-form-group id="input-group-7" label="시간대:" label-for="input-7">
+        <b-form-radio-group id="input-7" v-model="form.time" :options="times"></b-form-radio-group>
       </b-form-group>-->
 
       <b-form-group id="input-group-8" label="스터디 기간:" laebl-for="input-8">
         <label for="start-datepicker">시작날짜</label>
-        <b-form-datepicker
-          id="start-datepicker"
-          v-model="form.startdate"
-          class="mb-2"
-        ></b-form-datepicker>
+        <b-form-datepicker id="start-datepicker" v-model="form.startdate" class="mb-2"></b-form-datepicker>
         <label for="end-datepicker">종료날짜</label>
-        <b-form-datepicker
-          id="end-datepicker"
-          v-model="form.enddate"
-          class="mb-2"
-        ></b-form-datepicker>
+        <b-form-datepicker id="end-datepicker" v-model="form.enddate" class="mb-2"></b-form-datepicker>
       </b-form-group>
 
-      <b-form-group id="input-group-9" label="인원:" laebl-for="input-9">
-        <vue-slider
-          v-model="form.value"
-          :min="1"
-          :max="30"
-          :interval="1"
-        ></vue-slider>
+      <!-- <b-form-group id="input-group-9" label="인원:" laebl-for="input-9">
+        <vue-slider v-model="form.value" :min="1" :max="30" :interval="1"></vue-slider>
+      </b-form-group>-->
+
+      <b-form-group id="input-group-10" label="스터디 소개:" laebl-for="input-10">
+        <b-form-textarea
+          v-model="form.content"
+          id="input-10"
+          placeholder="스터디 소개 글을 입력해주세요."
+          rows="3"
+          no-resize
+        ></b-form-textarea>
       </b-form-group>
 
       <b-button type="submit" variant="primary">Submit</b-button>
@@ -104,47 +72,26 @@
 </template>
 
 <script>
-import VueSlider from "vue-slider-component";
-import "vue-slider-component/theme/default.css";
+// import VueSlider from "vue-slider-component";
+// import "vue-slider-component/theme/default.css";
 import { mapActions, mapState } from "vuex";
 import Axios from "axios";
 import router from "@/router";
 
-const API_URL = process.env.VUE_APP_LOCAL_URL
+const API_URL = process.env.VUE_APP_LOCAL_URL;
 
 export default {
   components: {
-    VueSlider,
+    // VueSlider,
   },
   data() {
     return {
-      calendarData() {
-        const now = new Date();
-        const today = new Date(
-          now.getFullYear(),
-          now.getMonth(),
-          now.getDate()
-        );
-        // 15th two months prior
-        const minDate = new Date(today);
-        minDate.setMonth(minDate.getMonth() - 2);
-        minDate.setDate(15);
-        // 15th in two months
-        const maxDate = new Date(today);
-        maxDate.setMonth(maxDate.getMonth() + 2);
-        maxDate.setDate(15);
-
-        return {
-          value: "",
-          min: minDate,
-          max: maxDate,
-        };
-      },
       form: {
         studyname: "",
         field: null,
         contact: null,
-        area: null,
+        siArea: null,
+        guArea: null,
         schedule: null,
         count: null,
         day: null,
@@ -160,11 +107,33 @@ export default {
         "공기업",
         "사기업",
       ],
-      areas: [
+      siAreas: [{ text: "원하는 지역을 선택해주세요", value: null }, "서울시"],
+      guAreas: [
         { text: "원하는 지역을 선택해주세요", value: null },
         "강남구",
+        "강동구",
         "강북구",
-        "종로구",
+        "강서구",
+        "관악구",
+        "광진구",
+        "구로구",
+        "금천구",
+        "노원구",
+        "도봉구",
+        "동대문구",
+        "동작구",
+        "마포구",
+        "서대문구",
+        "서초구",
+        "성동구",
+        "성북구",
+        "송파구",
+        "양천구",
+        "영등포구",
+        "용산구",
+        "은평구",
+        "중구",
+        "중랑구",
       ],
       contacts: [
         { text: "오프라인", value: "오프라인" },
@@ -193,24 +162,24 @@ export default {
   },
   computed: {
     ...mapState({
-      email: state => state.moduleName.email,
-    })
+      email: (state) => state.moduleName.email,
+    }),
   },
   methods: {
     ...mapActions(["createTeam"]),
     studyCreate() {
       const params = {
-        content: '반갑습니다',
+        content: this.form.content,
         email: this.email,
         endDate: this.form.enddate,
         gu: this.form.area,
-        si: '서울',
+        si: "서울",
         startDate: this.form.startdate,
-        title: this.form.studyname
-      }
-      
-      console.log('params', params)
-      
+        title: this.form.studyname,
+      };
+
+      console.log("params", params);
+
       const JsonParams = JSON.stringify(params);
       Axios({
         method: "POST",
@@ -219,20 +188,20 @@ export default {
         data: JsonParams,
         headers: { "Content-Type": "application/json; charset=utf-8" },
       })
-      .then((res) => {
-        alert('스터디 생성 성공')
-        
-        router.push({ name: 'StudyList' })
-        console.log(res)
-      })
-      .catch((err) => {
-        alert("스터디 생성 실패")
-        console.log(err)
-      })
+        .then((res) => {
+          alert("스터디 생성 성공");
+
+          router.push({ name: "StudyList" });
+          console.log(res);
+        })
+        .catch((err) => {
+          alert("스터디 생성 실패");
+          console.log(err);
+        });
     },
     onReset(evt) {
       evt.preventDefault();
-      
+
       // Reset our form valuess
       this.form.email = "";
       // this.form.name = "";
@@ -242,7 +211,6 @@ export default {
       this.$nextTick(() => {
         this.show = true;
       });
-      
     },
   },
 };
