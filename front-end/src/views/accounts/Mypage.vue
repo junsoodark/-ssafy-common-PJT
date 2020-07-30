@@ -77,21 +77,29 @@
     </div>
 
     <b-modal id="my-modal">
-      <b-form id="checkemail" @submit.prevent="deleteUserAccount(confirmPassword)">
-        <h3 class="text-center">비밀번호를 입력해주세요</h3>
-        <br>
-        <b-row>비밀번호</b-row>
-        <b-row>
-          <b-form-input
-            id="input-2"
-            required
-            type="password"
-            v-model="confirmPassword"
-            placeholder="비밀번호를 입력하세요"
-          ></b-form-input>
-        </b-row>
-        <b-button type="submit" block variant="danger" size="lg">정말 삭제하기</b-button>
-      </b-form>
+      <template v-slot:modal-header>
+        <h5>회원탈퇴 하시겠습니까?</h5>
+      </template>
+
+      <template v-slot:default="">
+        <b-form-input
+          id="input-2"
+          required
+          type="password"
+          v-model="confirmPassword"
+          placeholder="비밀번호를 입력하세요."
+        ></b-form-input>
+      </template>
+
+      <template v-slot:modal-footer="{ ok, cancel }">
+        <!-- Emulate built in modal footer ok and cancel button actions -->
+        <b-button size="sm" variant="danger" @click="deleteUserAccount(confirmPassword)">
+          회원탈퇴
+        </b-button>
+        <b-button size="sm" variant="primary" @click="cancel()">
+          취소
+        </b-button>
+      </template>
     </b-modal>
   </b-container>
 </template>

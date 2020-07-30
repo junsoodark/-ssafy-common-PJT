@@ -1,25 +1,22 @@
 package com.web.blog.model.user;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.web.blog.model.study.Study;
-import com.web.blog.model.study.StudyMember;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,25 +33,33 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	//@NotNull(message = "이메일은 필수 항목입니다.")
-	//@Email(message = "이메일 형식에 맞지 않습니다.")
+	@NotNull(message = "이메일은 필수 항목입니다.")
+	@Email(message = "이메일 형식에 맞지 않습니다.")
 	private String email;
 
-	//@NotNull(message = "비밀번호는 필수 항목입니다.")
-	//@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d$@$!%*#?&]{8,}$", message = "비밀번호는 영문과 숫자가 적어도 1자 이상씩 포함된 8자이상으로 구성되어야 합니다.")
+	@NotNull(message = "비밀번호는 필수 항목입니다.")
+	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d$@$!%*#?&]{8,}$", message = "비밀번호는 영문과 숫자가 적어도 1자 이상씩 포함된 8자이상으로 구성되어야 합니다.")
 	private String password;
 
-	//@NotNull(message = "이름은 필수 항목입니다.")
+	@NotNull(message = "이름은 필수 항목입니다.")
 	private String name;
 
-	//@NotNull(message = "나이는 필수 항목입니다.")
+	@NotNull(message = "나이는 필수 항목입니다.")
 	private int age;
 
-	//@NotNull(message = "성별은 필수 항목입니다.")
-	//@Pattern(regexp = "^[12]{1}$", message = "성별은 1 또는 2의 값을 가져야 합니다.")
+	@NotNull(message = "성별은 필수 항목입니다.")
+	@Pattern(regexp = "^[12]{1}$", message = "성별은 1 또는 2의 값을 가져야 합니다.")
 	private String sex; // 1: man, 2: woman
 
-	@OneToMany(mappedBy="user")
-	private List <StudyMember> studies = new ArrayList<StudyMember>();
-	
+	@JsonManagedReference
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH })
+	@JoinTable(name = "study_member", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "study_id"))
+	private Set<Study> studies = new HashSet<>();
+
+	public void addStudy(Study study) {
+		if (!this.studies.contains(study))
+			this.studies.add(study);
+		if (!study.getMembers().contains(this))
+			study.getMembers().add(this);
+	}
 }

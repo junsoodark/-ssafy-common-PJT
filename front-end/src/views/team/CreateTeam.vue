@@ -1,6 +1,6 @@
 <template>
   <b-container>
-    <b-form @submit.prevent="createTeam" @reset="onReset" v-if="show">
+    <b-form @submit.prevent="studyCreate" @reset="onReset" v-if="show">
       <b-form-group id="input-group-1" label="스터디 이름:" label-for="input-1">
         <b-form-input
           id="input-1"
@@ -106,7 +106,11 @@
 <script>
 import VueSlider from "vue-slider-component";
 import "vue-slider-component/theme/default.css";
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
+import Axios from "axios";
+import router from "@/router";
+
+const API_URL = process.env.VUE_APP_LOCAL_URL
 
 export default {
   components: {
@@ -149,6 +153,7 @@ export default {
         value: 0,
         startdate: null,
         enddate: null,
+        content: null,
       },
       fields: [
         { text: "원하는 분야를 선택해주세요", value: null },
@@ -186,19 +191,58 @@ export default {
       show: true,
     };
   },
+  computed: {
+    ...mapState({
+      email: state => state.moduleName.email,
+    })
+  },
   methods: {
     ...mapActions(["createTeam"]),
+    studyCreate() {
+      const params = {
+        content: '반갑습니다',
+        email: this.email,
+        endDate: this.form.enddate,
+        gu: this.form.area,
+        si: '서울',
+        startDate: this.form.startdate,
+        title: this.form.studyname
+      }
+      
+      console.log('params', params)
+      
+      const JsonParams = JSON.stringify(params);
+      Axios({
+        method: "POST",
+        url: `${API_URL}study`,
+        params: params,
+        data: JsonParams,
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+      })
+      .then((res) => {
+        alert('스터디 생성 성공')
+        
+        router.push({ name: 'StudyList' })
+        console.log(res)
+      })
+      .catch((err) => {
+        alert("스터디 생성 실패")
+        console.log(err)
+      })
+    },
     onReset(evt) {
       evt.preventDefault();
-      // Reset our form values
+      
+      // Reset our form valuess
       this.form.email = "";
-      this.form.name = "";
-      this.form.food = null;
+      // this.form.name = "";
+      // this.form.food = null;
       // Trick to reset/clear native browser form validation state
       this.show = false;
       this.$nextTick(() => {
         this.show = true;
       });
+      
     },
   },
 };
