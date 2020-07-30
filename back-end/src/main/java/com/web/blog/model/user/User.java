@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,6 +17,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.web.blog.model.study.Study;
 
 import lombok.AllArgsConstructor;
@@ -50,17 +52,16 @@ public class User {
 	@NotNull(message = "성별은 필수 항목입니다.")
 	@Pattern(regexp = "^[12]{1}$", message = "성별은 1 또는 2의 값을 가져야 합니다.")
 	private String sex; // 1: man, 2: woman
-	
-	@ManyToMany
-	@JoinTable(name = "study_member",
-			   joinColumns = @JoinColumn(name="user_id"),
-			   inverseJoinColumns = @JoinColumn(name="study_id"))
+
+	@JsonManagedReference
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH })
+	@JoinTable(name = "study_member", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "study_id"))
 	private Set<Study> studies = new HashSet<>();
-	
+
 	public void addStudy(Study study) {
-		if(!this.studies.contains(study))
+		if (!this.studies.contains(study))
 			this.studies.add(study);
-		if(!study.getMembers().contains(this))
+		if (!study.getMembers().contains(this))
 			study.getMembers().add(this);
 	}
 }

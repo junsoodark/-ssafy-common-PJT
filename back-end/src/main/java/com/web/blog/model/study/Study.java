@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -18,6 +19,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.web.blog.model.address.Address;
 import com.web.blog.model.user.User;
@@ -43,7 +45,8 @@ public class Study {
 	@JoinColumn(name = "mgr_id")
 	private User user;
 
-	@ManyToMany(mappedBy="studies")
+	@JsonBackReference
+	@ManyToMany(mappedBy="studies", cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.DETACH})
 	private Set<User> members;
 	
 	@JsonIgnore
