@@ -44,6 +44,12 @@
           >로그인</b-button>
         </b-row>
         <b-row>
+          <p>Help Desk : 010-7374-5848</p>
+        </b-row>
+        <b-row>
+          <p>평일 상담시간 : 24:00 ~ 25:00</p>
+        </b-row>
+        <b-row>
           <b-col class="text-right py-1 pr-1">
             <router-link :to="{ name: 'Signup' }">회원가입</router-link>
           </b-col>
