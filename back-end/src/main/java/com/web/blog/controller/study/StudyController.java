@@ -47,10 +47,9 @@ public class StudyController {
 	@GetMapping("/study/{studyId}")
 	@ApiOperation(value = "스터디 아이디를 입력받아 일치하는 스터디의 정보를 반환합니다.")
 	public ResponseEntity read(@PathVariable final int studyId) {
-		Study res = studyService.findStudyByStudyId(studyId);
-		if (res == null)
-			return new ResponseEntity("존재하지 않는 스터디입니다.", HttpStatus.NOT_FOUND);
-		return new ResponseEntity(res, HttpStatus.OK);
+		Study study = studyService.findStudyByStudyId(studyId);
+		if (study==null) return new ResponseEntity("존재하지 않는 스터디입니다.", HttpStatus.NOT_FOUND);
+		return new ResponseEntity(studyService.Study2DetailInfo(study), HttpStatus.OK);
 	}
 
 	@PostMapping("/study")
