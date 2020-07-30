@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <div class="row">
-    <div id="map" class="col-7"></div>
-    <div id="menu_wrap" class="bg_white col-4" style="overflow:scroll; height:800px;">
+    <div id="map" class="col-8"></div>
+    <div id="menu_wrap" class="bg_white col-4" style="overflow-y:scroll; height:800px;">
         <div class="option d-none">
             <div>
                 <form @submit.prevent="searchPlaces">
@@ -12,8 +12,8 @@
             </div>
         </div>
         <hr>
-        <ul id="placesList" class="pl-0"></ul>
-        <div id="pagination" class="pl-0"></div>
+        <ul id="placesList"></ul>
+        <div id="pagination"></div>
     </div>
     </div>
   </div>
@@ -272,7 +272,7 @@ function removeAllChildNods(el) {
 .map_wrap, .map_wrap * {margin:0;padding:0;font-family:'Malgun Gothic',dotum,'돋움',sans-serif;font-size:12px;}
 .map_wrap a, .map_wrap a:hover, .map_wrap a:active{color:#000;text-decoration: none;}
 .map_wrap {position:relative;width:100%;height:500px;}
-#menu_wrap {position: relative;;top:0;left:0;bottom:0;width:250px;margin:10px 0 30px 10px;padding:5px;overflow-y:auto;background:rgba(255, 255, 255, 0.7);z-index: 1;font-size:12px;border-radius: 10px;}
+#menu_wrap {position: relative;;top:0;left:0;bottom:0;width:250px;overflow-y:auto;background:rgba(255, 255, 255, 0.7);z-index: 1;font-size:12px;border-radius: 10px;}
 .bg_white {background:#fff;}
 #menu_wrap hr {display: block; height: 1px;border: 0; border-top: 2px solid #5F5F5F;margin:3px 0;}
 #menu_wrap .option{text-align: center;}

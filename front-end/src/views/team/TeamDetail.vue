@@ -112,8 +112,8 @@
         <b-card-text>매일 깃 허브에 1문제 이상 풀이해서 올리고, 행아웃을 통해 코드 리뷰를 함께 하실 스터디원을 모집하고 있습니다.</b-card-text>
       </b-card>
     </b-card-group>
-    <Caffe class="mt-3 mb-5"></Caffe>
   </b-container>
+  <Caffe class="mt-3 mb-5"></Caffe>
 
 </div>
 </template>
