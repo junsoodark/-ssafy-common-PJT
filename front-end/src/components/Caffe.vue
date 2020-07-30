@@ -6,7 +6,7 @@
         <div class="option d-none">
             <div>
                 <form @submit.prevent="searchPlaces">
-                    키워드 : <input type="text" v-model="search" id="keyword" size="15"> 
+                    키워드 : <input type="text" id="keyword" size="15" v-model="search"> 
                     <button type="submit">검색하기</button> 
                 </form>
             </div>
@@ -24,15 +24,12 @@ const KAKAO_KEY = process.env.VUE_APP_KAKAO_MAP_KEY
 export default {
     data () {
         return {
-            si: '서울',
-            search: this.gu,
+            search: '서울 강남구 스터디카페',
         }
     },
     props: {
-        gu: String
-    },
-    created () {
-        this.serch = this.si + this.search
+        gu: String,
+        si: String
     },
     mounted() {
         if (window.kakao && window.kakao.maps) {
@@ -49,7 +46,6 @@ export default {
         initMap() {
             // 마커를 담을 배열입니다
 var markers = [];
-
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
     mapOption = {
         center: new kakao.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
@@ -64,15 +60,24 @@ var ps = new kakao.maps.services.Places();
 
 // 검색 결과 목록이나 마커를 클릭했을 때 장소명을 표출할 인포윈도우를 생성합니다
 var infowindow = new kakao.maps.InfoWindow({zIndex:1});
-
+this.search = this.si + ' ' + this.gu + ' 스터디 카페'
+if (this.gu === undefined || this.si === undefined) {
+    setTimeout(this.search = this.si + ' ' + this.gu + ' 스터디 카페',500)
+}
+if (this.gu === undefined || this.si === undefined) {
+    setTimeout(this.search = this.si + ' ' + this.gu + ' 스터디 카페',500)
+}
+if (this.gu === undefined || this.si === undefined) {
+    this.search = '서울 강남구 스터디 카페'
+}
 // 키워드로 장소를 검색합니다
-searchPlaces();
+searchPlaces(this.search);
 
 // 키워드 검색을 요청하는 함수입니다
-function searchPlaces() {
+function searchPlaces(key) {
 
-    var keyword = document.getElementById('keyword').value;
-    console.log(keyword)
+    var keyword = key;
+    console.log(keyword,key)
     if (!keyword.replace(/^\s+|\s+$/g, '')) {
         alert('키워드를 입력해주세요!');
         return false;

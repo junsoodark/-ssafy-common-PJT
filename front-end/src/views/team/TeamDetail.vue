@@ -255,6 +255,7 @@ export default {
       console.log(err)
       this.$router.push({ name: "NotFound" })
     })
+    console.log(`${API_URL}study/member/${this.study_id}`)
   },
   components: {
     Caffe
