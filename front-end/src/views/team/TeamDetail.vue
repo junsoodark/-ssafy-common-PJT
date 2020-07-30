@@ -113,6 +113,7 @@
       </b-card>
     </b-card-group>
   </b-container>
+  <h3 class="mt-3">해당 지역 카페</h3>
   <Caffe class="mt-3 mb-5"></Caffe>
 
 </div>

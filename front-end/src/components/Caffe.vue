@@ -30,7 +30,7 @@ export default {
         }
     },
     created() {
-        this.search = this.si + this.gu + '카페'
+        this.search = this.si + this.gu + '스터디 카페'
     },
     mounted() {
         if (window.kakao && window.kakao.maps) {
