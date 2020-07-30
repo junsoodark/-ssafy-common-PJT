@@ -1,5 +1,5 @@
 <template>
-  <b-container style="max-width:450px;background: url('~@/assets/second.jpg');">
+  <b-container style="max-width:450px;">
     <br>
     <h1>로그인</h1>
 		<br>
@@ -57,8 +57,7 @@ export default {
 	},
 	methods: {
     ...mapActions(['login', 'update_email']),
-     
-	}
+	},
 }
 </script>
 
