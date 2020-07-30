@@ -28,6 +28,10 @@ import VueSlider from "vue-slider-component";
 import "vue-slider-component/theme/default.css";
 Vue.component("VueSlider", VueSlider);
 
+import "../fontAwesomeIcon.js"; // fontAwesomeIcon.js 불러옴
+
+Vue.config.productionTip = false
+ 
 new Vue({
   router,
   store,
