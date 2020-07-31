@@ -4,8 +4,8 @@
       <router-link to="/" class="ml-2 mr-5 text-decoration-none text-light"><img src="../../assets/logo.png" style="height:30px">Home</router-link>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
         <b-collapse id="nav-collapse" is-nav>
-        <router-link class="text-decoration-none text-light" :to="{ name: 'StudyList' }">스터디 팀들</router-link>
-
+        <router-link class="text-decoration-none text-light mx-1" :to="{ name: 'StudyList' }">스터디 팀들</router-link>
+        <router-link class="text-decoration-none text-light mx-1" :to="{ name: 'CreateTeam'}">스터디만들기</router-link>
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
           <b-nav-form>

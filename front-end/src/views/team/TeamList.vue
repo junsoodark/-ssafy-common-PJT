@@ -19,12 +19,12 @@ const API_URL = process.env.VUE_APP_LOCAL_URL
 
 export default {
   components: {
-      TeamListItem
+    TeamListItem
   },
   data () {
-      return {
-          TeamList: []
-      }
+    return {
+        TeamList: []
+    }
   },
   created () {
     Axios.get(`${API_URL}study/all`)

@@ -91,15 +91,25 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const publicPages = ['Login', 'Signup', 'Home', 'About', 'StudyList', 'StudyDetail', 'Mypage', 'CreateTeam', 'UpdateUserInfo','NotFound']  // Login 안해도 됨
+  const publicPages = ['Login', 'Signup', 'Home', 'About', 'StudyList', 'StudyDetail', 'Mypage',  'UpdateUserInfo','NotFound']  // Login 안해도 됨
   const authPages = ['Login', 'Signup']  // Login 되어있으면 안됨
+  const loginRequiredPages = ['CreateTeam']
   
   const authRequired = !publicPages.includes(to.name)  // 로그인 해야 함.
   const unauthRequired = authPages.includes(to.name)  // 로그인 해서는 안됨
+  const loginRequired = loginRequiredPages.includes(to.name)
   const isLoggedIn = !!Vue.$cookies.isKey('auth-token')
 
+  console.log('체크로그인',authRequired, unauthRequired, isLoggedIn)
   if (unauthRequired && isLoggedIn) {
+    console.log('qqq')
     next("/");
+  }
+  console.log(loginRequiredPages)
+  console.log('www', loginRequired)
+  if (loginRequired && !isLoggedIn) {
+    alert('로그인이 필요합니다.')
+    next({ name: "Login"})
   }
   authRequired && !isLoggedIn ? next({ name: "Login" }) : next();
 });
