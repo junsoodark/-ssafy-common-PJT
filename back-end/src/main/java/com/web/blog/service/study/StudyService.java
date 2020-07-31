@@ -9,7 +9,7 @@ import com.web.blog.model.study.Study;
 import com.web.blog.model.user.User;
 
 public interface StudyService {
-	public void create(final User user, final Address address, final String title, final String content, final LocalDate startDate, final LocalDate endDate);
+	public Study create(final User user, final Address address, final String title, final String content, final LocalDate startDate, final LocalDate endDate);
 	public boolean delete(final int studyId);
 	public boolean update(final Address address, final int studyId, final String title, final String content, final LocalDate startDate, final LocalDate endDate);
 

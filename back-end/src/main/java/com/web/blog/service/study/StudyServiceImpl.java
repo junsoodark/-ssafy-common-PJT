@@ -7,10 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.web.blog.dao.study.StudyDao;
 import com.web.blog.model.address.Address;
@@ -24,7 +23,7 @@ public class StudyServiceImpl implements StudyService {
 	StudyDao studyDao;
 
 	@Override
-	public void create(final User user, final Address address, final String title, final String content, final LocalDate startDate, final LocalDate endDate) {
+	public Study create(final User user, final Address address, final String title, final String content, final LocalDate startDate, final LocalDate endDate) {
 		Study study = new Study();
 		study.setUser(user);
 		study.setAddress(address);
@@ -32,16 +31,16 @@ public class StudyServiceImpl implements StudyService {
 		study.setContent(content);
 		study.setStartDate(startDate);
 		study.setEndDate(endDate);
-		studyDao.save(study);
+		return studyDao.save(study);
 	}
 
 	@Override
 	public boolean delete(final int studyId) {
-		Study study = findStudyByStudyId(studyId);
-		if (study != null) {
+		Optional<Study> studyOpt = studyDao.findStudyByStudyId(studyId);
+		if(studyOpt.isPresent()==false) return false;
+		studyOpt.ifPresent(study->{
 			studyDao.delete(study);
-			return true;
-		} return false;
+		}); return true;
 	}
 	
 	@Override

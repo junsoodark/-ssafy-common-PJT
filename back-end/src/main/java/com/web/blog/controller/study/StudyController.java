@@ -21,6 +21,7 @@ import com.web.blog.model.address.Address;
 import com.web.blog.model.study.Study;
 import com.web.blog.model.user.User;
 import com.web.blog.service.address.AddressService;
+import com.web.blog.service.study.StudyMemberService;
 import com.web.blog.service.study.StudyService;
 import com.web.blog.service.user.UserService;
 
@@ -36,6 +37,9 @@ public class StudyController {
 
 	@Autowired
 	AddressService addressService;
+	
+	@Autowired
+	StudyMemberService studyMemberService;
 
 	@GetMapping("/study/all")
 	@ApiOperation(value = "모든 스터디의 리스트를 반환합니다.")
@@ -53,7 +57,7 @@ public class StudyController {
 	}
 
 	@PostMapping("/study")
-	@ApiOperation(value = "")
+	@ApiOperation(value = "스터디 데이터를 입력받아 데이터를 검증하고 새로운 스터디를 생성합니다.")
 	public ResponseEntity create(@RequestParam final String email,
 								 @RequestParam final String title,
 								 @RequestParam final String content,
@@ -72,7 +76,11 @@ public class StudyController {
 		if (endDate.compareTo(startDate) < 0)
 			return new ResponseEntity("종료일은 시작일 보다 빠를수 없습니다", HttpStatus.FORBIDDEN);
 		
-		studyService.create(user, address, title, content, startDate, endDate);
+		Study study = studyService.create(user, address, title, content, startDate, endDate);
+		if(study == null)
+			return new ResponseEntity("스터디를 생성할 수 없습니다. 관리자에게 문의하세요.", HttpStatus.FORBIDDEN);
+		
+		studyMemberService.join(study, user);
 		return new ResponseEntity("스터디 생성에 성공했습니다.", HttpStatus.OK);
 	}
 

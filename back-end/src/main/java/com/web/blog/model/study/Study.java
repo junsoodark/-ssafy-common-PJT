@@ -1,10 +1,7 @@
 package com.web.blog.model.study;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -19,10 +16,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.web.blog.model.address.Address;
 import com.web.blog.model.user.User;
 
@@ -47,7 +41,6 @@ public class Study {
 	@JoinColumn(name = "mgr_id")
 	private User user;
 
-	@JsonIgnore
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH })
 	@JoinTable(name = "study_member", joinColumns = @JoinColumn(name = "study_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
 	private Set<User> members;
@@ -63,6 +56,9 @@ public class Study {
 	private LocalDate endDate;
 
 	public boolean addMember(User member) {
+		if(this.members==null)
+			this.members = new HashSet<>();
+			
 		if (!this.members.contains(member)) {
 			this.members.add(member);
 			return true;
@@ -70,20 +66,12 @@ public class Study {
 	}
 	
 	public boolean removeMember(User member) {
+		if (this.members==null)
+			return false;
+		
 		if (this.members.contains(member)) {
 			this.members.remove(member);
 			return true;
 		} return false;
 	}
-
-//	public List<Map<String, Object>> getMemberList() {
-//		List<Map<String, Object>> ret = new ArrayList<>();
-//		for (User member : members) {
-//			Map<String, Object> info = new HashMap<>();
-//			info.put("email", member.getEmail());
-//			info.put("name", member.getName());
-//			ret.add(info);
-//		}
-//		return ret;
-//	}
 }
