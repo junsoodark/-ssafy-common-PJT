@@ -48,7 +48,7 @@
           <b-input-group-prepend is-text>
             <b-icon icon="unlock"></b-icon>
           </b-input-group-prepend>
-          <b-form-input type="password" v-model="password" required placeholder="비밀번호"></b-form-input>
+          <b-form-input type="password" v-model="password" required placeholder="비밀번호는 영문과 숫자가 적어도 1자 이상씩 포함된 8자이상으로 구성되어야 합니다."></b-form-input>
         </b-input-group>
         <!-- 비밀번호 확인 -->
         <b-input-group class="mb-3">
@@ -270,8 +270,8 @@ export default {
       nickname: "",
       isTerm: false,
       code: "",
-      age: 0,
-      sex: 1,
+      age: null,
+      sex: null,
     };
   },
   methods: {
@@ -287,13 +287,38 @@ export default {
       if (password != passwordConfirm) {
         alert("비밀번호 확인과 비밀번호가 다릅니다!");
         return false;
-      } else if (isTerm !== "accepted") {
+      } 
+      if (isTerm !== "accepted") {
         alert("동의를 해주세요!");
         return false;
-      } else if (email.indexOf("@") === -1) {
+      } 
+      if (email.indexOf("@") === -1) {
         alert("이메일 형식을 사용해야합니다!");
         return false;
       }
+      if (password.length < 8) {
+        alert("비밀번호는 8자 이상으로 구성되어야합니다.")
+        return false
+      } else {
+        let numCheck = false
+        let strCheck = false
+
+        for (var i=0; i<password.length; i++) {
+          const temp = password.charAt(i);
+          console.log(temp)
+          if (!isNaN(temp)) {
+            numCheck = true
+          } else {
+            strCheck = true
+          }
+        }
+        if (!strCheck || !numCheck) {
+          alert("비밀번호는 영문과 숫자가 적어도 1자 이상씩 포함되어야합니다.")
+          return false
+        }
+      }
+      
+
       this.$store.dispatch("signup", {
         code,
         age,
