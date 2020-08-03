@@ -29,7 +29,7 @@
         </b-row>
         <hr>
           <b-row align-h="start" class="text-left">
-            <b-col cols="4">참여중인 스터디 0</b-col>
+            <b-col cols="4">참여중인 스터디 {{ countStudy }}</b-col>
             <b-col cols="4">개설한 스터디 0</b-col>
           </b-row>
           <b-row>
@@ -63,15 +63,24 @@
           <h6>현재 스터디</h6>
         </b-col>
       </b-row>
-      <b-row>
-        <b-table
-          :no-border-collapse="true"
-          :items="items"
-          :fields="fields"
-        ></b-table>
-      </b-row>
+
+      <b-list-group>
+        <b-row>
+          <b-col cols="4" class="p-0"><b-list-group-item >TITLE</b-list-group-item></b-col>
+          <b-col cols="8" class="p-0"><b-list-group-item >CONTENT</b-list-group-item></b-col>
+        </b-row>
+        <hr>
+        <b-row v-for="item in items" :key="item.studyId">
+          <b-col cols="4" class="p-0"><b-list-group-item route :to="{ name: 'StudyDetail', params: {id:item.studyId} }">{{ item.title }}</b-list-group-item></b-col>
+          <b-col cols="8" class="p-0"><b-list-group-item >content</b-list-group-item></b-col>
+        </b-row>
+      </b-list-group>
+
+      <br>
+      <br>
     </div>
 
+    <!-- 모달 -->
     <b-modal id="my-modal">
       <template v-slot:modal-header>
         <h5>회원탈퇴 하시겠습니까?</h5>
@@ -113,14 +122,11 @@ export default {
       mainProps: { blank: true, blankColor: '#777', width: 75, height: 75, class: 'm1' },
       value: 90,
       max: 100,
-      
-      fields: ['상태', '스터디명', '진행 기간', '버튼'],
-      items: [
-        { 상태: '요청 중', 스터디명: '알고리즘 초급 스터디(코드 리뷰)', '진행 기간': '2020-03-01 ~ 2020-04-03', '버튼': '요청취소'},
-        { 상태: '가입', 스터디명: '즐거운 vuex', '진행 기간': '2020-03-01 ~ 2020-04-03', '버튼': '탈퇴'},
-        { 상태: '가입', 스터디명: '같이해요 spring', '진행 기간': '2020-03-01 ~ 2020-04-03', '버튼': '탈퇴'}
-      ],
+      fields: [],
+      items: [],
+      countStudy: 0,
       confirmPassword: null,
+
     }
   },
 
@@ -159,6 +165,8 @@ export default {
     Axios.get(`${API_URL}study/email?email=${this.email}`)
     .then(res => {
       this.items = res.data
+      console.log(res.data.length)
+      this.countStudy = res.data.length
       this.fields = ['studyId','title']
     })
     .catch(err => {
