@@ -4,11 +4,11 @@
     <br>
     <!-- 이메일 -->
     <b-row>
-      <b-col class="input-group input-group-lg">
+      <b-col class="input-group input-group-lg" >
         <div class="input-group-prepend">
           <span class="input-group-text" style="width: 9rem;" id="inputGroup-sizing-default">이메일</span>
         </div>
-        <p class="form-control text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">{{ email }}</p>
+        <p class="form-control text-center" style="background-color: #F8F8FF" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" >{{ email }}</p>
       </b-col>
     </b-row>
     <br>
@@ -19,7 +19,7 @@
           <div class="input-group-prepend">
             <span class="input-group-text" style="width: 9rem;" id="inputGroup-sizing-default">이름</span>
           </div>
-          <input :value="newName" @input="updateNickname" type="text" class="form-control text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+          <input :value="form.name" @input="updateNickname" type="text" class="form-control text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
         </b-col>
       </b-row>
       <br>
@@ -29,7 +29,7 @@
           <div class="input-group-prepend">
             <span class="input-group-text" style="width: 9rem;" id="inputGroup-sizing-default">나이</span>
           </div>
-          <input :value="newAge" @input="updateAge" type="number" class="form-control text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+          <input :value="form.age" @input="updateAge" type="number" class="form-control text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
         </b-col>
       </b-row>
       <br>
@@ -40,17 +40,10 @@
             <span class="input-group-text" style="width: 9rem;" id="inputGroup-sizing-default">성별</span>
           </div>
 
-
-          <b-form-radio v-model="newSex" type="number" name="some-radios" value="1" v-if="newSex == 1" class="form-control text-center"
+          <b-form-radio v-model="form.sex" @input="updateSex" type="number" name="some-radios" value="1" class="form-control text-center"
             >남자</b-form-radio
           >
-          <b-form-radio value="1" @input="updateSex" type="number" name="some-radios" v-if="newSex == 2" class="form-control text-center"
-            >남자</b-form-radio
-          >
-          <b-form-radio v-model="newSex" type="number" name="some-radios" value="2" v-if="newSex == 2" class="form-control text-center"
-            >여자</b-form-radio
-          >
-          <b-form-radio value="2" @input="updateSex" type="number" name="some-radios" v-if="newSex == 1" class="form-control text-center"
+          <b-form-radio v-model="form.sex" @input="updateSex" type="number" name="some-radios" value="2" class="form-control text-center"
             >여자</b-form-radio
           >
 
@@ -110,9 +103,6 @@ export default {
   computed: {
     ...mapState({
       email: state => state.moduleName.email,
-      newName: state => state.moduleName.name,
-      newSex: state => state.moduleName.sex,
-      newAge: state => state.moduleName.age,
     }),
   
   },
@@ -122,7 +112,7 @@ export default {
       this.form.name = e.target.value
     },
     updateSex(e) {
-      console.log(e)
+      console.log('ee', e)
       this.form.sex = e
     },
     updateAge(e) {
@@ -184,6 +174,18 @@ export default {
       })
     },
     
+  },
+  created () {
+    Axios.get(`${API_URL}user/${this.email}`)
+    .then(res => {
+      console.log(res.data)
+      this.form.name = res.data.name
+      this.form.sex = res.data.sex
+      this.form.age = res.data.age
+    })
+    .catch(err => {
+      console.log(err)
+    })
   }
 
 }

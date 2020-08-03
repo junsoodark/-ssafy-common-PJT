@@ -100,13 +100,9 @@ router.beforeEach((to, from, next) => {
   const loginRequired = loginRequiredPages.includes(to.name)
   const isLoggedIn = !!Vue.$cookies.isKey('auth-token')
 
-  console.log('체크로그인',authRequired, unauthRequired, isLoggedIn)
   if (unauthRequired && isLoggedIn) {
-    console.log('qqq')
     next("/");
   }
-  console.log(loginRequiredPages)
-  console.log('www', loginRequired)
   if (loginRequired && !isLoggedIn) {
     alert('로그인이 필요합니다.')
     next({ name: "Login"})

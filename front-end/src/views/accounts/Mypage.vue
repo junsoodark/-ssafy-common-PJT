@@ -10,17 +10,17 @@
         </template>
         <b-row>
           <b-col cols="2" class="text-center font-weight-bold"><p>이메일</p> </b-col>
-          <b-col cols="10" class="text-center"><p>{{ email }}</p></b-col>
+          <b-col cols="10" class="text-center font-weight-bold"><p>{{ email }}</p></b-col>
         </b-row>
         <hr>
         <b-row>
           <b-col cols="2" class="text-center font-weight-bold"><p>이름</p></b-col>
-          <b-col cols="10" class="text-center"><p>{{ name }}</p></b-col>
+          <b-col cols="10" class="text-center font-weight-bold"><p>{{ name }}</p></b-col>
         </b-row>
         <hr>
         <b-row>
           <b-col cols="2" class="text-center font-weight-bold"><p>나이</p></b-col>
-          <b-col cols="10" class="text-center"><p>{{ age }}</p></b-col>
+          <b-col cols="10" class="text-center font-weight-bold"><p>{{ age }}</p></b-col>
         </b-row>
         <hr>
         <b-row>
@@ -171,7 +171,7 @@ export default {
     })
     .catch(err => {
       console.log(err)
-      })
+    })
   }
 
 }
