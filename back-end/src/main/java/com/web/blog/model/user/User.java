@@ -31,7 +31,7 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-
+	
 	@NotNull(message = "이메일은 필수 항목입니다.")
 	@Email(message = "이메일 형식에 맞지 않습니다.")
 	private String email;
@@ -54,6 +54,9 @@ public class User {
 	@JoinTable(name = "study_member", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "study_id"))
 	private Set<Study> studies;
 
+	private String imgUrl;
+	
+	
 	public boolean addStudy(Study study) {
 		if(this.studies==null)
 			this.studies = new HashSet<>();
