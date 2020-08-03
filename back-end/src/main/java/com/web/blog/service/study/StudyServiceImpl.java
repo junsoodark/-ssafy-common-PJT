@@ -68,6 +68,7 @@ public class StudyServiceImpl implements StudyService {
 		Map<String, Object> ret = new HashMap<>();
 		ret.put("studyId", study.getStudyId());
 		ret.put("title", study.getTitle());
+		ret.put("content", study.getContent());
 		// ret.put("img", study.getImage());
 		return ret;
 	}
