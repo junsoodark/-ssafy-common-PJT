@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.web.blog.model.address.Address;
@@ -50,28 +51,12 @@ public class Study {
 	@JoinColumn(name = "address_id")
 	private Address address;
 
+	@Version
+	private Long version;
+	
 	private String title;
 	private String content;
 	private LocalDate startDate;
 	private LocalDate endDate;
-
-	public boolean addMember(User member) {
-		if(this.members==null)
-			this.members = new HashSet<>();
-			
-		if (!this.members.contains(member)) {
-			this.members.add(member);
-			return true;
-		} return false;
-	}
-	
-	public boolean removeMember(User member) {
-		if (this.members==null)
-			return false;
-		
-		if (this.members.contains(member)) {
-			this.members.remove(member);
-			return true;
-		} return false;
-	}
+	private int maxMembers;
 }
