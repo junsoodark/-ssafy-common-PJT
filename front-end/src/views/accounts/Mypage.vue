@@ -48,6 +48,7 @@
           <br>
           <b-row align-h="end" class="text-right">
             <div class="badge text-wrap mr-2" style="width: 9rem;"><b-button route :to="{name: 'UpdateUserInfo'}" variant="warning">회원정보 수정</b-button></div>
+            <div class="badge text-wrap mr-2" style="width: 9rem;"><b-button route :to="{name: 'EditPassword'}" variant="success">비밀번호 변경</b-button></div>
             <div class="badge text-wrap mr-2" style="width: 7rem;"><b-button variant="danger" v-b-modal.my-modal>회원탈퇴</b-button></div>
           </b-row>
       </b-media>
@@ -165,7 +166,6 @@ export default {
     Axios.get(`${API_URL}study/email?email=${this.email}`)
     .then(res => {
       this.items = res.data
-      console.log(res.data.length)
       this.countStudy = res.data.length
       this.fields = ['studyId','title']
     })

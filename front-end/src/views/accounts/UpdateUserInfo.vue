@@ -104,7 +104,6 @@ export default {
     ...mapState({
       email: state => state.moduleName.email,
     }),
-  
   },
 
   methods: {

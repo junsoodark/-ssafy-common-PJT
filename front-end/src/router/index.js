@@ -7,6 +7,7 @@ import Signup from '../views/accounts/Signup.vue'
 import Logout from '../views/accounts/Logout.vue'
 import Mypage from '../views/accounts/Mypage.vue'
 import UpdateUserInfo from '../views/accounts/UpdateUserInfo.vue'
+import EditPassword from '../views/accounts/EditPassword.vue'
 //team
 import TeamList from '../views/team/TeamList.vue'
 import TeamDetail from '../views/team/TeamDetail.vue'
@@ -56,6 +57,11 @@ const routes = [
     path: '/updateuserinfo',
     name: 'UpdateUserInfo',
     component: UpdateUserInfo,
+  },
+  {
+    path: '/EditPassword',
+    name: 'EditPassword',
+    component: EditPassword,
   },
   {
     path: '/study/list',
