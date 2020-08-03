@@ -1,7 +1,5 @@
 package com.web.blog.controller.user;
 
-import java.util.Map;
-
 import javax.validation.Valid;
 
 import com.web.blog.model.user.User;
