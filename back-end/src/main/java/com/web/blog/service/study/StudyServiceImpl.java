@@ -23,7 +23,7 @@ public class StudyServiceImpl implements StudyService {
 	StudyDao studyDao;
 
 	@Override
-	public Study create(final User user, final Address address, final String title, final String content, final LocalDate startDate, final LocalDate endDate) {
+	public Study create(final User user, final Address address, final String title, final String content, final LocalDate startDate, final LocalDate endDate, final int maxMembers) {
 		Study study = new Study();
 		study.setUser(user);
 		study.setAddress(address);
@@ -31,6 +31,7 @@ public class StudyServiceImpl implements StudyService {
 		study.setContent(content);
 		study.setStartDate(startDate);
 		study.setEndDate(endDate);
+		study.setMaxMembers(maxMembers);
 		return studyDao.save(study);
 	}
 
@@ -44,7 +45,7 @@ public class StudyServiceImpl implements StudyService {
 	}
 	
 	@Override
-	public boolean update(final Address address, final int studyId, final String title, final String content, final LocalDate startDate, final LocalDate endDate) {
+	public boolean update(final Address address, final int studyId, final String title, final String content, final LocalDate startDate, final LocalDate endDate, final int maxMembers) {
 		Optional<Study> studyOpt = studyDao.findStudyByStudyId(studyId);
 		if(studyOpt.isPresent()==false) return false;
 		studyOpt.ifPresent(study->{
@@ -53,6 +54,7 @@ public class StudyServiceImpl implements StudyService {
 			study.setContent(content);
 			study.setStartDate(startDate);
 			study.setEndDate(endDate);
+			study.setMaxMembers(maxMembers);
 			studyDao.save(study);
 		}); return true;
 	}
@@ -81,6 +83,7 @@ public class StudyServiceImpl implements StudyService {
 		ret.put("mgrEmail", study.getUser().getEmail());
 		ret.put("mgrName", study.getUser().getName());
 		ret.put("numMembers", study.getMembers().size());
+		ret.put("maxMembers", study.getMaxMembers());
 		ret.put("startDate", study.getStartDate());
 		ret.put("endDate", study.getEndDate());
 		ret.put("si", study.getAddress().getSi());
