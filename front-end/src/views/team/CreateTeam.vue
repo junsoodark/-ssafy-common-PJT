@@ -197,7 +197,6 @@ export default {
         });
     },
   },
-
   created() {
     const self = this;
     Axios.get(`${API_URL}address/`)
