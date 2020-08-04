@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="sample-toolbar">
-		<a href="javascript:void(0)" @click="format('bold')"><span class="fa fa-bold fa-fw"></span></a>
-		<a href="javascript:void(0)" @click="format('italic')"><span class="fa fa-italic fa-fw"></span></a>
-		<a href="javascript:void(0)" @click="format('underline')" class="mr-3"><span class="fas fa-underline fa-fw"></span></a>
+		<a href="javascript:void(0)" id="Bold" @click="format('bold')" class="text-decoration-none text-dark"><span class="fa fa-bold fa-fw"></span></a>
+		<a href="javascript:void(0)" id="Italic" @click="format('italic')" class="text-decoration-none text-dark"><span class="fa fa-italic fa-fw"></span></a>
+		<a href="javascript:void(0)" id="Underline" @click="format('underline')" class="mr-3 text-decoration-none text-dark"><span class="fas fa-underline fa-fw"></span></a>
     <select name="job" id='test' v-model="size" @click="changeSize">
       <option value="1">1</option>
       <option value="2">2</option>
@@ -35,7 +35,10 @@ export default {
       content: [
         { value: '여기에 글을 쓰세요' },
       ],
-      size: 3
+      size: 3,
+      BV: false,
+      IV: false,
+      UV: false
     };
   },
   props: {
@@ -64,14 +67,25 @@ export default {
       });
     },
     format(command, value) {
+      if (command == 'bold') {
+        this.BV = !this.BV
+      } else if (command == 'italic') {
+        this.IV = !this.IV
+      } else if (command == 'underline') {
+        this.UV = !this.UV
+      }
+
+      if (this.BV) {
+        document.getElementById('Bold').className = 'text-decoration-none text-danger'
+      } else {document.getElementById('Bold').className = 'text-decoration-none text-dark'}
+      if (this.IV) {
+        document.getElementById('Italic').className = 'text-decoration-none text-danger'
+      } else {document.getElementById('Italic').className = 'text-decoration-none text-dark'}
+      if (this.UV) {
+        document.getElementById('Underline').className = 'mr-3 text-decoration-none text-danger'
+      } else {document.getElementById('Underline').className = 'mr-3 text-decoration-none text-dark'}
 		document.execCommand(command, false, value);
     },
-    setUrl() {
-		var url = document.getElementById('txtFormatUrl').value;
-		var sText = document.getSelection();
-		document.execCommand('insertHTML', false, '<a href="' + url + '" target="_blank">' + sText + '</a>');
-		document.getElementById('txtFormatUrl').value = '';
-  },
     changeSize() {
       this.size *= 1
       document.execCommand('fontSize', false,this.size)

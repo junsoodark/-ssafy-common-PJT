@@ -4,7 +4,7 @@
     <router-link v-if="isLoggedIn" :to="{ name: 'CreateTeam'}">스터디 만들기</router-link>
     <b-container class="bv-example-row">
       <b-row>
-        <TeamListItem class="col-4" v-for="team in TeamList" :key="team" v-bind:team="team"></TeamListItem>
+        <TeamListItem class="col-4" v-for="team in TeamList" :key="team.studyId" v-bind:team="team"></TeamListItem>
       </b-row>
     </b-container>
   </div>
