@@ -5,7 +5,7 @@
 		<a href="javascript:void(0)" @click="format('italic')"><span class="fa fa-italic fa-fw"></span></a>
 		<a href="javascript:void(0)" @click="format('underline')"><span class="fas fa-underline fa-fw"></span></a>
 		<a href="javascript:void(0)" @click="setUrl()"><span class="fa fa-link fa-fw"></span></a>
-    <select name="job" id='test' v-model="size" @change="changeSize">
+    <select name="job" id='test' v-model="size" @click="changeSize">
       <option value="1">1</option>
       <option value="2">2</option>
       <option value="3">3</option>
@@ -18,7 +18,7 @@
     </div>
     <p
       v-for="(value, index) in content"
-      :id="sampleeditor"
+      id="paragraph"
       :key="index"
       contenteditable
       @input="event => onInput(event, index)"
@@ -33,16 +33,13 @@ export default {
   data() {
     return {
       content: [
-        { value: 'paragraph 1' },
+        { value: 'paragraph' },
       ],
-      size: 1
+      size: 3
     };
   },
-  created() {
-    document.getElementById('sampleeditor').setAttribute('contenteditable', 'true');
-	document.getElementById('sampleeditor2').setAttribute('contenteditable', 'true');
-  },
   mounted() {
+    document.getElementById('paragraph').setAttribute('contenteditable', 'true');
     this.updateAllContent();
   },
   methods: {
@@ -58,8 +55,8 @@ export default {
       }
     },
     updateAllContent() {
-      this.content.forEach((c, index) => {
-        const el = document.getElementById(`content-${index}`);
+      this.content.forEach((c) => {
+        const el = document.getElementById('paragraph');
         el.innerText = c.value;
       });
     },
