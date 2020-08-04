@@ -15,8 +15,12 @@ import TeamList from '../views/team/TeamList.vue'
 import TeamDetail from '../views/team/TeamDetail.vue'
 import CreateTeam from "../views/team/CreateTeam.vue"
 import UpdateTeam from "../views/team/UpdateTeam.vue"
+
 //error
 import NotFound from '../views/error/NotFound.vue'
+
+//test
+import Test from '../views/accounts/Test.vue'
 
 Vue.use(VueRouter);
 
@@ -94,6 +98,11 @@ const routes = [
     path: "*",
     name: "NotFound",
     component: NotFound,
+  },
+  {
+    path: "/test",
+    name: "Test",
+    component: Test,
   }
 ]
 

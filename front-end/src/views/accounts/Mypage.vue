@@ -6,7 +6,29 @@
       <hr>
       <b-media>
         <template v-slot:aside>
-          <b-img blank blank-color="#abc" width="300" rounded="circle" alt="placeholder"></b-img>
+          <b-row>
+            <b-img v-if="imageUrl === null" blank blank-color="#abc" width="300" rounded="circle" alt="placeholder"></b-img>
+            <b-img v-if="imageUrl !== null" :src="imageUrl" width="300" rounded="circle" alt="placeholder"></b-img>
+          </b-row>
+          <b-row>
+            <div class="group group_upload">
+              <button class="btn_upload" type="button" @click="onPickFile">
+                업로드 이미지
+              </button>
+              <input
+                id="uploadImg"
+                type="file"
+                value="upload"
+                style="display: none;"
+                ref="fileInput"
+                accept="image/*"
+                @change="onFilePicked"
+              />
+
+              <progress value="0" max="100" id="uploader">0%</progress>
+              <input type="file" value="upload" id="fileButton" @change="onFilePicked">
+            </div>
+          </b-row>
         </template>
         <b-row>
           <b-col cols="3" class="text-center font-weight-bold"><p>이메일</p> </b-col>
@@ -115,7 +137,13 @@ import { mapState, mapActions } from 'vuex'
 import Axios from 'axios';
 import router from "@/router";
 import VueCookies from "vue-cookies";
+import firebase from 'firebase'
+
 const API_URL = process.env.VUE_APP_LOCAL_URL
+
+
+
+// var uploader = document.getElementById('uploader');
 
 export default {
   data() {
@@ -127,7 +155,9 @@ export default {
       items: [],
       countStudy: 0,
       confirmPassword: null,
-
+      
+      imageUrl: null,
+      image: null,
     }
   },
 
@@ -142,6 +172,55 @@ export default {
   },
 
   methods: {
+    onPickFile() {
+      this.$refs.fileInput.click()
+      console.log('onPick')
+      // var uploader = document.getElementById('uploader');
+    },
+    onFilePicked(event) {
+      var file = event.target.files[0];
+
+      //firebase 레퍼런스
+      var storageRef = firebase.storage().ref('images/'+file.name);
+
+      //업로드
+      var task = storageRef.put(file);
+
+
+      console.log('file', file)
+      console.log('storaga', storageRef)
+      console.log('task', task)
+      console.log('##########')
+
+      task.on('state_changed',
+        function progess(snapshot){
+          console.log('sp', snapshot)
+          // var pct = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          // uploader.value = pct;
+          // console.log('uploader', pct)
+        },
+        function error(err){
+          console.log('err', err)
+        },
+        function complete(res){
+          console.log('res', res)
+        }
+      )
+      console.log('aaa')
+      const files = event.target.files
+      let filename = files[0].name
+      if (filename.lastIndexOf('.') <= 0) {
+        return alert('Please add a valid file!')
+      }
+      const fileReader = new FileReader()
+      fileReader.addEventListener('load', () => {
+        this.imageUrl = fileReader.result
+        // console.log('imageUrl', this.imageUrl)
+      })
+      fileReader.readAsDataURL(files[0])
+      this.image = files[0]
+    },
+
     ...mapActions(['authDelete']),
     deleteUserAccount(data) {
       const params = {
@@ -172,6 +251,37 @@ export default {
     .catch(err => {
       console.log(err)
     })
+  },
+  watch: {
+    uploadTask: function () {
+      this.uploadTask.on('state_changed', sp => {
+        this.progressUpload = Math.floor(sp.bytesTransferred / sp.totalBytes * 100)
+      },
+      null,
+      () => {
+        this.uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
+          this.uploadEnd = true
+          this.downloadURL = downloadURL
+          this.$emit('downloadURL', downloadURL)
+        })
+      })
+    },
+
+    // task() {
+    //   this.task.on('state_changed',
+    //     function progess(snapshot){
+    //       var pct = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+    //       uploader.value = pct;
+    //       console.log('uploader', pct)
+    //     },
+    //     function error(err){
+    //       console.log('err', err)
+    //     },
+    //     function complete(res){
+    //       console.log('res', res)
+    //     }
+    //   )
+    // }
   }
 
 }

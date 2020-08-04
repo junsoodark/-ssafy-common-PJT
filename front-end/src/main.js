@@ -28,7 +28,31 @@ import VueSlider from "vue-slider-component";
 import "vue-slider-component/theme/default.css";
 Vue.component("VueSlider", VueSlider);
 
+//fontAwesome
 import "../fontAwesomeIcon.js"; // fontAwesomeIcon.js 불러옴
+
+//firebase
+// import VueFire from 'vuefire'
+// import VueBlu from 'vue-blu'
+// import 'vue-blu/dist/css/vue-blu.min.css'
+
+// Vue.ue(VueFire)
+// Vue.use(VueBlu)
+// import firebase from 'firebase'
+
+// var firebaseConfig = {
+//   apiKey: "AIzaSyDuVnkxHS-vWwE0Wo_XKcG-u_djB9sB2-w",
+//   authDomain: "ssafy-ssbal.firebaseapp.com",
+//   databaseURL: "https://ssafy-ssbal.firebaseio.com",
+//   projectId: "ssafy-ssbal",
+//   storageBucket: "ssafy-ssbal.appspot.com",
+//   messagingSenderId: "813066731926",
+//   appId: "1:813066731926:web:2de5c7b68b2d359e479db7",
+//   measurementId: "G-CHB9G6C06P"
+// };
+
+// firebase.initializeApp(firebaseConfig);
+// firebase.analytics();
 
 Vue.config.productionTip = false
  
