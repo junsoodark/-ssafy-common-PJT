@@ -157,6 +157,7 @@
       </b-col>
     </b-row>
   </b-container>
+  <TextEditor></TextEditor>
   <Caffe class="mt-3 mb-5" v-bind:si="team.si" v-bind:gu="team.gu"></Caffe>
 </div>
 </template>
@@ -166,6 +167,7 @@
 import Axios from 'axios'
 import { mapGetters, mapState } from 'vuex'
 import Caffe from '../../components/Caffe.vue'
+import TextEditor from '../../components/common/TextEditor.vue'
 const API_URL = process.env.VUE_APP_LOCAL_URL
 
 export default {
@@ -261,7 +263,8 @@ export default {
     console.log(`${API_URL}study/member/${this.study_id}`)
   },
   components: {
-    Caffe
+    Caffe,
+    TextEditor
   }
 }
 </script>

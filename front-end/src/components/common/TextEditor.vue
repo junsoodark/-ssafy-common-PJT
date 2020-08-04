@@ -3,8 +3,17 @@
     <div class="sample-toolbar">
 		<a href="javascript:void(0)" @click="format('bold')"><span class="fa fa-bold fa-fw"></span></a>
 		<a href="javascript:void(0)" @click="format('italic')"><span class="fa fa-italic fa-fw"></span></a>
-		<a href="javascript:void(0)" @click="format('insertunorderedlist')"><span class="fa fa-list fa-fw"></span></a>
+		<a href="javascript:void(0)" @click="format('underline')"><span class="fas fa-underline fa-fw"></span></a>
 		<a href="javascript:void(0)" @click="setUrl()"><span class="fa fa-link fa-fw"></span></a>
+    <select name="job" id='test' v-model="size" @change="changeSize">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+    </select>
 		<span><input id="txtFormatUrl" placeholder="url" class="form-control"></span>
     </div>
     <p
@@ -26,6 +35,7 @@ export default {
       content: [
         { value: 'paragraph 1' },
       ],
+      size: 1
     };
   },
   created() {
@@ -61,7 +71,11 @@ export default {
 		var sText = document.getSelection();
 		document.execCommand('insertHTML', false, '<a href="' + url + '" target="_blank">' + sText + '</a>');
 		document.getElementById('txtFormatUrl').value = '';
-	}
+  },
+    changeSize() {
+      this.size *= 1
+      document.execCommand('fontSize', false,this.size)
+    }
   },
 };
 </script>
