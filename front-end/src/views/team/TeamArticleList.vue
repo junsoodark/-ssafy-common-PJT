@@ -1,9 +1,9 @@
 <template>
   <div>
-    <h1>게시판입니다</h1>
+    <h1 class="my-3">게시판입니다</h1>
     <b-button v-b-modal.modal-1>글쓰기</b-button>
 
-    <b-modal id="modal-1" title="BootstrapVue" hide-footer>
+    <b-modal id="modal-1" title="글쓰기" hide-footer>
       <TextEditor></TextEditor>
     </b-modal>
     <b-table striped hover :items="articles"></b-table>
