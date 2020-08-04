@@ -15,6 +15,8 @@ import CreateTeam from "../views/team/CreateTeam.vue"
 import UpdateTeam from "../views/team/UpdateTeam.vue"
 //error
 import NotFound from '../views/error/NotFound.vue'
+//추가기능
+import Search from '../views/Search.vue'
 
 Vue.use(VueRouter);
 
@@ -84,6 +86,11 @@ const routes = [
     component: UpdateTeam
   },
   {
+    path: "/look/:search",
+    name: "Search",
+    component: Search
+  },
+  {
     path: "*",
     name: "NotFound",
     component: NotFound,
@@ -97,7 +104,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const publicPages = ['Login', 'Signup', 'Home', 'About', 'StudyList', 'StudyDetail', 'Mypage',  'UpdateUserInfo','NotFound']  // Login 안해도 됨
+  const publicPages = ['Login', 'Signup', 'Home', 'About', 'StudyList', 'Mypage',  'UpdateUserInfo','NotFound']  // Login 안해도 됨
   const authPages = ['Login', 'Signup']  // Login 되어있으면 안됨
   const loginRequiredPages = ['CreateTeam']
   
