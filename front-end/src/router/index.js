@@ -13,6 +13,7 @@ import TeamList from '../views/team/TeamList.vue'
 import TeamDetail from '../views/team/TeamDetail.vue'
 import CreateTeam from "../views/team/CreateTeam.vue"
 import UpdateTeam from "../views/team/UpdateTeam.vue"
+import StudyArticle from '../views/team/TeamArticleList.vue'
 //error
 import NotFound from '../views/error/NotFound.vue'
 //추가기능
@@ -74,6 +75,11 @@ const routes = [
     path: '/study/detail/:id',
     name: 'StudyDetail',
     component: TeamDetail,
+  },
+  {
+    path: '/study/:id/article',
+    name: 'StudyArticle',
+    component: StudyArticle
   },
   {
     path: "/study/create",

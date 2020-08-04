@@ -4,7 +4,8 @@
     <br>
     <b-row>
       <b-col class="totheleft text-center" cols="12"><h1>{{ team.title }}</h1></b-col>
-      <b-col class="totheright my-3 text-center" offset="10" cols="2">
+      <b-col class="totheright my-3 text-center" offset="8" cols="4">
+        <b-button @click="toAricle" class="mr-1">게시판 보기</b-button>
         <b-button v-if="isLoggedIn" v-b-modal.modal-prevent-closing variant="info">가입신청</b-button>
 
         <b-modal
@@ -57,7 +58,7 @@
         <template v-slot:header>
           <b-icon icon="people" aria-hidden="true"></b-icon> 인원
         </template>
-        <b-card-text>{{ team.numMembers }} 명</b-card-text>
+        <b-card-text>{{ team.numMembers }} / {{ team.maxMembers }} 명</b-card-text>
       </b-card>
       
       <b-card header-tag="header" footer-tag="footer">
@@ -157,7 +158,6 @@
       </b-col>
     </b-row>
   </b-container>
-  <TextEditor></TextEditor>
   <Caffe class="mt-3 mb-5" v-bind:si="team.si" v-bind:gu="team.gu"></Caffe>
 </div>
 </template>
@@ -167,7 +167,6 @@
 import Axios from 'axios'
 import { mapGetters, mapState } from 'vuex'
 import Caffe from '../../components/Caffe.vue'
-import TextEditor from '../../components/common/TextEditor.vue'
 const API_URL = process.env.VUE_APP_LOCAL_URL
 
 export default {
@@ -249,6 +248,9 @@ export default {
       this.$nextTick(() => {
         this.$bvModal.hide('modal-prevent-closing')
       })
+    },
+    toAricle () {
+      this.$router.push({ name: "StudyArticle", params: {id:this.study_id}})
     }
   },
   created() {
@@ -263,8 +265,7 @@ export default {
     console.log(`${API_URL}study/member/${this.study_id}`)
   },
   components: {
-    Caffe,
-    TextEditor
+    Caffe
   }
 }
 </script>

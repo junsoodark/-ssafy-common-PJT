@@ -3,8 +3,7 @@
     <div class="sample-toolbar">
 		<a href="javascript:void(0)" @click="format('bold')"><span class="fa fa-bold fa-fw"></span></a>
 		<a href="javascript:void(0)" @click="format('italic')"><span class="fa fa-italic fa-fw"></span></a>
-		<a href="javascript:void(0)" @click="format('underline')"><span class="fas fa-underline fa-fw"></span></a>
-		<a href="javascript:void(0)" @click="setUrl()"><span class="fa fa-link fa-fw"></span></a>
+		<a href="javascript:void(0)" @click="format('underline')" class="mr-3"><span class="fas fa-underline fa-fw"></span></a>
     <select name="job" id='test' v-model="size" @click="changeSize">
       <option value="1">1</option>
       <option value="2">2</option>
@@ -14,8 +13,8 @@
       <option value="6">6</option>
       <option value="7">7</option>
     </select>
-		<span><input id="txtFormatUrl" placeholder="url" class="form-control"></span>
     </div>
+    <hr>
     <p
       v-for="(value, index) in content"
       id="paragraph"
@@ -25,6 +24,7 @@
       @keyup.delete="onRemove(index)"
       class="editor"
     />
+    <button class='btn btn-success' @click.prevent='Submit'>제출</button>
   </div>
 </template>
 
@@ -33,10 +33,13 @@ export default {
   data() {
     return {
       content: [
-        { value: 'paragraph' },
+        { value: '여기에 글을 쓰세요' },
       ],
       size: 3
     };
+  },
+  props: {
+    studyId: Number
   },
   mounted() {
     document.getElementById('paragraph').setAttribute('contenteditable', 'true');
@@ -72,6 +75,10 @@ export default {
     changeSize() {
       this.size *= 1
       document.execCommand('fontSize', false,this.size)
+    },
+    Submit () {
+      const articleData = document.querySelector('#paragraph')
+      console.log(articleData.innerHTML)
     }
   },
 };
