@@ -9,7 +9,7 @@ public interface PostService {
 
     public boolean update(Post post);
 
-    public boolean delete(Post post);
+    public boolean delete(int id);
 
     public Post findPostById(int id);
 }
