@@ -192,11 +192,13 @@ export default {
     },
     deleteSubmit() {
       if (this.checkDelete === this.checkDeleteForm) {
-        Axios.delete(`${API_URL}study/${this.study_id}`)
+        var params = new URLSearchParams()
+        params.append('studyId',this.study_id)
+        Axios({method:'DELETE',url:`${API_URL}study`,params:params,headers:{'Content-Type': 'application/json; charset=utf-8'}})
         .then(res => {
-          alert('스터트가 삭제되었습니다.')
+          alert('스터디가 삭제되었습니다.')
           console.log(res)
-          this.$router.push({ name: "TeamList" })
+          this.$router.push({ name: "StudyList" })
         })
         .catch(err => {
           console.log(err)

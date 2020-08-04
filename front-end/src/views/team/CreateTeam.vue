@@ -20,7 +20,10 @@
       </b-form-group>-->
 
       <b-form-group id="input-group-4" label="지역:" label-for="input-4">
-        <b-form-select id="input-4" v-model="form.siArea" :options="siAreas" required></b-form-select>
+        <!-- <b-button @click="getCity"></b-button> -->
+        <b-form-select id="input-4" v-model="form.city" :options="cities" required>
+          <!-- <option :options="cities"></option> -->
+        </b-form-select>
         <b-form-select id="input-4" v-model="form.guArea" :options="guAreas" required></b-form-select>
       </b-form-group>
 
@@ -90,7 +93,7 @@ export default {
         studyname: "",
         field: null,
         contact: null,
-        siArea: null,
+        city: null,
         guArea: null,
         schedule: null,
         count: null,
@@ -107,7 +110,7 @@ export default {
         "공기업",
         "사기업",
       ],
-      siAreas: [{ text: "원하는 지역을 선택해주세요", value: null }, "서울시"],
+      cities: [],
       guAreas: [
         { text: "원하는 지역을 선택해주세요", value: null },
         "강남구",
@@ -212,6 +215,27 @@ export default {
         this.show = true;
       });
     },
+    // getCity() {
+    //   Axios.get(`${API_URL}address/`)
+    //     .then((res) => {
+    //       this.cities = res.data;
+    //       console.log(this.cities);
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+    // },
+  },
+
+  created() {
+    Axios.get(`${API_URL}address/`)
+      .then((res) => {
+        this.cities = res.data;
+        console.log(this.cities);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   },
 };
 </script>
