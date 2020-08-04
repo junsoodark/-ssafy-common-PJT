@@ -20,8 +20,10 @@
       </b-form-group>-->
 
       <b-form-group id="input-group-4" label="지역:" label-for="input-4">
-        <!-- <b-button @click="getGu"></b-button> -->
-        <b-form-select id="input-4" v-model="form.city" :options="cities" required></b-form-select>
+        <!-- <b-button @click="getCity"></b-button> -->
+        <b-form-select id="input-4" v-model="form.city" :options="cities" required>
+          <!-- <option :options="cities"></option> -->
+        </b-form-select>
         <b-form-select id="input-4" v-model="form.guArea" :options="guAreas" required></b-form-select>
       </b-form-group>
 
@@ -109,7 +111,33 @@ export default {
         "사기업",
       ],
       cities: [],
-      guAreas: [],
+      guAreas: [
+        { text: "원하는 지역을 선택해주세요", value: null },
+        "강남구",
+        "강동구",
+        "강북구",
+        "강서구",
+        "관악구",
+        "광진구",
+        "구로구",
+        "금천구",
+        "노원구",
+        "도봉구",
+        "동대문구",
+        "동작구",
+        "마포구",
+        "서대문구",
+        "서초구",
+        "성동구",
+        "성북구",
+        "송파구",
+        "양천구",
+        "영등포구",
+        "용산구",
+        "은평구",
+        "중구",
+        "중랑구",
+      ],
       contacts: [
         { text: "오프라인", value: "오프라인" },
         { text: "온라인", value: "온라인" },
@@ -148,7 +176,7 @@ export default {
         email: this.email,
         endDate: this.form.enddate,
         gu: this.form.guArea,
-        si: this.form.city,
+        si: "서울",
         startDate: this.form.startdate,
         title: this.form.studyname,
       };
@@ -187,11 +215,11 @@ export default {
         this.show = true;
       });
     },
-    // getGu() {
-    //   Axios.get(`${API_URL}address/${this.form.city}`)
+    // getCity() {
+    //   Axios.get(`${API_URL}address/`)
     //     .then((res) => {
-    //       this.guAreas = res.data;
-    //       console.log(this.guAreas);
+    //       this.cities = res.data;
+    //       console.log(this.cities);
     //     })
     //     .catch((err) => {
     //       console.log(err);
@@ -203,34 +231,12 @@ export default {
     Axios.get(`${API_URL}address/`)
       .then((res) => {
         this.cities = res.data;
-        // console.log(this.cities);\
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
-    Axios.get(`${API_URL}address/${this.form.city}`)
-      .then((res) => {
-        this.guAreas = res.data;
-        console.log(this.guAreas);
+        console.log(this.cities);
       })
       .catch((err) => {
         console.log(err);
       });
   },
-
-  // computed: {
-  //   getGu() {
-  //     Axios.get(`${API_URL}address/${this.form.city}`)
-  //       .then((res) => {
-  //         this.guAreas = res.data;
-  //         console.log(this.guAreas);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   },
-  // },
 };
 </script>
 
