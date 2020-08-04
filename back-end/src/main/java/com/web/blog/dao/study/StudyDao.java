@@ -11,7 +11,7 @@ import com.web.blog.model.study.Study;
 
 @Repository
 @Transactional
-public interface StudyDao extends JpaRepository<Study, String> {
+public interface StudyDao extends StudyMemberDao, JpaRepository<Study, String> {
 	Optional<Study> findStudyByStudyId(final int studyId);
 //	Study findStudyByTitle(String title);
 }

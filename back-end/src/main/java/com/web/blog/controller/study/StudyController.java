@@ -63,6 +63,7 @@ public class StudyController {
 								 @RequestParam final String content,
 								 @DateTimeFormat(iso = ISO.DATE) @RequestParam final LocalDate startDate,
 								 @DateTimeFormat(iso = ISO.DATE) @RequestParam final LocalDate endDate,
+								 @RequestParam final int maxMembers,
 								 @RequestParam final String si,
 								 @RequestParam final String gu) {
 		final User user = userService.findUserByEmail(email);
@@ -76,7 +77,7 @@ public class StudyController {
 		if (endDate.compareTo(startDate) < 0)
 			return new ResponseEntity("종료일은 시작일 보다 빠를수 없습니다", HttpStatus.FORBIDDEN);
 		
-		Study study = studyService.create(user, address, title, content, startDate, endDate);
+		Study study = studyService.create(user, address, title, content, startDate, endDate, maxMembers);
 		if(study == null)
 			return new ResponseEntity("스터디를 생성할 수 없습니다. 관리자에게 문의하세요.", HttpStatus.FORBIDDEN);
 		
@@ -99,6 +100,7 @@ public class StudyController {
 								 @RequestParam final String content,
 								 @DateTimeFormat(iso = ISO.DATE) @RequestParam final LocalDate startDate,
 								 @DateTimeFormat(iso = ISO.DATE) @RequestParam final LocalDate endDate,
+								 @RequestParam final int maxMembers,
 								 @RequestParam final String si,
 								 @RequestParam final String gu) {
 		final User user = userService.findUserByEmail(email);
@@ -116,7 +118,7 @@ public class StudyController {
 		if (endDate.compareTo(startDate) < 0)
 			return new ResponseEntity("종료일은 시작일 보다 빠를수 없습니다", HttpStatus.FORBIDDEN);
 
-		if(studyService.update(address, studyId, title, content, startDate, endDate)==false)
+		if(studyService.update(address, studyId, title, content, startDate, endDate, maxMembers)==false)
 			return new ResponseEntity("스터디를 수정할 수 없습니다. 관리자에게 문의바랍니다.", HttpStatus.FORBIDDEN);
 		return new ResponseEntity("스터디 수정에 성공했습니다.", HttpStatus.OK);
 	}

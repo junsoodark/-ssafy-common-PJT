@@ -16,6 +16,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.web.blog.model.address.Address;
@@ -56,6 +57,9 @@ public class Study {
 	@JoinColumn(name = "address_id")
 	private Address address;
 
+	@Version
+	private Long version;
+	
 	private String title;
 	private String content;
 	private LocalDate startDate;
@@ -93,4 +97,5 @@ public class Study {
 		}
 		return false;
 	}
+	private int maxMembers;
 }

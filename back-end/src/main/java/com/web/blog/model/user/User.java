@@ -1,6 +1,5 @@
 package com.web.blog.model.user;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -53,21 +52,4 @@ public class User {
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH })
 	@JoinTable(name = "study_member", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "study_id"))
 	private Set<Study> studies;
-
-	public boolean addStudy(Study study) {
-		if(this.studies==null)
-			this.studies = new HashSet<>();
-		
-		if (!this.studies.contains(study)) {
-			this.studies.add(study);
-			return true;
-		} return false;
-	}
-	
-	public boolean removeStudy(Study study) {
-		if (this.studies.contains(study)) {
-			this.studies.remove(study);
-			return true;
-		} return false;
-	}
 }

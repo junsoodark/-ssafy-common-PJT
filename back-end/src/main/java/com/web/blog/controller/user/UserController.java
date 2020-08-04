@@ -1,7 +1,5 @@
 package com.web.blog.controller.user;
 
-import java.util.Map;
-
 import javax.validation.Valid;
 
 import com.web.blog.model.user.User;
@@ -62,5 +60,20 @@ public class UserController {
 		if(verifyService.isValidUser(email, password)==false) return new ResponseEntity("이메일 또는 비밀번호가 일치하지 않습니다.", HttpStatus.NOT_FOUND);
 		else if(userService.delete(email)==false) return new ResponseEntity("존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND);
 		return new ResponseEntity("회원탈퇴가 완료되었습니다.", HttpStatus.OK);
+	}
+	
+	@PutMapping("/user/help")
+	@ApiOperation(value="이메일, 인증 번호 그리고 변경할 패스워드를 입력받아 유효성을 재검증하고, 결과에 따라 비밀번호 변경을 승인/거부합니다.")
+	public ResponseEntity updatePassword(@RequestParam final String email, @RequestParam final String code, @RequestParam final String password) {
+		if(java.util.regex.Pattern.matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d$@$!%*#?&]{8,}$", password)==false)
+			return new ResponseEntity("비밀번호는 영문과 숫자가 적어도 1자 이상씩 포함된 8자이상으로 구성되어야 합니다.", HttpStatus.BAD_REQUEST);
+		else if(verifyService.isValidCode(email, code)==false) return new ResponseEntity("인증번호가 유효하지 않습니다.", HttpStatus.FORBIDDEN);
+		
+		User user = userService.findUserByEmail(email);
+		if(user==null) return new ResponseEntity("존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND);
+
+		user.setPassword(password);
+		if(userService.update(user)==false) return new ResponseEntity("존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND);
+		return new ResponseEntity("비밀번호가 변경되었습니다.", HttpStatus.OK);
 	}
 }

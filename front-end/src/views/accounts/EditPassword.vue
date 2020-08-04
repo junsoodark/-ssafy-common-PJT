@@ -1,32 +1,149 @@
 <template>
-  <b-container>
-    <h1>비밀번호 확인 페이지</h1>
+  <b-container class="bv-example-row my-5">
+    <h1>회원정보 수정 페이지</h1>
     <br>
-    <b-row class="my-1">
-      <b-col sm="3">
-        <label for="input-none">현재 이메일</label>
-      </b-col>
-      <b-col sm="9">
-        <b-list-group>
-          <b-list-group-item href="#">aa@aa.com</b-list-group-item>
-        </b-list-group>
-      </b-col>
-    </b-row>
-    <b-row class="my-1">
-      <b-col sm="3">
-        <label for="input-none">No State:</label>
-      </b-col>
-      <b-col sm="9">
-        <b-form-input id="input-none" :state="null" placeholder="No validation"></b-form-input>
+    <!-- 현재 비밀번호 -->
+    <b-row>
+      <b-col class="input-group input-group-lg">
+        <div class="input-group-prepend">
+          <span class="input-group-text" style="width: 10rem;" id="inputGroup-sizing-default">현재 비밀번호</span>
+        </div>
+        <input 
+          v-model="nowPassword" 
+          type="password" 
+          class="form-control text-center" 
+          aria-label="Sizing example input" 
+          aria-describedby="inputGroup-sizing-default"
+        >
+        <b-button @click="verifyPassword">확인</b-button>
       </b-col>
     </b-row>
-
+    <br>
+      <!-- 새 비밀번호 -->
+    <b-form @submit.stop.prevent="editPassword">
+      <b-row>
+        <b-col class="input-group input-group-lg">
+          <div class="input-group-prepend">
+            <span class="input-group-text" style="width: 10rem;" id="inputGroup-sizing-default">새 비밀번호</span>
+          </div>
+          <input 
+            v-model="newPassword" 
+            type="password" 
+            class="form-control text-center" 
+            aria-label="Sizing example input" 
+            aria-describedby="inputGroup-sizing-default"
+          >
+        </b-col>
+      </b-row>
+      <br>
+      <!-- 새 비밀번호 확인 -->
+      <b-row>
+        <b-col class="input-group input-group-lg">
+          <div class="input-group-prepend">
+            <span class="input-group-text" style="width: 10rem;" id="inputGroup-sizing-default">비밀번호 확인</span>
+          </div>
+          <input 
+            v-model="newPasswordConfirm" 
+            type="password" 
+            class="form-control text-center" 
+            aria-label="Sizing example input" 
+            aria-describedby="inputGroup-sizing-default"
+          >
+        </b-col>
+      </b-row>
+      <br>
+      <b-button type="submit" block size="lg" variant="info">변경하기</b-button>
+    </b-form>
   </b-container>
   
 </template>
 
 <script>
+import { mapState } from 'vuex';
+import Axios from 'axios';
+import router from "@/router";
+const API_URL = process.env.VUE_APP_LOCAL_URL
+
 export default {
+  data() {
+    return {
+      nowPasswordVerifyState: false,
+      nowPassword: '',
+      newPassword: '',
+      newPasswordConfirm: '',
+      sex: '',
+      name: '',
+      age: null,
+    };
+  },
+  computed: {
+    ...mapState({
+      email: state => state.moduleName.email,
+    }),
+  },
+  methods: {
+    verifyPassword() {
+      const params = {
+        'email' : this.email,
+        'password' : this.nowPassword
+      }
+      var JsonForm = JSON.stringify(params)
+
+      Axios({method:'POST',url:`${API_URL}login`,params:params,data:JsonForm,headers:{'Content-Type': 'application/json; charset=utf-8'}})
+      .then(() => {
+        alert("비밀번호 인증되었습니다.")
+        this.nowPasswordVerifyState = true
+        
+        //get 요쳥
+        Axios.get(`${API_URL}user/${this.email}`)
+        .then(res => {
+          this.name = res.data.name
+          this.age = res.data.age
+          this.sex = res.data.sex
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      })
+      .catch(err => {
+        alert('비밀번호를 확인해주세요')
+        console.log(err.response.data)
+      })
+    },
+    editPassword() {
+      if (this.newPassword !== this.newPasswordConfirm) {
+        alert("비밀번호 확인과 비밀번호가 다릅니다!");
+        return false;
+      } 
+
+      if (!this.nowPasswordVerifyState) {
+        alert("현재 비밀번호 확인을 해주세요!")
+        return false
+      }
+
+      if (this.newPassword === this.nowPassword) {
+        alert("현재 비밀번호와 새 비밀번호가 같습니다.")
+        return false
+      }
+
+      const params = {
+        'name' : this.name,
+        'sex' : this.sex,
+        'age' : this.age,
+        'email' : this.email,
+        'password' : this.newPassword
+      }
+
+      Axios.put(`${API_URL}user`, params)
+      .then(() => {
+        alert("비밀번호 수정을 완료하였습니다.")
+        router.push({ name: "Mypage" })
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    },
+  },
 }
 </script>
   
