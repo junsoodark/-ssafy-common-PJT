@@ -1,10 +1,12 @@
 <template>
   <div>
+    <b-form-input v-model="title" placeholder="제목을 입력해주세요"></b-form-input>
+    <hr>
     <div class="sample-toolbar">
 		<a href="javascript:void(0)" id="Bold" @click="format('bold')" class="text-decoration-none text-dark"><span class="fa fa-bold fa-fw"></span></a>
 		<a href="javascript:void(0)" id="Italic" @click="format('italic')" class="text-decoration-none text-dark"><span class="fa fa-italic fa-fw"></span></a>
 		<a href="javascript:void(0)" id="Underline" @click="format('underline')" class="mr-3 text-decoration-none text-dark"><span class="fas fa-underline fa-fw"></span></a>
-    <select name="job" id='test' v-model="size" @click="changeSize">
+    <select name="job" id='test' v-model="size" @click="changeSize" class="mr-3">
       <option value="1">1</option>
       <option value="2">2</option>
       <option value="3">3</option>
@@ -13,6 +15,8 @@
       <option value="6">6</option>
       <option value="7">7</option>
     </select>
+    글자색: <input name="Color Picker" type="color" v-model="fontColor" @change="changeColor" class="mr-3"/>
+    배경색: <input name="Color Picker" type="color" v-model="backColor" @change="changeBackColor" class="mr-3"/>
     </div>
     <hr>
     <p
@@ -36,9 +40,12 @@ export default {
         { value: '여기에 글을 쓰세요' },
       ],
       size: 3,
+      title: null,
       BV: false,
       IV: false,
-      UV: false
+      UV: false,
+      fontColor: '#000000',
+      backColor: '#ffffff',
     };
   },
   props: {
@@ -90,9 +97,15 @@ export default {
       this.size *= 1
       document.execCommand('fontSize', false,this.size)
     },
+    changeColor () {
+      document.execCommand('foreColor', false, this.fontColor)
+    },
+    changeBackColor () {
+      document.execCommand('backColor', false, this.backColor)
+    },
     Submit () {
       const articleData = document.querySelector('#paragraph')
-      console.log(articleData.innerHTML)
+      console.log(articleData.innerHTML,this.title)
     }
   },
 };
