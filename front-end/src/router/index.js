@@ -8,6 +8,8 @@ import Logout from '../views/accounts/Logout.vue'
 import Mypage from '../views/accounts/Mypage.vue'
 import UpdateUserInfo from '../views/accounts/UpdateUserInfo.vue'
 import EditPassword from '../views/accounts/EditPassword.vue'
+import FindPassword from '../views/accounts/FindPassword.vue'
+
 //team
 import TeamList from '../views/team/TeamList.vue'
 import TeamDetail from '../views/team/TeamDetail.vue'
@@ -64,6 +66,11 @@ const routes = [
     component: EditPassword,
   },
   {
+    path: '/FindPassword',
+    name: 'FindPassword',
+    component: FindPassword,
+  },
+  {
     path: '/study/list',
     name: 'StudyList',
     component: TeamList
@@ -97,7 +104,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const publicPages = ['Login', 'Signup', 'Home', 'About', 'StudyList', 'StudyDetail', 'Mypage',  'UpdateUserInfo','NotFound']  // Login 안해도 됨
+  const publicPages = ['Login', 'Signup', 'Home', 'About', 'StudyList', 'StudyDetail', 'Mypage',  'UpdateUserInfo','NotFound', 'FindPassword']  // Login 안해도 됨
   const authPages = ['Login', 'Signup']  // Login 되어있으면 안됨
   const loginRequiredPages = ['CreateTeam']
   

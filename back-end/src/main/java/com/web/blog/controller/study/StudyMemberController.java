@@ -40,8 +40,13 @@ public class StudyMemberController {
 		
 		Study study = studyService.findStudyByStudyId(studyId);
 		if(study==null) return new ResponseEntity("존재하지 않는 스터디입니다.", HttpStatus.NOT_FOUND);
+		
+		if(studyMemberService.isExistMember(study, user)) return new ResponseEntity("이미 가입된 멤버입니다.", HttpStatus.CONFLICT);
 	
-		if(studyMemberService.join(study, user)==false) return new ResponseEntity("이미 가입된 멤버입니다.", HttpStatus.CONFLICT);
+		if(studyMemberService.isFull(study)) return new ResponseEntity("스터디 멤버 수가 초과하여 가입할 수 없습니다.", HttpStatus.CONFLICT);
+		
+		if(studyMemberService.join(study, user)==false) return new ResponseEntity("스터디에 가입할 수 없습니다. 관리자에게 문의바랍니다.", HttpStatus.FORBIDDEN);
+		
 		return new ResponseEntity("스터디에 가입되었습니다.", HttpStatus.OK);
 	}
 	
@@ -54,7 +59,9 @@ public class StudyMemberController {
 		Study study = studyService.findStudyByStudyId(studyId);
 		if(study==null) return new ResponseEntity("존재하지 않는 스터디입니다.", HttpStatus.NOT_FOUND);
 	
-		if(studyMemberService.leave(study, user)==false) return new ResponseEntity("스터디의 멤버가 아닙니다.", HttpStatus.FORBIDDEN);
+		if(studyMemberService.isExistMember(study, user)==false) return new ResponseEntity("스터디의 멤버가 아닙니다.", HttpStatus.NOT_FOUND);
+		
+		if(studyMemberService.leave(study, user)==false) return new ResponseEntity("스터디에서 탈퇴할 수 없습니다. 관리자에게 문의바랍니다.", HttpStatus.FORBIDDEN);
 		return new ResponseEntity("스터디에서 탈퇴되었습니다.", HttpStatus.OK);
 	}
 	
