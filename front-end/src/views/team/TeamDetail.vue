@@ -4,9 +4,50 @@
     <br>
     <b-row>
       <b-col class="totheleft text-center" cols="12"><h1>{{ team.title }}</h1></b-col>
-      <b-col class="totheright my-3 text-center" offset="8" cols="4">
-        <b-button @click="toAricle" class="mr-1">게시판 보기</b-button>
-        <b-button v-if="isLoggedIn" v-b-modal.modal-prevent-closing variant="info">가입신청</b-button>
+      <b-col v-if="isLoggedIn" class="totheright my-3 text-center" offset="8" cols="4">
+        <b-button v-if="isMember" @click="toAricle" class="mr-1">게시판 보기</b-button>
+        <!-- 탈퇴 -->
+        <b-button v-if="isMember" v-b-modal.modal-secession variant="info">탈퇴신청</b-button>
+
+        <b-modal
+          id="modal-secession"
+          ref="modal"
+          title="스터디를 탈퇴하시겠습니까?"
+          @show="resetModal"
+          @hidden="resetModal"
+          @ok="secessionOk"
+        >
+          <form ref="form" @submit.stop.prevent="secessionSubmit">
+            <b-form-group
+              label="다음 글을 옮겨 적으세요"
+              label-for="name-input"
+              invalid-feedback="message is required"
+            >
+              <div class="input-group input-group">
+                <p class="form-control text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">해당 스터디를 탈퇴하겠습니다.</p>
+              </div>
+              <b-form-input
+                id="name-input"
+                v-model="checkDelete"
+                class="text-center"
+                required
+              ></b-form-input>
+            </b-form-group>
+          </form>
+          <template v-slot:modal-footer="{ ok, cancel }">
+            <!-- <b>Custom Footer</b> -->
+            <!-- Emulate built in modal footer ok and cancel button actions -->
+            <b-button size="sm" variant="success" @click="ok()">
+              신청
+            </b-button>
+            <b-button size="sm" variant="danger" @click="cancel()">
+              취소
+            </b-button>
+            <!-- Button with custom close trigger value -->
+          </template>
+        </b-modal>
+        <!-- 여기까지 -->
+        <b-button v-if="!isMember" v-b-modal.modal-prevent-closing variant="info">가입신청</b-button>
 
         <b-modal
           id="modal-prevent-closing"
@@ -177,6 +218,8 @@ export default {
       team: [],
       checkDelete: '',
       checkDeleteForm: '해당 스터디를 삭제하겠습니다.',
+      checkSecessionForm: '해당 스터디를 탈퇴하겠습니다.',
+      isMember: false,
     }
   },
   computed: {
@@ -196,9 +239,9 @@ export default {
         var params = new URLSearchParams()
         params.append('studyId',this.study_id)
         Axios({method:'DELETE',url:`${API_URL}study`,params:params,headers:{'Content-Type': 'application/json; charset=utf-8'}})
-        .then(res => {
+        .then(() => {
           alert('스터디가 삭제되었습니다.')
-          console.log(res)
+          this.checkDelete = ''
           this.$router.push({ name: "StudyList" })
         })
         .catch(err => {
@@ -236,12 +279,11 @@ export default {
       })
       .then(res => {
         alert(res.data)
-        this.$router.push({ name: "StudyDetail" })
-
+        this.isMember = true
+        this.team.numMembers += 1
       })
       .catch(err => {
-        alert('이미 가입된 멤버입니다.')
-        console.log('aaaa', err)
+        alert(err.response.data)
       })
 
 
@@ -251,6 +293,34 @@ export default {
     },
     toAricle () {
       this.$router.push({ name: "StudyArticle", params: {id:this.study_id}})
+    },
+    secessionSubmit () {
+      if (this.checkDelete === this.checkSecessionForm) {
+        var params = new URLSearchParams()
+        params.append('email',this.email)
+        params.append('studyId',this.study_id)
+        Axios({method:'DELETE',url:`${API_URL}study/member`,params:params,headers:{'Content-Type': 'application/json; charset=utf-8'}})
+        .then(() => {
+          alert('탈퇴가 성공적으로 진행되었습니다.')
+          this.checkDelete = ''
+          this.isMember = false
+          this.team.numMembers -= 1
+          this.$nextTick(() => {
+            this.$bvModal.hide('modal-secession')
+          })
+        })
+        .catch(err => {
+          alert(err.response.data)
+        })
+      } else {
+        alert('일치하지 않습니다.')
+      }
+    },
+    secessionOk(bvModalEvt) {
+      // Prevent modal from closing
+      bvModalEvt.preventDefault()
+      // Trigger submit handler
+      this.secessionSubmit()
     }
   },
   created() {
@@ -262,7 +332,15 @@ export default {
       console.log(err)
       this.$router.push({ name: "NotFound" })
     })
-    console.log(`${API_URL}study/member/${this.study_id}`)
+    Axios.get(`${API_URL}study/email?email=${this.email}`)
+    .then(res => {
+      for (var i=0; i<res.data.length; i++) {
+        console.log(res.data[i].studyId)
+        if (res.data[i].studyId == this.study_id) {
+          this.isMember = true
+        }
+      }
+    })
   },
   components: {
     Caffe
