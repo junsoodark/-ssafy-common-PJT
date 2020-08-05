@@ -335,7 +335,6 @@ export default {
     Axios.get(`${API_URL}study/email?email=${this.email}`)
     .then(res => {
       for (var i=0; i<res.data.length; i++) {
-        console.log(res.data[i].studyId)
         if (res.data[i].studyId == this.study_id) {
           this.isMember = true
         }
