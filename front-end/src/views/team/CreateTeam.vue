@@ -87,7 +87,7 @@ export default {
   data() {
     return {
       form: {
-        studyname: "",
+        studyname: null,
         field: null,
         contact: null,
         city: null,
@@ -97,7 +97,7 @@ export default {
         day: null,
         time: null,
         period: null,
-        person: "",
+        person: null,
         startdate: null,
         enddate: null,
         content: null,
