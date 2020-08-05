@@ -6,26 +6,26 @@
       <hr>
       <b-media>
         <template v-slot:aside>
-          <b-img blank blank-color="#abc" width="150" rounded="circle" alt="placeholder"></b-img>
+          <b-img blank blank-color="#abc" width="300" rounded="circle" alt="placeholder"></b-img>
         </template>
         <b-row>
-          <b-col cols="2" class="text-center font-weight-bold"><p>이메일</p> </b-col>
-          <b-col cols="10" class="text-center font-weight-bold"><p>{{ email }}</p></b-col>
+          <b-col cols="3" class="text-center font-weight-bold"><p>이메일</p> </b-col>
+          <b-col cols="9" class="text-center font-weight-bold"><p>{{ email }}</p></b-col>
         </b-row>
         <hr>
         <b-row>
-          <b-col cols="2" class="text-center font-weight-bold"><p>이름</p></b-col>
-          <b-col cols="10" class="text-center font-weight-bold"><p>{{ name }}</p></b-col>
+          <b-col cols="3" class="text-center font-weight-bold"><p>이름</p></b-col>
+          <b-col cols="9" class="text-center font-weight-bold"><p>{{ name }}</p></b-col>
         </b-row>
         <hr>
         <b-row>
-          <b-col cols="2" class="text-center font-weight-bold"><p>나이</p></b-col>
-          <b-col cols="10" class="text-center font-weight-bold"><p>{{ age }}</p></b-col>
+          <b-col cols="3" class="text-center font-weight-bold"><p>나이</p></b-col>
+          <b-col cols="9" class="text-center font-weight-bold"><p>{{ age }}</p></b-col>
         </b-row>
         <hr>
         <b-row>
-          <b-col cols="2" class="text-center font-weight-bold"><p>성별</p></b-col>
-          <b-col cols="10" class="text-center font-weight-bold"><p v-if="sex == 1">남자</p><p v-if="sex == 2">여자</p></b-col>
+          <b-col cols="3" class="text-center font-weight-bold"><p>성별</p></b-col>
+          <b-col cols="9" class="text-center font-weight-bold"><p v-if="sex == 1">남자</p><p v-if="sex == 2">여자</p></b-col>
         </b-row>
         <hr>
           <b-row align-h="start" class="text-left">
@@ -73,7 +73,7 @@
         <hr>
         <b-row v-for="item in items" :key="item.studyId">
           <b-col cols="4" class="p-0"><b-list-group-item route :to="{ name: 'StudyDetail', params: {id:item.studyId} }">{{ item.title }}</b-list-group-item></b-col>
-          <b-col cols="8" class="p-0"><b-list-group-item >content</b-list-group-item></b-col>
+          <b-col cols="8" class="p-0"><b-list-group-item route :to="{ name: 'StudyDetail', params: {id:item.studyId} }">{{ item.content }}</b-list-group-item></b-col>
         </b-row>
       </b-list-group>
 
