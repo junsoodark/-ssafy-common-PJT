@@ -7,8 +7,9 @@
       <b-media>
         <template v-slot:aside>
           <b-row>
-            <b-img v-if="imageUrl === null" blank blank-color="#abc" width="300" rounded="circle" alt="프로필사진"></b-img>
-            <b-img v-if="imageUrl !== null" :src="imageUrl" width="300" rounded="circle" alt="프로필사진"></b-img>
+            <b-img v-if="image === undefined" blank blank-color="#abc" width="300" rounded="circle" alt="aaa"></b-img>
+            <b-img v-else-if="image === null" blank blank-color="#abc" width="300" rounded="circle" alt="bbb"></b-img>
+            <b-img v-else-if="image !== null" :src="imageUrl" width="300" rounded="circle" alt="ccc"></b-img>
           </b-row>
           <b-row>
             <div class="group group_upload">
@@ -117,7 +118,7 @@
         ></b-form-input>
       </template>
 
-      <template v-slot:modal-footer="{ ok, cancel }">
+      <template v-slot:modal-footer="{ deleteUserAccount, cancel }">
         <!-- Emulate built in modal footer ok and cancel button actions -->
         <b-button size="sm" variant="danger" @click="deleteUserAccount(confirmPassword)">
           회원탈퇴
@@ -150,7 +151,6 @@ export default {
       countStudy: 0,
       confirmPassword: null,
       
-      // imageUrl: null,
       image: null,
     }
   },
@@ -176,6 +176,11 @@ export default {
       var storageRef = firebase.storage().ref('images/'+file.name);
       // 업로드
       var task = storageRef.put(file);
+
+      const test = firebase.database().ref('images/강아지사진').once('value').then(function(snapshot) {
+        console.log('sssss', snapshot)
+      })
+      console.log('test', test)
 
       task.on('state_changed',
         function progess(snapshot){
@@ -232,6 +237,8 @@ export default {
     .catch(err => {
       console.log(err)
     })
+
+    this.image = this.imageUrl
   },
 
 }
