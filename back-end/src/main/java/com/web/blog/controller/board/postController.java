@@ -3,7 +3,11 @@ package com.web.blog.controller.board;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.web.blog.model.board.Post;
+import com.web.blog.model.study.Study;
+import com.web.blog.model.user.User;
 import com.web.blog.service.board.PostService;
+import com.web.blog.service.study.StudyService;
+import com.web.blog.service.user.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,9 +29,29 @@ public class postController {
     @Autowired
     PostService postService;
 
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    StudyService studyService;
+
     @PostMapping("/post")
     @ApiOperation(value = "")
-    public ResponseEntity create(@RequestBody Post post) {
+    public ResponseEntity create(@RequestParam int studyId, @RequestParam int writer, @RequestParam String content,
+            @RequestParam String title) {
+        Study study = studyService.findStudyByStudyId(studyId);
+        if (study == null) {
+            return new ResponseEntity("존재하지 않는 스터디 입니다.", HttpStatus.NOT_FOUND);
+        }
+        User user = userService.findUserById(writer);
+        if (user == null) {
+            return new ResponseEntity("존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND);
+        }
+        Post post = new Post();
+        post.setStudy(study);
+        post.setUser(user);
+        post.setTitle(title);
+        post.setContent(content);
         if (postService.create(post) == false) {
             return new ResponseEntity("이미 존재하는 글입니다.", HttpStatus.CONFLICT);
         }
@@ -46,7 +70,13 @@ public class postController {
 
     @PutMapping("/post")
     @ApiOperation(value = "")
-    public ResponseEntity update(@RequestBody Post post) {
+    public ResponseEntity update(@RequestParam int id, @RequestParam String content, @RequestParam String title) {
+        Post post = postService.findPostById(id);
+        if (post == null) {
+            return new ResponseEntity("존재하지 않는 글입니다.", HttpStatus.NOT_FOUND);
+        }
+        post.setTitle(title);
+        post.setContent(content);
         if (postService.update(post) == false) {
             return new ResponseEntity("존재하지 않는 글입니다.", HttpStatus.NOT_FOUND);
         }

@@ -24,6 +24,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public User findUserById(int id) {
+		Optional<User> userOpt = userDao.findUserById(id);
+		return userOpt.isPresent() ? userOpt.get() : null;
+	}
+
+	@Override
 	public Map<String, Object> User2Map(User user) {
 		Map<String, Object> ret = new HashMap<>();
 		ret.put("email", user.getEmail());
