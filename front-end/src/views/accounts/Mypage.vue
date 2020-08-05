@@ -6,7 +6,28 @@
       <hr>
       <b-media>
         <template v-slot:aside>
-          <b-img blank blank-color="#abc" width="300" rounded="circle" alt="placeholder"></b-img>
+          <b-row>
+            <b-img v-if="image === undefined" blank blank-color="#abc" width="300" rounded="circle" alt="aaa"></b-img>
+            <b-img v-else-if="image === null" blank blank-color="#abc" width="300" rounded="circle" alt="bbb"></b-img>
+            <b-img v-else-if="image !== null" :src="imageUrl" width="300" rounded="circle" alt="ccc"></b-img>
+          </b-row>
+          <b-row>
+            <div class="group group_upload">
+              <button class="btn_upload" type="button" @click="onPickFile">
+                이미지 업로드
+              </button>
+              <input
+                id="uploadImg"
+                type="file"
+                value="upload"
+                style="display: none;"
+                ref="fileInput"
+                accept="image/*"
+                @change="onFilePicked"
+              />
+              <!-- <progress value="0" max="100" id="uploader">0%</progress> -->
+            </div>
+          </b-row>
         </template>
         <b-row>
           <b-col cols="3" class="text-center font-weight-bold"><p>이메일</p> </b-col>
@@ -97,7 +118,7 @@
         ></b-form-input>
       </template>
 
-      <template v-slot:modal-footer="{ ok, cancel }">
+      <template v-slot:modal-footer="{ deleteUserAccount, cancel }">
         <!-- Emulate built in modal footer ok and cancel button actions -->
         <b-button size="sm" variant="danger" @click="deleteUserAccount(confirmPassword)">
           회원탈퇴
@@ -115,6 +136,8 @@ import { mapState, mapActions } from 'vuex'
 import Axios from 'axios';
 import router from "@/router";
 import VueCookies from "vue-cookies";
+import firebase from 'firebase'
+
 const API_URL = process.env.VUE_APP_LOCAL_URL
 
 export default {
@@ -127,7 +150,8 @@ export default {
       items: [],
       countStudy: 0,
       confirmPassword: null,
-
+      
+      image: null,
     }
   },
 
@@ -136,12 +160,53 @@ export default {
       email: state => state.moduleName.email,
       name: state => state.moduleName.name,
       sex: state => state.moduleName.sex,
-      age: state => state.moduleName.age
+      age: state => state.moduleName.age,
+      imageUrl: state => state.moduleName.imageUrl,
     }),
     ...mapState(['userInfo'])
   },
 
   methods: {
+    onPickFile() {
+      this.$refs.fileInput.click()
+    },
+    onFilePicked(event) {
+      var file = event.target.files[0];
+      // firebase 레퍼런스
+      var storageRef = firebase.storage().ref('images/'+file.name);
+      // 업로드
+      var task = storageRef.put(file);
+
+      const test = firebase.database().ref('images/강아지사진').once('value').then(function(snapshot) {
+        console.log('sssss', snapshot)
+      })
+      console.log('test', test)
+
+      task.on('state_changed',
+        function progess(snapshot){
+          var pct = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          this.uploaders = pct;
+        },
+        function error(err){
+          console.log('err', err)
+        },
+        function complete(){
+        }
+      )
+
+      const files = event.target.files
+      let filename = files[0].name
+      if (filename.lastIndexOf('.') <= 0) {
+        return alert('Please add a valid file!')
+      }
+      const fileReader = new FileReader()
+      fileReader.addEventListener('load', () => {
+        this.$store.commit('UPDATE_IMAGEURL', fileReader.result)
+      })
+      fileReader.readAsDataURL(files[0])
+      this.image = files[0]
+    },
+
     ...mapActions(['authDelete']),
     deleteUserAccount(data) {
       const params = {
@@ -172,7 +237,9 @@ export default {
     .catch(err => {
       console.log(err)
     })
-  }
+
+    this.image = this.imageUrl
+  },
 
 }
 </script>

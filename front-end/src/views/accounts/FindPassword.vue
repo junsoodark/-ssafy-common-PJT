@@ -28,7 +28,7 @@
         </b-input-group> -->
 
       </b-form>
-      <b-form @submit.prevent="changePassword">
+      <b-form @submit.prevent="changePassword(passwordInfo)">
         <!-- 인증 코드 -->
         <b-input-group class="mb-3">
           <b-input-group-prepend is-text>
@@ -41,19 +41,19 @@
           <b-input-group-prepend is-text>
             <b-icon icon="unlock"></b-icon>
           </b-input-group-prepend>
-          <b-form-input type="password" v-model="password" required placeholder="비밀번호는 영문과 숫자가 적어도 1자 이상씩 포함된 8자이상으로 구성되어야 합니다."></b-form-input>
+          <b-form-input type="password" v-model="passwordInfo.password" required placeholder="비밀번호는 영문과 숫자가 적어도 1자 이상씩 포함된 8자이상으로 구성되어야 합니다."></b-form-input>
         </b-input-group>
         <!-- 비밀번호 확인 -->
         <b-input-group class="mb-3">
           <b-input-group-prepend is-text>
             <b-icon icon="unlock-fill"></b-icon>
           </b-input-group-prepend>
-          <b-form-input type="password" v-model="passwordConfirm" required placeholder="비밀번호 확인"></b-form-input>
+          <b-form-input type="password" v-model="passwordInfo.passwordConfirm" required placeholder="비밀번호 확인"></b-form-input>
         </b-input-group>
         
 
 
-        <b-button class="mt-2" type="submit" block variant="secondary">비밀번호 변경</b-button>
+        <b-button class="mt-2" type="submit" @click="update_email(email)"  block variant="secondary">비밀번호 변경</b-button>
       </b-form>
     </div>
   </b-container>
@@ -69,17 +69,21 @@ export default {
   data() {
     return {
       email: "",
+      passwordInfo: {
+        password: null,
+        passwordConfirm: null,
+      },
       password: "",
       passwordConfirm: "",
       code: "",
     };
   },
   methods: {
-    changePassword() {
+    changePassword(passwordInfo) {
       const code = this.code
       const email = this.email
-      const password = this.password
-      const passwordConfirm = this.passwordConfirm
+      const password = this.passwordInfo.password
+      const passwordConfirm = this.passwordInfo.passwordConfirm
       if (password != passwordConfirm) {
         alert("비밀번호 확인과 비밀번호가 다릅니다!");
         return false;
@@ -91,7 +95,7 @@ export default {
         let numCheck = false
         let strCheck = false
 
-        for (var i=0; i<password.length; i++) {
+        for (var i=0; i< password.length; i++) {
           const temp = password.charAt(i);
           if (!isNaN(temp)) {
             numCheck = true
@@ -116,11 +120,10 @@ export default {
         headers: { "Content-Type": "application/json; charset=utf-8" },
       })
       .then((res) => {
-
         const putParams = {
           'code': this.code,
           'email': this.email,
-          'password': this.password
+          'password': password
         }
         // 비밀번호 변경
         Axios({
@@ -131,12 +134,18 @@ export default {
          })
         .then((res) => {
           alert(res.data)
+          
+          const loginData = {
+            'email': this.email,
+            'password': password,
+          }
           // 로그인
-          this.$store.dispatch('login', { 'email': this.email, 'password': this.password})
+          this.$store.dispatch('update_email', email)
+          this.$store.dispatch('login', loginData)
         })
         .catch((err) => {
           // alert(err)
-          console.log(err)
+          console.log('err', err)
         })
       })
       .catch((err) => {

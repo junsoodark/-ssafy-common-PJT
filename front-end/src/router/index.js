@@ -21,6 +21,7 @@ import NotFound from '../views/error/NotFound.vue'
 //추가기능
 import Search from '../views/Search.vue'
 
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -107,7 +108,7 @@ const routes = [
     path: "*",
     name: "NotFound",
     component: NotFound,
-  }
+  },
 ]
 
 const router = new VueRouter({
