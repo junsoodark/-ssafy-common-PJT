@@ -48,8 +48,8 @@ public class Study {
 	@JoinTable(name = "study_member", joinColumns = @JoinColumn(name = "study_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
 	private Set<User> members;
 
-	@OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH })
-	@JoinTable(name = "post", joinColumns = @JoinColumn(name = "study_id"))
+	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "study")
+	// @JoinTable(name = "post", joinColumns = @JoinColumn(name = "study_id"))
 	private Set<Post> posts;
 
 	@JsonIgnore
@@ -59,7 +59,7 @@ public class Study {
 
 	@Version
 	private Long version;
-	
+
 	private String title;
 	private String content;
 	private LocalDate startDate;
@@ -97,5 +97,6 @@ public class Study {
 		}
 		return false;
 	}
+
 	private int maxMembers;
 }
