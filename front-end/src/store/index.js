@@ -39,16 +39,18 @@ export default new Vuex.Store({
   actions: {
     login({ commit }, loginData) {
       const params = {
-        email: loginData.email,
-        password: loginData.password,
-      };
-      var JsonForm = JSON.stringify(params);
-      Axios({
-        method: "POST",
-        url: `${API_URL}login`,
-        params: params,
-        data: JsonForm,
-        headers: { "Content-Type": "application/json; charset=utf-8" },
+        'email' : loginData.email,
+        'password' : loginData.password
+      }
+      var JsonForm = JSON.stringify(params)
+      Axios({method:'POST',url:`${API_URL}login`,params:params,data:JsonForm,headers:{'Content-Type': 'application/json; charset=utf-8'}})
+      .then(res => {
+        commit('SET_TOKEN', res.data)
+        alert("로그인")
+        router.push({ name: 'Home' })
+      })
+      .catch(err => {
+        alert(err.response.data)
       })
         .then((res) => {
           commit("SET_TOKEN", res.data);
