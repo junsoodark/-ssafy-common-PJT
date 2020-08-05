@@ -19,8 +19,6 @@ import UpdateTeam from "../views/team/UpdateTeam.vue"
 //error
 import NotFound from '../views/error/NotFound.vue'
 
-//test
-import Test from '../views/accounts/Test.vue'
 
 Vue.use(VueRouter);
 
@@ -99,11 +97,6 @@ const routes = [
     name: "NotFound",
     component: NotFound,
   },
-  {
-    path: "/test",
-    name: "Test",
-    component: Test,
-  }
 ]
 
 const router = new VueRouter({

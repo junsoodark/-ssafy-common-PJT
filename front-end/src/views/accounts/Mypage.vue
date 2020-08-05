@@ -7,13 +7,13 @@
       <b-media>
         <template v-slot:aside>
           <b-row>
-            <b-img v-if="imageUrl === null" blank blank-color="#abc" width="300" rounded="circle" alt="placeholder"></b-img>
-            <b-img v-if="imageUrl !== null" :src="imageUrl" width="300" rounded="circle" alt="placeholder"></b-img>
+            <b-img v-if="imageUrl === null" blank blank-color="#abc" width="300" rounded="circle" alt="프로필사진"></b-img>
+            <b-img v-if="imageUrl !== null" :src="imageUrl" width="300" rounded="circle" alt="프로필사진"></b-img>
           </b-row>
           <b-row>
             <div class="group group_upload">
               <button class="btn_upload" type="button" @click="onPickFile">
-                업로드 이미지
+                이미지 업로드
               </button>
               <input
                 id="uploadImg"
@@ -24,9 +24,7 @@
                 accept="image/*"
                 @change="onFilePicked"
               />
-
-              <progress value="0" max="100" id="uploader">0%</progress>
-              <input type="file" value="upload" id="fileButton" @change="onFilePicked">
+              <!-- <progress value="0" max="100" id="uploader">0%</progress> -->
             </div>
           </b-row>
         </template>
@@ -141,10 +139,6 @@ import firebase from 'firebase'
 
 const API_URL = process.env.VUE_APP_LOCAL_URL
 
-
-
-// var uploader = document.getElementById('uploader');
-
 export default {
   data() {
     return {
@@ -156,7 +150,7 @@ export default {
       countStudy: 0,
       confirmPassword: null,
       
-      imageUrl: null,
+      // imageUrl: null,
       image: null,
     }
   },
@@ -166,7 +160,8 @@ export default {
       email: state => state.moduleName.email,
       name: state => state.moduleName.name,
       sex: state => state.moduleName.sex,
-      age: state => state.moduleName.age
+      age: state => state.moduleName.age,
+      imageUrl: state => state.moduleName.imageUrl,
     }),
     ...mapState(['userInfo'])
   },
@@ -174,39 +169,26 @@ export default {
   methods: {
     onPickFile() {
       this.$refs.fileInput.click()
-      console.log('onPick')
-      // var uploader = document.getElementById('uploader');
     },
     onFilePicked(event) {
       var file = event.target.files[0];
-
-      //firebase 레퍼런스
+      // firebase 레퍼런스
       var storageRef = firebase.storage().ref('images/'+file.name);
-
-      //업로드
+      // 업로드
       var task = storageRef.put(file);
-
-
-      console.log('file', file)
-      console.log('storaga', storageRef)
-      console.log('task', task)
-      console.log('##########')
 
       task.on('state_changed',
         function progess(snapshot){
-          console.log('sp', snapshot)
-          // var pct = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          // uploader.value = pct;
-          // console.log('uploader', pct)
+          var pct = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          this.uploaders = pct;
         },
         function error(err){
           console.log('err', err)
         },
-        function complete(res){
-          console.log('res', res)
+        function complete(){
         }
       )
-      console.log('aaa')
+
       const files = event.target.files
       let filename = files[0].name
       if (filename.lastIndexOf('.') <= 0) {
@@ -214,8 +196,7 @@ export default {
       }
       const fileReader = new FileReader()
       fileReader.addEventListener('load', () => {
-        this.imageUrl = fileReader.result
-        // console.log('imageUrl', this.imageUrl)
+        this.$store.commit('UPDATE_IMAGEURL', fileReader.result)
       })
       fileReader.readAsDataURL(files[0])
       this.image = files[0]
@@ -252,37 +233,6 @@ export default {
       console.log(err)
     })
   },
-  watch: {
-    uploadTask: function () {
-      this.uploadTask.on('state_changed', sp => {
-        this.progressUpload = Math.floor(sp.bytesTransferred / sp.totalBytes * 100)
-      },
-      null,
-      () => {
-        this.uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
-          this.uploadEnd = true
-          this.downloadURL = downloadURL
-          this.$emit('downloadURL', downloadURL)
-        })
-      })
-    },
-
-    // task() {
-    //   this.task.on('state_changed',
-    //     function progess(snapshot){
-    //       var pct = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-    //       uploader.value = pct;
-    //       console.log('uploader', pct)
-    //     },
-    //     function error(err){
-    //       console.log('err', err)
-    //     },
-    //     function complete(res){
-    //       console.log('res', res)
-    //     }
-    //   )
-    // }
-  }
 
 }
 </script>
