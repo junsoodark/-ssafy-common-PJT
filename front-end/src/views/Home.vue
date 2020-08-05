@@ -86,7 +86,7 @@
         <b-row>
           <h2 class="col-12">지금도 {{TeamCnt}}개의 스터디 팀이 활동하는 중!</h2>
           <h2 class="col-12">최근 만들어진 팀들</h2>
-          <TeamListItem class="col-4" v-for="team in TeamList" :key="team" v-bind:team="team"></TeamListItem>
+          <TeamListItem class="col-4" v-for="team in TeamList" :key="team.studyId" v-bind:team="team"></TeamListItem>
         </b-row>
       </b-container>
     </div>

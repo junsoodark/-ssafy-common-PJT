@@ -1,21 +1,34 @@
 <template>
   <div>
+    <b-form-input v-model="title" placeholder="제목을 입력해주세요"></b-form-input>
+    <hr>
     <div class="sample-toolbar">
-		<a href="javascript:void(0)" @click="format('bold')"><span class="fa fa-bold fa-fw"></span></a>
-		<a href="javascript:void(0)" @click="format('italic')"><span class="fa fa-italic fa-fw"></span></a>
-		<a href="javascript:void(0)" @click="format('insertunorderedlist')"><span class="fa fa-list fa-fw"></span></a>
-		<a href="javascript:void(0)" @click="setUrl()"><span class="fa fa-link fa-fw"></span></a>
-		<span><input id="txtFormatUrl" placeholder="url" class="form-control"></span>
+		<a href="javascript:void(0)" id="Bold" @click="format('bold')" class="text-decoration-none text-dark"><span class="fa fa-bold fa-fw"></span></a>
+		<a href="javascript:void(0)" id="Italic" @click="format('italic')" class="text-decoration-none text-dark"><span class="fa fa-italic fa-fw"></span></a>
+		<a href="javascript:void(0)" id="Underline" @click="format('underline')" class="mr-3 text-decoration-none text-dark"><span class="fas fa-underline fa-fw"></span></a>
+    <select name="job" id='test' v-model="size" @click="changeSize" class="mr-3">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+    </select>
+    글자색: <input name="Color Picker" type="color" v-model="fontColor" @change="changeColor" class="mr-3"/>
+    배경색: <input name="Color Picker" type="color" v-model="backColor" @change="changeBackColor" class="mr-3"/>
     </div>
+    <hr>
     <p
       v-for="(value, index) in content"
-      :id="sampleeditor"
+      id="paragraph"
       :key="index"
       contenteditable
       @input="event => onInput(event, index)"
       @keyup.delete="onRemove(index)"
       class="editor"
     />
+    <button class='btn btn-success' @click.prevent='Submit'>제출</button>
   </div>
 </template>
 
@@ -24,15 +37,22 @@ export default {
   data() {
     return {
       content: [
-        { value: 'paragraph 1' },
+        { value: '여기에 글을 쓰세요' },
       ],
+      size: 3,
+      title: null,
+      BV: false,
+      IV: false,
+      UV: false,
+      fontColor: '#000000',
+      backColor: '#ffffff',
     };
   },
-  created() {
-    document.getElementById('sampleeditor').setAttribute('contenteditable', 'true');
-	document.getElementById('sampleeditor2').setAttribute('contenteditable', 'true');
+  props: {
+    studyId: Number
   },
   mounted() {
+    document.getElementById('paragraph').setAttribute('contenteditable', 'true');
     this.updateAllContent();
   },
   methods: {
@@ -48,20 +68,45 @@ export default {
       }
     },
     updateAllContent() {
-      this.content.forEach((c, index) => {
-        const el = document.getElementById(`content-${index}`);
+      this.content.forEach((c) => {
+        const el = document.getElementById('paragraph');
         el.innerText = c.value;
       });
     },
     format(command, value) {
+      if (command == 'bold') {
+        this.BV = !this.BV
+      } else if (command == 'italic') {
+        this.IV = !this.IV
+      } else if (command == 'underline') {
+        this.UV = !this.UV
+      }
+
+      if (this.BV) {
+        document.getElementById('Bold').className = 'text-decoration-none text-danger'
+      } else {document.getElementById('Bold').className = 'text-decoration-none text-dark'}
+      if (this.IV) {
+        document.getElementById('Italic').className = 'text-decoration-none text-danger'
+      } else {document.getElementById('Italic').className = 'text-decoration-none text-dark'}
+      if (this.UV) {
+        document.getElementById('Underline').className = 'mr-3 text-decoration-none text-danger'
+      } else {document.getElementById('Underline').className = 'mr-3 text-decoration-none text-dark'}
 		document.execCommand(command, false, value);
     },
-    setUrl() {
-		var url = document.getElementById('txtFormatUrl').value;
-		var sText = document.getSelection();
-		document.execCommand('insertHTML', false, '<a href="' + url + '" target="_blank">' + sText + '</a>');
-		document.getElementById('txtFormatUrl').value = '';
-	}
+    changeSize() {
+      this.size *= 1
+      document.execCommand('fontSize', false,this.size)
+    },
+    changeColor () {
+      document.execCommand('foreColor', false, this.fontColor)
+    },
+    changeBackColor () {
+      document.execCommand('backColor', false, this.backColor)
+    },
+    Submit () {
+      const articleData = document.querySelector('#paragraph')
+      console.log(articleData.innerHTML,this.title)
+    }
   },
 };
 </script>
