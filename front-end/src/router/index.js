@@ -20,6 +20,7 @@ import StudyArticle from '../views/team/TeamArticleList.vue'
 import NotFound from '../views/error/NotFound.vue'
 //추가기능
 import Search from '../views/Search.vue'
+import Chat from '../views/chat.vue'
 
 
 Vue.use(VueRouter);
@@ -103,6 +104,11 @@ const routes = [
     path: "/look/:search",
     name: "Search",
     component: Search
+  },
+  {
+    path: "/chat",
+    name: "Chat",
+    component: Chat
   },
   {
     path: "*",
