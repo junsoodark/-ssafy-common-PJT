@@ -17,7 +17,7 @@ const plugins = [
     paths: ["moduleName"],
   }),
 ];
-const API_URL = process.env.VUE_APP_LOCAL_URL
+const API_URL = process.env.VUE_APP_LOCAL_URL;
 export default new Vuex.Store({
   state: {
     authToken: VueCookies.get("auth-token"),
@@ -32,8 +32,8 @@ export default new Vuex.Store({
   },
   mutations: {
     SET_TOKEN(state, token) {
-      state.authToken = token
-      VueCookies.set("auth-token", token)
+      state.authToken = token;
+      VueCookies.set("auth-token", token);
     },
   },
   actions: {
@@ -52,6 +52,14 @@ export default new Vuex.Store({
       .catch(err => {
         alert(err.response.data)
       })
+        .then((res) => {
+          commit("SET_TOKEN", res.data);
+          alert("로그인 성공");
+          router.push({ name: "Home" });
+        })
+        .catch((err) => {
+          alert(err.response.data);
+        });
     },
     signup(state, { code, age, email, nickname, password, sex }) {
       var params = new URLSearchParams();
@@ -72,25 +80,25 @@ export default new Vuex.Store({
         headers: { "Content-Type": "application/json; charset=utf-8" },
       })
         .then((res) => {
-          alert("회원가입 성공!")
+          alert("회원가입 성공!");
           console.log(res);
-          router.push({ name: "Login" })
+          router.push({ name: "Login" });
         })
         .catch((err) => {
-          alert(err.response.data)
-          console.log(err)
-        })
+          alert(err.response.data);
+          console.log(err);
+        });
     },
 
     logout({ commit }) {
-      alert('로그아웃')
+      alert("로그아웃");
       commit("SET_TOKEN", null); // state 에서도 삭제
       VueCookies.remove("auth-token"); // cookie 에서는 삭제
-      commit("deleteUserInfo", null)
+      commit("deleteUserInfo", null);
       router.push({ name: "Home" });
     },
     createTeam(state, form) {
-      console.log('fffff', form)
+      console.log("fffff", form);
       Axios.post(`${API_URL}study/create`, form)
         .then((res) => {
           alert("스터디 생성");
