@@ -3,8 +3,10 @@ package com.web.blog.service.user;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
@@ -15,8 +17,13 @@ import com.web.blog.model.user.User;
 @Service
 public class UserServiceImpl implements UserService {
 	@Autowired
-	UserDao userDao;
+	private UserDao userDao;
 
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
+	static final String regex = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d$@$!%*#?&]{8,}$";
+	
 	@Override
 	public User findUserByEmail(final String email) {
 		Optional<User> userOpt = userDao.findUserByEmail(email);
@@ -49,8 +56,10 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public boolean create(final User user) {
-		if (userDao.findUserByEmail(user.getEmail()).isPresent())
-			return false;
+		if(userDao.findUserByEmail(user.getEmail()).isPresent()) return false;
+		
+		final String encodedPassword = passwordEncoder.encode(user.getPassword());
+		user.setPassword(encodedPassword);
 		userDao.save(user);
 		return true;
 	}
@@ -58,11 +67,12 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean update(final User user) {
 		Optional<User> userOpt = userDao.findUserByEmail(user.getEmail());
-		if (userOpt.isPresent() == false)
-			return false;
-
-		userOpt.ifPresent(u -> {
-			u.setPassword(user.getPassword());
+		if(userOpt.isPresent()==false) return false;
+		
+		final String encodedPassword = passwordEncoder.encode(user.getPassword());
+		
+		userOpt.ifPresent(u->{
+			u.setPassword(encodedPassword);
 			u.setName(user.getName());
 			u.setAge(user.getAge());
 			u.setSex(user.getSex());
@@ -82,5 +92,10 @@ public class UserServiceImpl implements UserService {
 			userDao.delete(user);
 		});
 		return true;
+	}
+
+	@Override
+	public boolean isValidPattern(String password) {
+		return Pattern.matches(regex, password);
 	}
 }

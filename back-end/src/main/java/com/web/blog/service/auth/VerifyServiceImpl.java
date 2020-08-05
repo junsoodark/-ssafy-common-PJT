@@ -4,6 +4,7 @@ import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.web.blog.dao.auth.VerifyDao;
@@ -22,6 +23,9 @@ public class VerifyServiceImpl implements VerifyService {
 	@Autowired
 	private UserDao userDao;
 	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
 	@Override
 	public boolean isDuplicated(final String email) {
 		return userDao.findUserByEmail(email).isPresent();
@@ -29,7 +33,9 @@ public class VerifyServiceImpl implements VerifyService {
 
 	@Override
 	public boolean isValidUser(final String email, final String password) {
-		return userDao.findUserByEmailAndPassword(email, password).isPresent();
+		final String encodedPassword = userDao.findPasswordByEmail(email);
+		return encodedPassword==null ? false : passwordEncoder.matches(password, encodedPassword);
+//		return userDao.findUserByEmailAndPassword(email, password).isPresent();
 	}
 
 	@Override

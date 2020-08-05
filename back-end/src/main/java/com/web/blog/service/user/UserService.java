@@ -14,5 +14,6 @@ public interface UserService {
 	public boolean update(final User user);
 	public boolean delete(final String email);
 	
+	public boolean isValidPattern(final String password);
 	public Map<String, String> getErrorMessage(final Errors errors);
 }
