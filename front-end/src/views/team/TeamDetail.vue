@@ -283,8 +283,7 @@ export default {
         this.team.numMembers += 1
       })
       .catch(err => {
-        alert('이미 가입된 멤버입니다.')
-        console.log('aaaa', err)
+        alert(err.response.data)
       })
 
 
