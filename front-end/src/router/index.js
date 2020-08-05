@@ -15,9 +15,11 @@ import TeamList from '../views/team/TeamList.vue'
 import TeamDetail from '../views/team/TeamDetail.vue'
 import CreateTeam from "../views/team/CreateTeam.vue"
 import UpdateTeam from "../views/team/UpdateTeam.vue"
-
+import StudyArticle from '../views/team/TeamArticleList.vue'
 //error
 import NotFound from '../views/error/NotFound.vue'
+//추가기능
+import Search from '../views/Search.vue'
 
 
 Vue.use(VueRouter);
@@ -83,6 +85,11 @@ const routes = [
     component: TeamDetail,
   },
   {
+    path: '/study/:id/article',
+    name: 'StudyArticle',
+    component: StudyArticle
+  },
+  {
     path: "/study/create",
     name: "CreateTeam",
     component: CreateTeam,
@@ -91,6 +98,11 @@ const routes = [
     path: "/study/update/:id",
     name: "UpdateTeam",
     component: UpdateTeam
+  },
+  {
+    path: "/look/:search",
+    name: "Search",
+    component: Search
   },
   {
     path: "*",
