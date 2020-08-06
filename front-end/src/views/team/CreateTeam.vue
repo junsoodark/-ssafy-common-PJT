@@ -170,17 +170,10 @@ export default {
           router.push({ name: "StudyList" });
           console.log(res);
         })
-          .then((res) => {
-            alert("스터디 생성 성공");
-
-            router.push({ name: "StudyList" });
-            console.log(res);
-          })
-          .catch((err) => {
-            alert(err.response.data);
-            console.log(err);
-          });
-      }
+        .catch((err) => {
+          alert(err.response.data);
+          console.log(err);
+        });
     },
     onReset(evt) {
       evt.preventDefault();
@@ -215,8 +208,9 @@ export default {
       })
       .catch((err) => {
         console.log(err);
+      });
   },
-};
+}
 </script>
 
 <style></style>
