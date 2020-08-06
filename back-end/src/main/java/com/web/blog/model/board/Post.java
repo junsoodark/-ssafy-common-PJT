@@ -47,7 +47,8 @@ public class Post {
 	private Study study;
 
 	@JsonIgnore
-	@ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.DETACH })
 	@JoinColumn(name = "writer")
 	private User user;
 
