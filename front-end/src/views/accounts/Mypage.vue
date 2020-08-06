@@ -36,17 +36,17 @@
         <hr>
         <b-row>
           <b-col cols="3" class="text-center font-weight-bold"><p>이름</p></b-col>
-          <b-col cols="9" class="text-center font-weight-bold"><p>{{ name }}</p></b-col>
+          <b-col cols="9" class="text-center font-weight-bold"><p>{{ userInfo.name }}</p></b-col>
         </b-row>
         <hr>
         <b-row>
           <b-col cols="3" class="text-center font-weight-bold"><p>나이</p></b-col>
-          <b-col cols="9" class="text-center font-weight-bold"><p>{{ age }}</p></b-col>
+          <b-col cols="9" class="text-center font-weight-bold"><p>{{ userInfo.age }}</p></b-col>
         </b-row>
         <hr>
         <b-row>
           <b-col cols="3" class="text-center font-weight-bold"><p>성별</p></b-col>
-          <b-col cols="9" class="text-center font-weight-bold"><p v-if="sex == 1">남자</p><p v-if="sex == 2">여자</p></b-col>
+          <b-col cols="9" class="text-center font-weight-bold"><p v-if="userInfo.sex == 1">남자</p><p v-if="userInfo.sex == 2">여자</p></b-col>
         </b-row>
         <hr>
           <b-row align-h="start" class="text-left">
@@ -147,11 +147,14 @@ export default {
       mainProps: { blank: true, blankColor: '#777', width: 75, height: 75, class: 'm1' },
       value: 90,
       max: 100,
-      fields: [],
       items: [],
       countStudy: 0,
       confirmPassword: null,
-      
+      userInfo: {
+        sex: null,
+        age: null,
+        name: null,
+      },
       image: null,
     }
   },
@@ -159,12 +162,9 @@ export default {
   computed: {
     ...mapState({
       email: state => state.moduleName.email,
-      name: state => state.moduleName.name,
-      sex: state => state.moduleName.sex,
-      age: state => state.moduleName.age,
       imageUrl: state => state.moduleName.imageUrl,
     }),
-    ...mapState(['userInfo'])
+    // ...mapState(['userInfo'])
   },
 
   methods: {
@@ -240,7 +240,15 @@ export default {
     .then(res => {
       this.items = res.data
       this.countStudy = res.data.length
-      this.fields = ['studyId','title']
+      console.log(res.data)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+
+    Axios.get(`${API_URL}user/${this.email}`)
+    .then(res => {
+      this.userInfo = res.data
     })
     .catch(err => {
       console.log(err)

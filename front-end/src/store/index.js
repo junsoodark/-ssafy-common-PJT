@@ -52,19 +52,20 @@ export default new Vuex.Store({
         sessionStorage.setItem('user-email', loginData.email);
 
         alert("로그인")
+        // Axios.defaults.headers.common['jwt-auth-token'] = res.data
+        // Axios.defaults.headers.common['user-email'] = loginData.email
+
+        const email = loginData.email
+        Axios.get(`${API_URL}user/${email}`)
+        .then(res => {
+          commit('UPDATE_EMAIL', res)
+        })
+        .catch( err => {console.log(err)} )
         router.push({ name: 'Home' })
       })
       .catch(err => {
         alert(err.response.data)
       })
-        // .then((res) => {
-        //   commit("SET_TOKEN", res.data);
-        //   alert("로그인 성공");
-        //   router.push({ name: "Home" });
-        // })
-        // .catch((err) => {
-        //   alert(err.response.data);
-        // });
     },
     signup(state, { code, age, email, nickname, password, sex }) {
       var params = new URLSearchParams();
