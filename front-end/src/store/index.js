@@ -46,20 +46,17 @@ export default new Vuex.Store({
       Axios({method:'POST',url:`${API_URL}login`,params:params,data:JsonForm,headers:{'Content-Type': 'application/json; charset=utf-8'}})
       .then(res => {
         commit('SET_TOKEN', res.data)
+        commit('UPDATE_EMAIL', loginData.email)
+
+        sessionStorage.setItem('jwt-auth-token', res.data);
+        sessionStorage.setItem('user-email', loginData.email);
+
         alert("로그인")
         router.push({ name: 'Home' })
       })
       .catch(err => {
         alert(err.response.data)
       })
-        .then((res) => {
-          commit("SET_TOKEN", res.data);
-          alert("로그인 성공");
-          router.push({ name: "Home" });
-        })
-        .catch((err) => {
-          alert(err.response.data);
-        });
     },
     signup(state, { code, age, email, nickname, password, sex }) {
       var params = new URLSearchParams();
@@ -74,7 +71,7 @@ export default new Vuex.Store({
       var JsonForm = JSON.stringify(form);
       Axios({
         method: "POST",
-        url: `${API_URL}user`,
+        url: `${API_URL}user/signUp`,
         params: params,
         data: JsonForm,
         headers: { "Content-Type": "application/json; charset=utf-8" },
@@ -91,10 +88,13 @@ export default new Vuex.Store({
     },
 
     logout({ commit }) {
-      alert("로그아웃");
       commit("SET_TOKEN", null); // state 에서도 삭제
       VueCookies.remove("auth-token"); // cookie 에서는 삭제
-      commit("deleteUserInfo", null);
+      // commit("deleteUserInfo", null);
+      localStorage.clear();
+      sessionStorage.clear();
+      
+      alert("로그아웃");
       router.push({ name: "Home" });
     },
     createTeam(state, form) {

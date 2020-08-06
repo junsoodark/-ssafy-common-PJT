@@ -51,9 +51,9 @@
         <b-form-datepicker id="end-datepicker" v-model="form.enddate" class="mb-2"></b-form-datepicker>
       </b-form-group>
 
-      <!-- <b-form-group id="input-group-9" label="인원:" laebl-for="input-9">
-        <vue-slider v-model="form.value" :min="1" :max="30" :interval="1"></vue-slider>
-      </b-form-group>-->
+      <b-form-group id="input-group-9" label="인원:" laebl-for="input-9">
+        <vue-slider v-model="form.maxMembers" :min="1" :max="30" :interval="1"></vue-slider>
+      </b-form-group>
 
       <b-form-group id="input-group-10" label="스터디 소개:" laebl-for="input-10">
         <b-form-textarea
@@ -65,15 +65,15 @@
         ></b-form-textarea>
       </b-form-group>
 
-      <b-button type="submit" variant="primary">Submit</b-button>
-      <b-button type="reset" variant="danger">Reset</b-button>
+      <b-button type="submit" variant="primary">스터디 생성</b-button>
+      <b-button type="reset" variant="danger">초기화</b-button>
     </b-form>
   </b-container>
 </template>
 
 <script>
 // import VueSlider from "vue-slider-component";
-// import "vue-slider-component/theme/default.css";
+import "vue-slider-component/theme/default.css";
 import { mapActions, mapState } from "vuex";
 import Axios from "axios";
 import router from "@/router";
@@ -87,7 +87,7 @@ export default {
   data() {
     return {
       form: {
-        studyname: "",
+        studyname: null,
         field: null,
         contact: null,
         city: null,
@@ -97,7 +97,7 @@ export default {
         day: null,
         time: null,
         period: null,
-        value: 0,
+        maxMembers: 1,
         startdate: null,
         enddate: null,
         content: null,
@@ -147,11 +147,11 @@ export default {
         email: this.email,
         endDate: this.form.enddate,
         gu: this.form.guArea,
-        si: "서울",
+        si: this.form.city,
         startDate: this.form.startdate,
         title: this.form.studyname,
+        maxMembers: this.form.maxMembers
       };
-
       console.log("params", params);
 
       const JsonParams = JSON.stringify(params);
@@ -160,7 +160,9 @@ export default {
         url: `${API_URL}study`,
         params: params,
         data: JsonParams,
-        headers: { "Content-Type": "application/json; charset=utf-8" },
+        headers: { "Content-Type": "application/json; charset=utf-8",
+                  'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+                  'user-email': sessionStorage.getItem('user-email')},
       })
         .then((res) => {
           alert("스터디 생성 성공");
@@ -169,7 +171,7 @@ export default {
           console.log(res);
         })
         .catch((err) => {
-          alert("스터디 생성 실패");
+          alert(err.response.data);
           console.log(err);
         });
     },
@@ -208,7 +210,7 @@ export default {
         console.log(err);
       });
   },
-};
+}
 </script>
 
 <style></style>

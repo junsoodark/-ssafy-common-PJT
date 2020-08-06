@@ -28,6 +28,7 @@
       @keyup.delete="onRemove(index)"
       class="editor"
     />
+    <hr>
     <button class='btn btn-success' @click.prevent='Submit'>제출</button>
   </div>
 </template>
