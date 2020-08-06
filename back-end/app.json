@@ -4,7 +4,7 @@
     "cwd": ".",
     "args": [
       "-jar",
-      "/home/ubuntu/repo/s3/s03p13a607/back-end/target/back-end-0.0.1-SNAPSHOT.jar"
+      "/home/ubuntu/repo/s3/s03p13a607/back-end/back-end-0.0.1-SNAPSHOT.jar"
     ],
     "env": {
     },
