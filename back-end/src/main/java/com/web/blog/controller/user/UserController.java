@@ -29,9 +29,9 @@ public class UserController {
 	@Autowired
 	VerifyService verifyService;
 	
-	@PostMapping("/user")
+	@PostMapping("/user/signUp")
 	@ApiOperation(value="사용자 정보와 이메일 인증 번호를 입력받아 유효성을 검증하고, 결과에 따라 회원가입을 승인/거부합니다.")
-	public ResponseEntity signup(@RequestBody @Valid final User user, Errors errors, @RequestParam final String code) {
+	public ResponseEntity create(@RequestBody @Valid final User user, Errors errors, @RequestParam final String code) {
 		if(errors.hasErrors()) return new ResponseEntity(userService.getErrorMessage(errors), HttpStatus.BAD_REQUEST);
 		else if(verifyService.isValidCode(user.getEmail(), code)==false) return new ResponseEntity("인증 번호가 유효하지 않습니다.", HttpStatus.NOT_FOUND);
 		else if(userService.isValidPattern(user.getPassword())==false) return new ResponseEntity("비밀번호는 영문과 숫자가 적어도 1자 이상씩 포함된 8자이상으로 구성되어야 합니다.", HttpStatus.BAD_REQUEST);

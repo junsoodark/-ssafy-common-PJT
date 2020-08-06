@@ -57,15 +57,15 @@ public class AuthController {
 		return new ResponseEntity(jwtService.generateToken(email), HttpStatus.OK);
 	}
 	
-	@PostMapping("/login/valid")
-	@ApiOperation(value="이메일과 토큰을 입력받아 사용자 정보를 검증하고 결과를 반환합니다.")
-	public ResponseEntity isValidToken(@RequestParam final String email, @RequestParam final String token) {
-		try {
-			if(jwtService.isValidToken(token, email)==false)
-				return new ResponseEntity("유효하지 않은 토큰입니다.", HttpStatus.NOT_FOUND);
-		} catch (Exception e) {
-			return new ResponseEntity("유효하지 않은 토큰입니다.", HttpStatus.FORBIDDEN);
-		}
-		return new ResponseEntity("토큰 인증에 성공했습니다.", HttpStatus.OK);
-	}
+//	@PostMapping("/login/valid")
+//	@ApiOperation(value="이메일과 토큰을 입력받아 사용자 정보를 검증하고 결과를 반환합니다.")
+//	public ResponseEntity isValidToken(@RequestParam final String email, @RequestParam final String token) {
+//		try {
+//			if(jwtService.isValidToken(token, email)==false)
+//				return new ResponseEntity("유효하지 않은 토큰입니다.", HttpStatus.NOT_FOUND);
+//		} catch (Exception e) {
+//			return new ResponseEntity("유효하지 않은 토큰입니다.", HttpStatus.FORBIDDEN);
+//		}
+//		return new ResponseEntity("토큰 인증에 성공했습니다.", HttpStatus.OK);
+//	}
 }
