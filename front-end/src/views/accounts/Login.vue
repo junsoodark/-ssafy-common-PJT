@@ -35,8 +35,8 @@
         </b-row>
         <br />
         <b-row>
+            <!-- @click="update_email(loginData.email)" -->
           <b-button
-            @click="update_email(loginData.email)"
             type="submit"
             block
             variant="info"

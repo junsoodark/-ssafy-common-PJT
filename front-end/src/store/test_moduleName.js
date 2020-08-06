@@ -15,11 +15,12 @@ const mutations = {
     state.imageUrl = value
   },
   UPDATE_EMAIL(state, value) {
-    state.email = value.data.email
-    state.age = value.data.age
-    state.name = value.data.name
-    state.sex = value.data.sex
-    state.imageUrl = value.data.imageUrl
+    state.email = value
+    // state.email = value.data.email
+    // state.age = value.data.age
+    // state.name = value.data.name
+    // state.sex = value.data.sex
+    // state.imageUrl = value.data.imageUrl
   },
   deleteUserInfo(state , value) {
     state.email = value
@@ -38,19 +39,24 @@ const mutations = {
 };
 
 const actions = {
-  update_email({commit}, $data) {
-    const email = $data
-    Axios.get(`${API_URL}user/${email}`)
-    .then(res => {
-      commit('UPDATE_EMAIL', res)
-    })
-    .catch( err => {console.log(err)} )
-  },
+  // update_email({commit}, $data) {
+  //   const email = $data
+  //   Axios.get(`${API_URL}user/${email}`)
+  //   .then(res => {
+  //     commit('UPDATE_EMAIL', res)
+  //   })
+  //   .catch( err => {console.log(err)} )
+  // },
 
   update_user_info(params) {
     console.log(params)
       
-      Axios.put(`${API_URL}user`, params)
+      Axios.put(`${API_URL}user`, params, {
+        headers: {
+          'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+          'user-email': sessionStorage.getItem('user-email')
+        }
+      })
       .then((res) => {
         alert(res.data)
         console.log(res)
