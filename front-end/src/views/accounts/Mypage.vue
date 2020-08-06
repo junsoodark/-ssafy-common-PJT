@@ -136,8 +136,7 @@ import { mapState, mapActions } from 'vuex'
 import Axios from 'axios';
 import router from "@/router";
 import VueCookies from "vue-cookies";
-import firebase from 'firebase'
-import { config } from 'vue/types/umd';
+import firebase from 'firebase';
 
 const API_URL = process.env.VUE_APP_LOCAL_URL
 
@@ -233,8 +232,8 @@ export default {
   created () {
     Axios.get(`${API_URL}study/email?email=${this.email}`, {
       headers: {
-          'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
-          'user-email': sessionStorage.getItem('user-email')
+        'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+        'user-email': sessionStorage.getItem('user-email')
       }
     })
     .then(res => {
@@ -246,7 +245,12 @@ export default {
       console.log(err)
     })
 
-    Axios.get(`${API_URL}user/${this.email}`)
+    Axios.get(`${API_URL}user/${this.email}`, {
+      headers: {
+        'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+        'user-email': sessionStorage.getItem('user-email')
+      }
+    })
     .then(res => {
       this.userInfo = res.data
     })

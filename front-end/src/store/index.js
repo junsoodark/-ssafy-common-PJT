@@ -52,15 +52,6 @@ export default new Vuex.Store({
         sessionStorage.setItem('user-email', loginData.email);
 
         alert("로그인")
-        // Axios.defaults.headers.common['jwt-auth-token'] = res.data
-        // Axios.defaults.headers.common['user-email'] = loginData.email
-
-        const email = loginData.email
-        Axios.get(`${API_URL}user/${email}`)
-        .then(res => {
-          commit('UPDATE_EMAIL', res)
-        })
-        .catch( err => {console.log(err)} )
         router.push({ name: 'Home' })
       })
       .catch(err => {
