@@ -1,6 +1,6 @@
 package com.web.blog.controller.board;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import java.util.List;
 
 import com.web.blog.model.board.Post;
 import com.web.blog.model.study.Study;
@@ -17,12 +17,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
-import io.swagger.models.Response;
 
 @RestController
 public class postController {
@@ -37,15 +35,15 @@ public class postController {
 
     @PostMapping("/post")
     @ApiOperation(value = "")
-    public ResponseEntity create(@RequestParam int studyId, @RequestParam int writer, @RequestParam String content,
-            @RequestParam String title) {
+    public ResponseEntity<Object> create(@RequestParam int studyId, @RequestParam int writer,
+            @RequestParam String content, @RequestParam String title) {
         Study study = studyService.findStudyByStudyId(studyId);
         if (study == null) {
-            return new ResponseEntity("존재하지 않는 스터디 입니다.", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<Object>("존재하지 않는 스터디 입니다.", HttpStatus.NOT_FOUND);
         }
         User user = userService.findUserById(writer);
         if (user == null) {
-            return new ResponseEntity("존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<Object>("존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND);
         }
         Post post = new Post();
         post.setStudy(study);
@@ -53,42 +51,57 @@ public class postController {
         post.setTitle(title);
         post.setContent(content);
         if (postService.create(post) == false) {
-            return new ResponseEntity("이미 존재하는 글입니다.", HttpStatus.CONFLICT);
+            return new ResponseEntity<Object>("이미 존재하는 글입니다.", HttpStatus.CONFLICT);
         }
-        return new ResponseEntity("생성에 성공하였습니다.", HttpStatus.OK);
+        return new ResponseEntity<Object>("생성에 성공하였습니다.", HttpStatus.OK);
     }
 
     @GetMapping("/post/{id}")
     @ApiOperation(value = "")
-    public ResponseEntity read(@PathVariable int id) {
+    public ResponseEntity<Object> read(@PathVariable int id) {
         Post post = postService.findPostById(id);
         if (post == null) {
-            return new ResponseEntity("존재하지 않는 글입니다.", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<Object>("존재하지 않는 글입니다.", HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity(post, HttpStatus.OK);
+        return new ResponseEntity<Object>(post, HttpStatus.OK);
+    }
+
+    @GetMapping("/post/study/{studyId}")
+    @ApiOperation(value = "")
+    public ResponseEntity<Object> readAllByStudyId(@PathVariable int studyId) {
+        List<Post> list = postService.findPostByStudy(studyId);
+        return new ResponseEntity<Object>(list, HttpStatus.OK);
+    }
+
+    @GetMapping("/post/all")
+    @ApiOperation(value = "")
+    public ResponseEntity<Object> readAll() {
+        List<Post> list = postService.findAll();
+        return new ResponseEntity<Object>(list, HttpStatus.OK);
     }
 
     @PutMapping("/post")
     @ApiOperation(value = "")
-    public ResponseEntity update(@RequestParam int id, @RequestParam String content, @RequestParam String title) {
+    public ResponseEntity<Object> update(@RequestParam int id, @RequestParam String content,
+            @RequestParam String title) {
         Post post = postService.findPostById(id);
         if (post == null) {
-            return new ResponseEntity("존재하지 않는 글입니다.", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<Object>("존재하지 않는 글입니다.", HttpStatus.NOT_FOUND);
         }
         post.setTitle(title);
         post.setContent(content);
         if (postService.update(post) == false) {
-            return new ResponseEntity("존재하지 않는 글입니다.", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<Object>("존재하지 않는 글입니다.", HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity("글 정보를 수정하였습니다.", HttpStatus.OK);
+        return new ResponseEntity<Object>("글 정보를 수정하였습니다.", HttpStatus.OK);
     }
 
     @DeleteMapping("/post")
     @ApiOperation(value = "")
-    public ResponseEntity delete(@RequestParam int id) {
+    public ResponseEntity<Object> delete(@RequestParam int id) {
         if (postService.delete(id) == false) {
-            return new ResponseEntity("존재하지 않는 글입니다.", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<Object>("존재하지 않는 글입니다.", HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity("삭제에 성공하였습니다.", HttpStatus.OK);
+        return new ResponseEntity<Object>("삭제에 성공하였습니다.", HttpStatus.OK);
     }
 }
