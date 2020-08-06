@@ -1,0 +1,18 @@
+{
+  "apps": [{
+    "name": "lotiple_s3",
+    "cwd": ".",
+    "args": [
+      "-jar",
+      "/home/ubuntu/repo/s3/s03p13a607/back-end/target/back-end-0.0.1-SNAPSHOT.jar"
+    ],
+    "env": {
+    },
+    "script": "java",
+    "node_args": [],
+    "log_date_format": "YYYY-MM-DD HH:mm Z",
+    "exec_interpreter": "none",
+    "exec_mode": "fork"
+  }]
+}
+
