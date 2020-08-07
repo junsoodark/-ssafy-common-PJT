@@ -34,6 +34,7 @@
 </template>
 
 <script>
+//import Axios from 'axios';
 export default {
   data() {
     return {
@@ -50,7 +51,8 @@ export default {
     };
   },
   props: {
-    studyId: Number
+    studyId: Number,
+    writer: Number
   },
   mounted() {
     document.getElementById('paragraph').setAttribute('contenteditable', 'true');
@@ -106,7 +108,14 @@ export default {
     },
     Submit () {
       const articleData = document.querySelector('#paragraph')
-      console.log(articleData.innerHTML,this.title)
+      const params = {
+        'content': articleData.innerHTML,
+        'studyId': this.studyId,
+        'title': this.title,
+        "writer": this.writer
+      }
+      console.log(this.studyId,this.writer)
+      console.log(params)
     }
   },
 };

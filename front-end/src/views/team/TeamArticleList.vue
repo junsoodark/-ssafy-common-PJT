@@ -4,7 +4,7 @@
     <b-button v-b-modal.modal-1 class="my-3">글쓰기</b-button>
 
     <b-modal id="modal-1" title="글쓰기" hide-footer>
-      <TextEditor></TextEditor>
+      <TextEditor v-bind:writer="writer"  v-bind:studyId="studyId"></TextEditor>
     </b-modal>
     <b-container>
       <b-list-group>
@@ -34,7 +34,8 @@ export default {
       studyId: this.$route.params.id,
       isMember: false,
       teamTitle: null,
-      articles: [{title:'안녕'}]
+      articles: [{title:'안녕'}],
+      writer: null,
     }
   },
   computed: {
@@ -56,6 +57,11 @@ export default {
         this.$router.push({name: 'Home'})
       }
     })
+    Axios.get(`${API_URL}user/${this.email}`)
+    .then(res => {
+      this.writer = res.data.id
+    })
+    .catch(() => {alert('사용자 정보를 불러올 수 없습니다')})
   },
   components: {
     TextEditor
