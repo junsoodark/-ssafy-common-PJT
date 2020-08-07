@@ -6,7 +6,6 @@
         <b-collapse id="nav-collapse" is-nav>
         <router-link class="text-decoration-none text-light mx-1" :to="{ name: 'StudyList' }">스터디 팀들</router-link>
         <router-link class="text-decoration-none text-light mx-1" :to="{ name: 'CreateTeam'}">스터디만들기</router-link>
-        <router-link class="text-decoration-none text-light mx-1" :to="{ name: 'Chat'}">모두와 대화</router-link>
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
           <b-nav-form @submit.prevent="search">
