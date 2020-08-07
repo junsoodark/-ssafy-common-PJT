@@ -158,7 +158,8 @@ export default {
         age: null,
         name: null,
       },
-      
+      progressUpload: 0,
+      uploadTask: '',
       imgUrl: 'https://previews.123rf.com/images/salamatik/salamatik1801/salamatik180100019/92979836-%ED%94%84%EB%A1%9C%ED%95%84-%EC%9D%B5%EB%AA%85%EC%9D%98-%EC%96%BC%EA%B5%B4-%EC%95%84%EC%9D%B4%EC%BD%98-%ED%9A%8C%EC%83%89-%EC%8B%A4%EB%A3%A8%EC%97%A3-%EC%82%AC%EB%9E%8C%EC%9E%85%EB%8B%88%EB%8B%A4-%EB%82%A8%EC%84%B1-%EA%B8%B0%EB%B3%B8-%EC%95%84%EB%B0%94%ED%83%80-%EC%82%AC%EC%A7%84-%EC%9E%90%EB%A6%AC-%ED%91%9C%EC%8B%9C-%EC%9E%90-%ED%9D%B0%EC%83%89-%EB%B0%B0%EA%B2%BD%EC%97%90-%EA%B3%A0%EB%A6%BD-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4-%EC%85%98.jpg',
 
     }
@@ -168,7 +169,6 @@ export default {
     ...mapState({
       email: state => state.moduleName.email,
       imageUrl: state => state.moduleName.imageUrl,
-      imageName: state => state.moduleName.imageName,
     }),
   },
 
@@ -177,60 +177,33 @@ export default {
       this.$refs.fileInput.click()
     },
     onFilePicked(event) {
-      var file = event.target.files[0];
-      console.log('file', file)
-      // firebase 레퍼런스
-      var storageRef = firebase.storage().ref(`images/${this.email}/`+ file.name);
       // 업로드
+      var file = event.target.files[0];
+      var storageRef = firebase.storage().ref(`images/${this.email}/${this.email}`);
+      console.log('file', file)
       var task = storageRef.put(file);
-      console.log(task)
+      console.log(this.uploadTask)
 
-      // const test = firebase.database().ref('images/' + this.email).once('value').then(function(snapshot) {
-      //   console.log('sssss', snapshot)
-      // })
-      // console.log('test', test)
+      var uploader = document.getElementById('uploader');      
 
-
-      // task.on('state_changed',
-      //   function progess(snapshot){
-      //     var pct = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-      //     this.uploaders = pct;
-      //   },
-      //   function error(err){
-      //     console.log('err', err)
-      //   },
-      //   function complete(){
-      //   }
-      // )
-      
-      this.$store.commit('UPDATE_IMAGEURL', file.name)
-      // // var testUrl = null
-      firebase.storage().ref(`images/${this.email}/`+ file.name).getDownloadURL()
-      .then(function(url) {
-        // `url`is the download URL for 'images/stars.jpg'
-        console.log('uuuu', url)
-        // This can be downloaded directly:
-        var xhr = new XMLHttpRequest();
-        xhr.responseType = 'blob';
-        xhr.onload = function() {
-          // console.log(event)
-          var blob = xhr.response;
-          console.log(blob)
-        };
-        xhr.open('GET', url);
-        xhr.send();
-        console.log(url)
-        // this.$store.commit('UPDATE_IMAGEURL', url)
-        // Or inserted into an <img> element:
-        var img = document.getElementById('myimg');
-        // testUrl = url
-        img.src = url;
-        
-      })
-      .catch(function(error) {
-        // Handle any errors
-        console.log('adfasfasdf', error)
-      })
+      task.on('state_changed',
+        //progress Bar
+        function progess(snapshot){
+          var pct = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          uploader.value = pct;
+        },
+        // error
+        function error(err){
+          console.log(err)
+        },
+        // complete
+        function (){
+          task.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+            var img = document.getElementById('myimg');
+            img.src = downloadURL;
+          })
+        }
+      )
     },
 
     ...mapActions(['authDelete']),
@@ -252,7 +225,6 @@ export default {
       })
     },
   },
-
   created () {
     // studyMember 가져오기
     Axios.get(`${API_URL}study/email?email=${this.email}`)
@@ -272,24 +244,20 @@ export default {
       console.log(err)
     })
     // 프로필 이미지 가져오기
-    firebase.storage().ref(`images/${this.email}/`+ this.imageName).getDownloadURL()
+    firebase.storage().ref(`images/${this.email}/${this.email}`).getDownloadURL()
     .then(function(url) {
       var xhr = new XMLHttpRequest();
       xhr.responseType = 'blob';
-      xhr.onload = function() {
-        // console.log(event)
-        // var blob = xhr.response;
-        // console.log(blob)
-      };
+      xhr.onload = function() {};
       xhr.open('GET', url);
       xhr.send();
-      // Or inserted into an <img> element:
       var img = document.getElementById('myimg');
-      // testUrl = url
       img.src = url;
     })
     .catch(function(err) {
-      console.log(err)    })
+      console.log(err)    
+    })
+    
   },
 
 }
