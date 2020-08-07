@@ -8,11 +8,13 @@ const initialState = {
   age: 0,
   sex: 1,
   imageUrl: null,
+  imageName: null,
 };
 
 const mutations = {
   UPDATE_IMAGEURL(state, value) {
-    state.imageUrl = value
+    console.log('updateimageurl', value)
+    state.imageName = value
   },
   UPDATE_EMAIL(state, value) {
     state.email = value.data.email
