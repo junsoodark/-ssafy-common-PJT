@@ -14,9 +14,8 @@
         </b-row>
         <hr>
         <b-row v-for="item in articles" :key="item.studyId">
-          {{item.title}}
-          <!-- <b-col cols="4" class="p-0"><b-list-group-item route :to="{ name: 'StudyDetail', params: {id:item.studyId} }">{{ item.title }}</b-list-group-item></b-col>
-          <b-col cols="8" class="p-0"><b-list-group-item route :to="{ name: 'StudyDetail', params: {id:item.studyId} }">{{ item.content }}</b-list-group-item></b-col> -->
+          <b-col cols="4" class="p-0"><b-list-group-item route :to="{ name: 'ArticleDetail', params: {studyid:studyId, articleid:item.id} }" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; height:50px;">{{ item.title }}</b-list-group-item></b-col>
+          <b-col cols="8" class="p-0"><b-list-group-item route :to="{ name: 'ArticleDetail', params: {studyid:studyId, articleid:item.id} }" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; height:50px;">{{ item.content }}</b-list-group-item></b-col>
         </b-row>
       </b-list-group>
     </b-container>
@@ -57,7 +56,25 @@ export default {
         this.$router.push({name: 'Home'})
       }
     })
-    Axios.get(`${API_URL}user/${this.email}`)
+    Axios({
+      method: "GET",
+      url: `${API_URL}post/study/${this.studyId}`,
+      headers: { "Content-Type": "application/json; charset=utf-8",
+                'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+                'user-email': sessionStorage.getItem('user-email')},
+    })
+    .then(res => {
+      console.log(res)
+      this.articles = res.data
+    })
+    .catch(() => {alert('스터디팀 정보를 불러올 수 없습니다')})
+    Axios({
+      method: "GET",
+      url: `${API_URL}user/${this.email}`,
+      headers: { "Content-Type": "application/json; charset=utf-8",
+                'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+                'user-email': sessionStorage.getItem('user-email')},
+    })
     .then(res => {
       this.writer = res.data.id
     })
