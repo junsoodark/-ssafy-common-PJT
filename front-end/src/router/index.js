@@ -22,6 +22,10 @@ import NotFound from '../views/error/NotFound.vue'
 //추가기능
 import Search from '../views/Search.vue'
 import Chat from '../views/chat.vue'
+// 자소서 관련
+import letterList from '../views/coverletter/letterList.vue'
+import letterDetail from '../views/coverletter/letterDetail.vue'
+import createLetter from '../views/coverletter/createLetter.vue'
 
 
 Vue.use(VueRouter);
@@ -110,6 +114,21 @@ const routes = [
     path: "/look/:search",
     name: "Search",
     component: Search
+  },
+  {
+    path: "/coverletter",
+    name: "LetterList",
+    component: letterList
+  },
+  {
+    path: "/coverletter/create",
+    name: "createLetter",
+    component: createLetter
+  },
+  {
+    path: "/coverletter/:id",
+    name: "coverLetterDetail",
+    component: letterDetail
   },
   {
     path: "/chat",
