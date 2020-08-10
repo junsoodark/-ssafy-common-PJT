@@ -16,10 +16,11 @@ const mutations = {
     state.imageName = value
   },
   UPDATE_EMAIL(state, value) {
-    state.email = value.data.email
-    state.age = value.data.age
-    state.name = value.data.name
-    state.sex = value.data.sex
+    // state.email = value.data.email
+    // state.age = value.data.age
+    // state.name = value.data.name
+    // state.sex = value.data.sex
+    state.email = value
   },
   deleteUserInfo(state , value) {
     state.email = value
