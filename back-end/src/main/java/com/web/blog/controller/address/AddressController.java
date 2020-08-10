@@ -26,7 +26,7 @@ public class AddressController {
 		return new ResponseEntity(ret, HttpStatus.OK);
 	}
 	
-	@GetMapping("address/{si}")
+	@GetMapping("/address/{si}")
 	@ApiOperation(value="도/시를 입력받아 일치하는 시/군/구의 리스트를 반환합니다.")
 	public ResponseEntity findGuList(@PathVariable final String si) {
 		List<String> ret = addressService.findGuListBySi(si);

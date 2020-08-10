@@ -34,6 +34,8 @@
 </template>
 
 <script>
+import Axios from 'axios';
+const API_URL = process.env.VUE_APP_LOCAL_URL;
 export default {
   data() {
     return {
@@ -50,7 +52,8 @@ export default {
     };
   },
   props: {
-    studyId: Number
+    studyId: Number,
+    writer: Number
   },
   mounted() {
     document.getElementById('paragraph').setAttribute('contenteditable', 'true');
@@ -106,7 +109,27 @@ export default {
     },
     Submit () {
       const articleData = document.querySelector('#paragraph')
-      console.log(articleData.innerHTML,this.title)
+      const params = {
+        'content': articleData.innerHTML,
+        'studyId': this.studyId,
+        'title': this.title,
+        "writer": this.writer
+      }
+      Axios({
+        method: "POST",
+        url: `${API_URL}post`,
+        params: params,
+        headers: { "Content-Type": "application/json; charset=utf-8",
+                  'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+                  'user-email': sessionStorage.getItem('user-email')},
+      })
+      .then(res => {
+        console.log(res)
+      })
+      .catch(err => {
+        console.log(err)
+        alert(err)
+      })
     }
   },
 };

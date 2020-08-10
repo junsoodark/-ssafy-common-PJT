@@ -59,7 +59,7 @@
       </b-form-group>
 
       <b-form-group id="input-group-9" label="인원:" laebl-for="input-9">
-        <vue-slider v-model="form.person" :min="1" :max="30" :interval="1"></vue-slider>
+        <vue-slider v-model="form.maxMembers" :min="1" :max="30" :interval="1"></vue-slider>
       </b-form-group>
 
       <b-form-group id="input-group-10" label="스터디 소개:" laebl-for="input-10">
@@ -103,7 +103,7 @@ export default {
         count: null,
         day: null,
         period: null,
-        person: null,
+        maxMembers: 1,
         startdate: null,
         enddate: null,
         content: null,
@@ -157,32 +157,30 @@ export default {
         si: this.form.city,
         startDate: this.form.startdate,
         title: this.form.studyname,
-        maxMembers: this.form.person,
+        maxMembers: this.form.maxMembers
       };
       console.log("params", params);
-      if (params.maxMembers === null) {
-        console.log("사람이없다");
-        alert("사람없다");
-      } else {
-        const JsonParams = JSON.stringify(params);
-        Axios({
-          method: "POST",
-          url: `${API_URL}study`,
-          params: params,
-          data: JsonParams,
-          headers: { "Content-Type": "application/json; charset=utf-8" },
-        })
-          .then((res) => {
-            alert("스터디 생성 성공");
 
-            router.push({ name: "StudyList" });
-            console.log(res);
-          })
-          .catch((err) => {
-            alert(err.response.data);
-            console.log(err);
-          });
-      }
+      const JsonParams = JSON.stringify(params);
+      Axios({
+        method: "POST",
+        url: `${API_URL}study`,
+        params: params,
+        data: JsonParams,
+        headers: { "Content-Type": "application/json; charset=utf-8",
+                  'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+                  'user-email': sessionStorage.getItem('user-email')},
+      })
+        .then((res) => {
+          alert("스터디 생성 성공");
+
+          router.push({ name: "StudyList" });
+          console.log(res);
+        })
+        .catch((err) => {
+          alert(err.response.data);
+          console.log(err);
+        });
     },
     onReset(evt) {
       evt.preventDefault();
@@ -219,7 +217,7 @@ export default {
         console.log(err);
       });
   },
-};
+}
 </script>
 
 <style></style>

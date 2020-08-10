@@ -207,7 +207,9 @@ export default {
         email: this.email,
         password: data,
       }
-      Axios({method:'DELETE', url:`${API_URL}user`,params:params,headers:{'Content-Type': 'application/json; charset=utf-8'}})
+      Axios({method:'DELETE', url:`${API_URL}user`,params:params,headers:{'Content-Type': 'application/json; charset=utf-8',
+                                                                          'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+                                                                          'user-email': sessionStorage.getItem('user-email')}})
       .then(res => {
         alert(res.data)
         VueCookies.remove("auth-token")
@@ -221,8 +223,12 @@ export default {
     },
   },
   created () {
-    // studyMember 가져오기
-    Axios.get(`${API_URL}study/email?email=${this.email}`)
+    Axios.get(`${API_URL}study/email?email=${this.email}`, {
+      headers: {
+        'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+        'user-email': sessionStorage.getItem('user-email')
+      }
+    })
     .then(res => {
       this.items = res.data
       this.countStudy = res.data.length
@@ -230,8 +236,13 @@ export default {
     .catch(err => {
       console.log(err)
     })
-    // userInfo 가져오기
-    Axios.get(`${API_URL}user/${this.email}`)
+
+    Axios.get(`${API_URL}user/${this.email}`, {
+      headers: {
+        'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+        'user-email': sessionStorage.getItem('user-email')
+      }
+    })
     .then(res => {
       this.userInfo = res.data
     })

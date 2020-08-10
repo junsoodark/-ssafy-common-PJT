@@ -46,16 +46,12 @@ export default new Vuex.Store({
       Axios({method:'POST',url:`${API_URL}login`,params:params,data:JsonForm,headers:{'Content-Type': 'application/json; charset=utf-8'}})
       .then(res => {
         commit('SET_TOKEN', res.data)
-        alert("로그인")
-        // Axios.defaults.headers.common['jwt-auth-token'] = res.data
-        // Axios.defaults.headers.common['user-email'] = loginData.email
+        commit('UPDATE_EMAIL', loginData.email)
 
-        const email = loginData.email
-        Axios.get(`${API_URL}user/${email}`)
-        .then(res => {
-          commit('UPDATE_EMAIL', res)
-        })
-        .catch( err => {console.log(err)} )
+        sessionStorage.setItem('jwt-auth-token', res.data);
+        sessionStorage.setItem('user-email', loginData.email);
+
+        alert("로그인")
         router.push({ name: 'Home' })
       })
       .catch(err => {
@@ -75,7 +71,7 @@ export default new Vuex.Store({
       var JsonForm = JSON.stringify(form);
       Axios({
         method: "POST",
-        url: `${API_URL}user`,
+        url: `${API_URL}user/signUp`,
         params: params,
         data: JsonForm,
         headers: { "Content-Type": "application/json; charset=utf-8" },
@@ -92,11 +88,13 @@ export default new Vuex.Store({
     },
 
     logout({ commit }) {
-      alert("로그아웃");
       commit("SET_TOKEN", null); // state 에서도 삭제
       VueCookies.remove("auth-token"); // cookie 에서는 삭제
       // commit("deleteUserInfo", null);
-      localStorage.clear()
+      localStorage.clear();
+      sessionStorage.clear();
+      
+      alert("로그아웃");
       router.push({ name: "Home" });
     },
     createTeam(state, form) {

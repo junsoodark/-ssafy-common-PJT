@@ -1,7 +1,9 @@
 package com.web.blog.model.study;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -65,6 +67,10 @@ public class Study {
 	private LocalDate startDate;
 	private LocalDate endDate;
 
+	public List<Post> getPostList(){
+		return new ArrayList<>(posts);
+	}
+
 	public boolean addPost(Post post) {
 		if (this.posts == null) {
 			this.posts = new HashSet<>();
@@ -76,27 +82,27 @@ public class Study {
 		return false;
 	}
 
-	public boolean addMember(User member) {
-		if (this.members == null)
-			this.members = new HashSet<>();
+	// public boolean addMember(User member) {
+	// 	if (this.members == null)
+	// 		this.members = new HashSet<>();
 
-		if (!this.members.contains(member)) {
-			this.members.add(member);
-			return true;
-		}
-		return false;
-	}
+	// 	if (!this.members.contains(member)) {
+	// 		this.members.add(member);
+	// 		return true;
+	// 	}
+	// 	return false;
+	// }
 
-	public boolean removeMember(User member) {
-		if (this.members == null)
-			return false;
+	// public boolean removeMember(User member) {
+	// 	if (this.members == null)
+	// 		return false;
 
-		if (this.members.contains(member)) {
-			this.members.remove(member);
-			return true;
-		}
-		return false;
-	}
+	// 	if (this.members.contains(member)) {
+	// 		this.members.remove(member);
+	// 		return true;
+	// 	}
+	// 	return false;
+	// }
 
 	private int maxMembers;
 }
