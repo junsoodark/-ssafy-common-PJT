@@ -275,7 +275,11 @@ export default {
         method: "POST",
         url: `${API_URL}study/member/join`,
         params: params,
-        headers: { "Content-Type": "application/json; charset=utf-8" },
+        headers: { 
+          "Content-Type": "application/json; charset=utf-8", 
+          'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+          'user-email': sessionStorage.getItem('user-email')
+        },
       })
       .then(res => {
         alert(res.data)

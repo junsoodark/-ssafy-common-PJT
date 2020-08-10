@@ -225,14 +225,34 @@ export default {
                                                                           'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
                                                                           'user-email': sessionStorage.getItem('user-email')}})
       .then(res => {
-        alert(res.data)
+        var user = firebase.auth().currentUser;
+
+        user.delete().then(function() {
+          // User deleted.
+        }).catch(function(error) {
+          // An error happened.
+          console.log(error)
+        })
+        this.$store.commit('SET_TOKEN', null)
         VueCookies.remove("auth-token")
-        this.$store.dispatch('logout')
+        localStorage.clear();
+        sessionStorage.clear();
+
+        // commit("SET_TOKEN", null); // state 에서도 삭제
+
+        // this.$store.dispatch('logout')
+        alert(res.data)
         router.push({ name: "Home" })
       })
       .catch(err => {
+        console.log(err)
         console.log(err.response.data)
-        alert('삭제 실패. 비밀번호를 확인해주세요!')
+        console.log(err.request.status)
+        if (err.request.status === 500) {
+          alert(`${this.userInfo.name} 님은 스터디 팀의 리더입니다.`)
+        } else {
+          alert('삭제 실패. 비밀번호를 확인해주세요!')
+        }
       })
     },
   },
@@ -262,7 +282,6 @@ export default {
       this.userInfo = res.data
     })
     .catch(err => {
-      console.log(this.email)
       console.log(err)
     })
     // 프로필 이미지 가져오기

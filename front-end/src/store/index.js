@@ -93,8 +93,7 @@ export default new Vuex.Store({
         headers: { "Content-Type": "application/json; charset=utf-8" },
       })
         .then((res) => {
-          alert("회원가입 성공!");
-          console.log(res);
+          alert(res.data);
           router.push({ name: "Login" });
         })
         .catch((err) => {

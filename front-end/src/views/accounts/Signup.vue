@@ -88,7 +88,7 @@
             <a class="my-3 text-right" v-b-modal.modal-tall>이용 약관</a>
           </b-form-checkbox>
         </div>
-          <b-modal id="modal-tall" title="Overflowing Content">
+          <b-modal id="modal-tall" title="이용 약관">
           <p class="my-4">
             제1장 총칙
 
@@ -350,10 +350,39 @@ export default {
         alert("이메일 형식을 사용해야 합니다!");
         return false;
       }
+      var emailForm = false
+      var flag = 0
+      for (var i=0; i<email.length; i++) {
+        if (email[i] === '@') {
+          if (flag === 0) {
+            flag = i
+          }
+          else {
+            alert("이메일 형식을 사용해야 합니다!")
+            return false
+          }
+        }
+        if (email[i] === '.') {
+          if (flag >= i) {
+            alert("이메일 형식을 사용해야 합니다!")
+            return false
+          } else if (flag !== 0) {
+            emailForm = true
+          }
+        }
+      }
+      if (email.length < 4) {
+        alert("이메일 형식을 사용해야 합니다!")
+        return false
+      }
+      if (emailForm === false) {
+        alert("이메일 형식을 사용해야 합니다!")
+        return false
+      }
+      
       Axios.post(`${API_URL}verify`, params)
         .then((res) => {
-          console.log(res)
-          alert('이메일이 발송되었습니다.')
+          alert(res.data)
         })
         .catch((err) => {
           if (err.response.status === 409) {
