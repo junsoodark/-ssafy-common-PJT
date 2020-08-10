@@ -260,7 +260,10 @@
 
 <script>
 import Axios from "axios";
+import firebase from 'firebase'
+
 const API_URL = process.env.VUE_APP_LOCAL_URL
+
 export default {
   data() {
     return {
@@ -305,7 +308,6 @@ export default {
 
         for (var i=0; i<password.length; i++) {
           const temp = password.charAt(i);
-          console.log(temp)
           if (!isNaN(temp)) {
             numCheck = true
           } else {
@@ -318,6 +320,17 @@ export default {
         }
       }
       
+      // firebase 회원가입
+      firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        console.log('firebase 인증 에러', email, password)
+        console.log(errorCode)
+        console.log(errorMessage)
+        // ...
+      })
+
 
       this.$store.dispatch("signup", {
         code,

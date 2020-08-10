@@ -6,6 +6,7 @@ import VueCookies from "vue-cookies";
 
 import createPersistedState from "vuex-persistedstate";
 import moduleName from "./test_moduleName";
+import firebase from 'firebase'
 
 Vue.use(Vuex);
 
@@ -52,6 +53,20 @@ export default new Vuex.Store({
         sessionStorage.setItem('user-email', loginData.email);
 
         alert("로그인")
+
+        // firebase 사용자 로그인
+        firebase.auth().signInWithEmailAndPassword(loginData.email, loginData.password).catch(function(error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          console.log('파이어베이스 로그인 에러')
+          console.log(errorCode)
+          console.log(errorMessage)
+          // ...
+        })
+
+        
+
         router.push({ name: 'Home' })
       })
       .catch(err => {
@@ -95,6 +110,14 @@ export default new Vuex.Store({
       localStorage.clear();
       sessionStorage.clear();
       
+      // 파이어베이스 로그아웃
+      firebase.auth().signOut().then(function() {
+        // Sign-out successful.
+      }).catch(function(error) {
+        // An error happened.
+        console.log(error)
+      });
+
       alert("로그아웃");
       router.push({ name: "Home" });
     },
