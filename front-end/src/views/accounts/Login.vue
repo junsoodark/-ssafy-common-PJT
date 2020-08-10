@@ -35,8 +35,8 @@
         </b-row>
         <br />
         <b-row>
+            <!-- @click="update_email(loginData.email)" -->
           <b-button
-            @click="update_email(loginData.email)"
             type="submit"
             block
             variant="info"
@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -71,6 +71,7 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(["UPDATE_IMAGEURL", null]),
     ...mapActions(["login", "update_email"]),
   },
 };

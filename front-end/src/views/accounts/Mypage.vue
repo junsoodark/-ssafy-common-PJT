@@ -7,9 +7,8 @@
       <b-media>
         <template v-slot:aside>
           <b-row>
-            <b-img v-if="image === undefined" blank blank-color="#abc" width="300" rounded="circle" alt="aaa"></b-img>
-            <b-img v-else-if="image === null" blank blank-color="#abc" width="300" rounded="circle" alt="bbb"></b-img>
-            <b-img v-else-if="image !== null" :src="imageUrl" width="300" rounded="circle" alt="ccc"></b-img>
+            <!-- <b-img id="myimg" :src="defaultImageUrl" blank blank-color="#abc" width="300" rounded="circle" alt="ccc"></b-img> -->
+            <b-img id="myimg" :src="defaultImageUrl" width="300" rounded="circle" alt="프로필 이미지"></b-img>
           </b-row>
           <b-row>
             <div class="group group_upload">
@@ -17,7 +16,7 @@
                 이미지 업로드
               </button>
               <input
-                id="uploadImg"
+                id="refresh"
                 type="file"
                 value="upload"
                 style="display: none;"
@@ -36,17 +35,17 @@
         <hr>
         <b-row>
           <b-col cols="3" class="text-center font-weight-bold"><p>이름</p></b-col>
-          <b-col cols="9" class="text-center font-weight-bold"><p>{{ name }}</p></b-col>
+          <b-col cols="9" class="text-center font-weight-bold"><p>{{ userInfo.name }}</p></b-col>
         </b-row>
         <hr>
         <b-row>
           <b-col cols="3" class="text-center font-weight-bold"><p>나이</p></b-col>
-          <b-col cols="9" class="text-center font-weight-bold"><p>{{ age }}</p></b-col>
+          <b-col cols="9" class="text-center font-weight-bold"><p>{{ userInfo.age }}</p></b-col>
         </b-row>
         <hr>
         <b-row>
           <b-col cols="3" class="text-center font-weight-bold"><p>성별</p></b-col>
-          <b-col cols="9" class="text-center font-weight-bold"><p v-if="sex == 1">남자</p><p v-if="sex == 2">여자</p></b-col>
+          <b-col cols="9" class="text-center font-weight-bold"><p v-if="userInfo.sex == 1">남자</p><p v-if="userInfo.sex == 2">여자</p></b-col>
         </b-row>
         <hr>
           <b-row align-h="start" class="text-left">
@@ -137,6 +136,7 @@ import Axios from 'axios';
 import router from "@/router";
 import VueCookies from "vue-cookies";
 import firebase from 'firebase'
+// import cors from 'cors'
 
 const API_URL = process.env.VUE_APP_LOCAL_URL
 
@@ -146,24 +146,26 @@ export default {
       mainProps: { blank: true, blankColor: '#777', width: 75, height: 75, class: 'm1' },
       value: 90,
       max: 100,
-      fields: [],
       items: [],
       countStudy: 0,
       confirmPassword: null,
-      
-      image: null,
+      userInfo: {
+        sex: null,
+        age: null,
+        name: null,
+      },
+      progressUpload: 0,
+      uploadTask: '',
+      defaultImageUrl: 'https://previews.123rf.com/images/salamatik/salamatik1801/salamatik180100019/92979836-%ED%94%84%EB%A1%9C%ED%95%84-%EC%9D%B5%EB%AA%85%EC%9D%98-%EC%96%BC%EA%B5%B4-%EC%95%84%EC%9D%B4%EC%BD%98-%ED%9A%8C%EC%83%89-%EC%8B%A4%EB%A3%A8%EC%97%A3-%EC%82%AC%EB%9E%8C%EC%9E%85%EB%8B%88%EB%8B%A4-%EB%82%A8%EC%84%B1-%EA%B8%B0%EB%B3%B8-%EC%95%84%EB%B0%94%ED%83%80-%EC%82%AC%EC%A7%84-%EC%9E%90%EB%A6%AC-%ED%91%9C%EC%8B%9C-%EC%9E%90-%ED%9D%B0%EC%83%89-%EB%B0%B0%EA%B2%BD%EC%97%90-%EA%B3%A0%EB%A6%BD-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4-%EC%85%98.jpg',
+
     }
   },
 
   computed: {
     ...mapState({
       email: state => state.moduleName.email,
-      name: state => state.moduleName.name,
-      sex: state => state.moduleName.sex,
-      age: state => state.moduleName.age,
       imageUrl: state => state.moduleName.imageUrl,
     }),
-    ...mapState(['userInfo'])
   },
 
   methods: {
@@ -171,40 +173,32 @@ export default {
       this.$refs.fileInput.click()
     },
     onFilePicked(event) {
-      var file = event.target.files[0];
-      // firebase 레퍼런스
-      var storageRef = firebase.storage().ref('images/'+file.name);
       // 업로드
+      var file = event.target.files[0];
+      var storageRef = firebase.storage().ref(`images/${this.email}/${this.email}`);
       var task = storageRef.put(file);
 
-      const test = firebase.database().ref('images/강아지사진').once('value').then(function(snapshot) {
-        console.log('sssss', snapshot)
-      })
-      console.log('test', test)
+      // var uploader = document.getElementById('uploader');      
 
       task.on('state_changed',
+        //progress Bar
         function progess(snapshot){
           var pct = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          this.uploaders = pct;
+          // uploader.value = pct;
+          console.log(pct)
         },
+        // error
         function error(err){
-          console.log('err', err)
+          console.log(err)
         },
-        function complete(){
+        // complete
+        function (){
+          task.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+            var img = document.getElementById('myimg');
+            img.src = downloadURL;
+          })
         }
       )
-
-      const files = event.target.files
-      let filename = files[0].name
-      if (filename.lastIndexOf('.') <= 0) {
-        return alert('Please add a valid file!')
-      }
-      const fileReader = new FileReader()
-      fileReader.addEventListener('load', () => {
-        this.$store.commit('UPDATE_IMAGEURL', fileReader.result)
-      })
-      fileReader.readAsDataURL(files[0])
-      this.image = files[0]
     },
 
     ...mapActions(['authDelete']),
@@ -226,19 +220,39 @@ export default {
       })
     },
   },
-
   created () {
+    // studyMember 가져오기
     Axios.get(`${API_URL}study/email?email=${this.email}`)
     .then(res => {
       this.items = res.data
       this.countStudy = res.data.length
-      this.fields = ['studyId','title']
     })
     .catch(err => {
       console.log(err)
     })
-
-    this.image = this.imageUrl
+    // userInfo 가져오기
+    Axios.get(`${API_URL}user/${this.email}`)
+    .then(res => {
+      this.userInfo = res.data
+    })
+    .catch(err => {
+      console.log(err)
+    })
+    // 프로필 이미지 가져오기
+    firebase.storage().ref(`images/${this.email}/${this.email}`).getDownloadURL()
+    .then(function(url) {
+      var xhr = new XMLHttpRequest();
+      xhr.responseType = 'blob';
+      xhr.onload = function() {};
+      xhr.open('GET', url);
+      xhr.send();
+      var img = document.getElementById('myimg');
+      img.src = url;
+    })
+    .catch(function(err) {
+      console.log(err)    
+    })
+    
   },
 
 }

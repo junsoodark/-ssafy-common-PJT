@@ -1,6 +1,7 @@
 <template>
   <div>
-    <h1>TeamList</h1>
+    <br>
+    <h1>스터디 목록</h1>
     <router-link v-if="isLoggedIn" :to="{ name: 'CreateTeam'}">스터디 만들기</router-link>
     <b-container class="bv-example-row">
       <b-row>

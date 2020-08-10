@@ -7,26 +7,25 @@ const initialState = {
   name: "",
   age: 0,
   sex: 1,
-  imageUrl: null,
+  imageName: null,
 };
 
 const mutations = {
   UPDATE_IMAGEURL(state, value) {
-    state.imageUrl = value
+    console.log('updateimageurl', value)
+    state.imageName = value
   },
   UPDATE_EMAIL(state, value) {
     state.email = value.data.email
     state.age = value.data.age
     state.name = value.data.name
     state.sex = value.data.sex
-    state.imageUrl = value.data.imageUrl
   },
   deleteUserInfo(state , value) {
     state.email = value
     state.age = value
     state.name = value
     state.sex = value
-    state.imageUrl = value
   },
   EDIT_USER_INFO(state, value) {
     state.email = value.email

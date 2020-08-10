@@ -47,19 +47,20 @@ export default new Vuex.Store({
       .then(res => {
         commit('SET_TOKEN', res.data)
         alert("로그인")
+        // Axios.defaults.headers.common['jwt-auth-token'] = res.data
+        // Axios.defaults.headers.common['user-email'] = loginData.email
+
+        const email = loginData.email
+        Axios.get(`${API_URL}user/${email}`)
+        .then(res => {
+          commit('UPDATE_EMAIL', res)
+        })
+        .catch( err => {console.log(err)} )
         router.push({ name: 'Home' })
       })
       .catch(err => {
         alert(err.response.data)
       })
-        .then((res) => {
-          commit("SET_TOKEN", res.data);
-          alert("로그인 성공");
-          router.push({ name: "Home" });
-        })
-        .catch((err) => {
-          alert(err.response.data);
-        });
     },
     signup(state, { code, age, email, nickname, password, sex }) {
       var params = new URLSearchParams();
@@ -94,7 +95,8 @@ export default new Vuex.Store({
       alert("로그아웃");
       commit("SET_TOKEN", null); // state 에서도 삭제
       VueCookies.remove("auth-token"); // cookie 에서는 삭제
-      commit("deleteUserInfo", null);
+      // commit("deleteUserInfo", null);
+      localStorage.clear()
       router.push({ name: "Home" });
     },
     createTeam(state, form) {
