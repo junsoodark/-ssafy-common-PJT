@@ -117,7 +117,7 @@
         ></b-form-input>
       </template>
 
-      <template v-slot:modal-footer="{ deleteUserAccount, cancel }">
+      <template v-slot:modal-footer="{ cancel }">
         <!-- Emulate built in modal footer ok and cancel button actions -->
         <b-button size="sm" variant="danger" @click="deleteUserAccount(confirmPassword)">
           회원탈퇴
@@ -136,7 +136,6 @@ import Axios from 'axios';
 import router from "@/router";
 import VueCookies from "vue-cookies";
 import firebase from 'firebase'
-// import cors from 'cors'
 
 const API_URL = process.env.VUE_APP_LOCAL_URL
 
@@ -164,7 +163,6 @@ export default {
   computed: {
     ...mapState({
       email: state => state.moduleName.email,
-      imageUrl: state => state.moduleName.imageUrl,
     }),
   },
 
@@ -202,11 +200,16 @@ export default {
     },
 
     ...mapActions(['authDelete']),
+    cancel() {
+      console.log('취소')
+    },
     deleteUserAccount(data) {
+      console.log('삭제', data)
       const params = {
         email: this.email,
         password: data,
       }
+      console.log(params)
       Axios({method:'DELETE', url:`${API_URL}user`,params:params,headers:{'Content-Type': 'application/json; charset=utf-8',
                                                                           'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
                                                                           'user-email': sessionStorage.getItem('user-email')}})
@@ -217,12 +220,13 @@ export default {
         router.push({ name: "Home" })
       })
       .catch(err => {
-        console.log(err)
+        console.log(err.response.data)
         alert('삭제 실패. 비밀번호를 확인해주세요!')
       })
     },
   },
   created () {
+    // 해당 아이디에 대한 스터디 정보 가져오기
     Axios.get(`${API_URL}study/email?email=${this.email}`, {
       headers: {
         'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
@@ -236,7 +240,7 @@ export default {
     .catch(err => {
       console.log(err)
     })
-
+    // 유저 정보 가져오기
     Axios.get(`${API_URL}user/${this.email}`, {
       headers: {
         'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
@@ -247,6 +251,7 @@ export default {
       this.userInfo = res.data
     })
     .catch(err => {
+      console.log(this.email)
       console.log(err)
     })
     // 프로필 이미지 가져오기

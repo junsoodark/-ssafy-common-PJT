@@ -53,7 +53,7 @@
         
 
 
-        <b-button class="mt-2" type="submit" @click="update_email(email)"  block variant="secondary">비밀번호 변경</b-button>
+        <b-button class="mt-2" type="submit"  block variant="secondary">비밀번호 변경</b-button>
       </b-form>
     </div>
   </b-container>
@@ -140,7 +140,6 @@ export default {
             'password': password,
           }
           // 로그인
-          this.$store.dispatch('update_email', email)
           this.$store.dispatch('login', loginData)
         })
         .catch((err) => {
