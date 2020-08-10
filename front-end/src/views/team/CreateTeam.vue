@@ -11,20 +11,20 @@
         ></b-form-input>
       </b-form-group>
 
-      <!-- <b-form-group id="input-group-2" label="분야:" label-for="input-2">
+      <b-form-group id="input-group-2" label="분야:" label-for="input-2">
         <b-form-select id="input-2" v-model="form.field" :options="fields" required></b-form-select>
-      </b-form-group>-->
+      </b-form-group>
 
-      <!-- <b-form-group id="input-group-3" label="방식:" label-for="input-5">
+      <b-form-group id="input-group-3" label="방식:" label-for="input-5">
         <b-form-radio-group id="input-3" v-model="form.contact" :options="contacts"></b-form-radio-group>
-      </b-form-group>-->
+      </b-form-group>
 
       <b-form-group id="input-group-4" label="지역:" label-for="input-4">
         <b-form-select id="input-4" v-model="form.city" :options="cities" @change="getGu" required></b-form-select>
         <b-form-select id="input-4" v-model="form.guArea" :options="guAreas" required></b-form-select>
       </b-form-group>
 
-      <!-- <b-form-group id="input-group-5" label="스터디 일정:" label-for="input-5">
+      <b-form-group id="input-group-5" label="스터디 일정:" label-for="input-5">
         <b-form-radio-group id="input-5" v-model="form.schedule" :options="schedules"></b-form-radio-group>
         <b-form-spinbutton
           id="input-5"
@@ -35,14 +35,21 @@
           required
         ></b-form-spinbutton>
       </b-form-group>-->
-
-      <!-- <b-form-group id="input-group-6" label="요일:" label-for="input-6">
+      <b-form-group id="input-group-6" label="요일:" label-for="input-6">
         <b-form-radio-group id="input-6" v-model="form.day" :options="days"></b-form-radio-group>
-      </b-form-group>-->
+      </b-form-group>
 
-      <!-- <b-form-group id="input-group-7" label="시간대:" label-for="input-7">
+      <b-form-group id="input-group-7" label="시간대:" label-for="input-7">
         <b-form-radio-group id="input-7" v-model="form.time" :options="times"></b-form-radio-group>
-      </b-form-group>-->
+        <vue-slider
+          v-model="form.time"
+          :min-range="0"
+          :max-range="24"
+          :min="0"
+          :max="24"
+          :interval="1"
+        ></vue-slider>
+      </b-form-group>
 
       <b-form-group id="input-group-8" label="스터디 기간:" laebl-for="input-8">
         <label for="start-datepicker">시작날짜</label>
@@ -95,12 +102,12 @@ export default {
         schedule: null,
         count: null,
         day: null,
-        time: null,
         period: null,
         maxMembers: 1,
         startdate: null,
         enddate: null,
         content: null,
+        time: [0, 2],
       },
       fields: [
         { text: "원하는 분야를 선택해주세요", value: null },
