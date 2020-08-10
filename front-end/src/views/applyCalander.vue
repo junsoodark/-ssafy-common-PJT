@@ -34,6 +34,8 @@ export default {
   methods: {
     changeCalander () {
       const calendar = document.getElementById('pageFrame')
+      if ( this.volumn == null ) { this.volumn = 'month' }
+      if ( this.selected == null ) { this.selected = '' }
       calendar.src = `http://www.jobkorea.co.kr/Starter/calendar/sub/${this.volumn}${this.selected}`
     }
   }
