@@ -1,4 +1,4 @@
-package com.web.blog.model.board;
+package com.web.blog.model.resume;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -23,24 +23,25 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class resume {
-
+public class ResumeItem {
     // `id` int(11) NOT NULL AUTO_INCREMENT,
-    // `writer` int(11) NOT NULL,
+    // `resume_id` int(11) NOT NULL,
     // `title` varchar(50) NOT NULL,
-    // `content` varchar(500) NOT NULL,
+    // `content` varchar(2000) NOT NULL,
+    // PRIMARY KEY (`id`),
+    // FOREIGN KEY (`resume_id`) REFERENCES `resume` (`id`)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @JsonIgnore
-    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH })
-    @JoinColumn(name = "writer")
-    private User user;
+    @ManyToOne(targetEntity = Resume.class, fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.DETACH })
+    @JoinColumn(name = "resume_id")
+    private Resume resume;
 
     @NotNull(message = "제목은 필수 항목입니다.")
     private String title;
-
     @NotNull(message = "내용은 필수 항목입니다.")
     private String content;
 }
