@@ -29,7 +29,13 @@ public class UserServiceImpl implements UserService {
 		Optional<User> userOpt = userDao.findUserByEmail(email);
 		return userOpt.isPresent() ? userOpt.get() : null;
 	}
-	
+
+	@Override
+	public User findUserById(int id) {
+		Optional<User> userOpt = userDao.findUserById(id);
+		return userOpt.isPresent() ? userOpt.get() : null;
+	}
+
 	@Override
 	public Map<String, Object> User2Map(User user) {
 		Map<String, Object> ret = new HashMap<>();
@@ -39,11 +45,11 @@ public class UserServiceImpl implements UserService {
 		ret.put("sex", user.getSex());
 		return ret;
 	}
-	
+
 	@Override
 	public Map<String, String> getErrorMessage(final Errors errors) {
 		Map<String, String> ret = new HashMap<>();
-		for(FieldError error : errors.getFieldErrors())
+		for (FieldError error : errors.getFieldErrors())
 			ret.put(error.getField(), error.getDefaultMessage());
 		return ret;
 	}
@@ -57,7 +63,7 @@ public class UserServiceImpl implements UserService {
 		userDao.save(user);
 		return true;
 	}
-	
+
 	@Override
 	public boolean update(final User user) {
 		Optional<User> userOpt = userDao.findUserByEmail(user.getEmail());
@@ -72,16 +78,17 @@ public class UserServiceImpl implements UserService {
 			u.setSex(user.getSex());
 			userDao.save(u);
 		});
-		
+
 		return true;
 	}
 
 	@Override
 	public boolean delete(final String email) {
 		Optional<User> userOpt = userDao.findUserByEmail(email);
-		if(userOpt.isPresent()==false) return false;
-		
-		userOpt.ifPresent(user->{
+		if (userOpt.isPresent() == false)
+			return false;
+
+		userOpt.ifPresent(user -> {
 			userDao.delete(user);
 		});
 		return true;

@@ -71,7 +71,8 @@ export default {
             console.log('구독으로 받은 메시지 입니다.', res.body);
 
             // 받은 데이터를 json으로 파싱하고 리스트에 넣어줍니다.
-            this.recvList.push(JSON.parse(res.body))
+            console.log(JSON.parse(res.body))
+            this.recvList.unshift(JSON.parse(res.body))
           });
         },
         error => {

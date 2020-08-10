@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserDao extends JpaRepository<User, String> {
+	Optional<User> findUserByEmailAndPassword(String email, String password);
+	Optional<User> findUserById(int id);
 	Optional<User> findUserByEmail(final String email);
 	
 	@Query(value="select password from user where email=:email", nativeQuery=true)
