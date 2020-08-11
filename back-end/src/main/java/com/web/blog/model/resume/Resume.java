@@ -51,6 +51,7 @@ public class Resume {
     @NotNull(message = "지원 직무는 필수 항목입니다.")
     private String job;
 
+    @JsonIgnore
     @OneToMany(cascade = { CascadeType.ALL }, mappedBy = "resume")
     private Set<ResumeItem> resumeItems;
 }

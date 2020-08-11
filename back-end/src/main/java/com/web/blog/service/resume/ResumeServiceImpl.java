@@ -72,11 +72,11 @@ public class ResumeServiceImpl implements ResumeService {
     public Map<String, Object> Resume2Map(Resume resume) {
         Map<String, Object> ret = new HashMap<>();
         ret.put("company", resume.getCompany());
-        ret.put("company", resume.getId());
-        ret.put("company", resume.getJob());
-        ret.put("company", resume.getTitle());
-        ret.put("company", resume.getUser().getId());
-        ret.put("company", resume.getUser().getEmail());
+        ret.put("id", resume.getId());
+        ret.put("job", resume.getJob());
+        ret.put("title", resume.getTitle());
+        ret.put("userId", resume.getUser().getId());
+        ret.put("email", resume.getUser().getEmail());
 
         return ret;
     }
