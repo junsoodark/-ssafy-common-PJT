@@ -18,4 +18,6 @@ public interface ResumeDao extends JpaRepository<Resume, String> {
     Optional<Resume> findResumeByCompany(String company);
 
     Optional<Resume> findResumeByJob(String job);
+
+    List<Resume> findByTitle(String title);
 }

@@ -42,6 +42,9 @@ public class Resume {
     @JoinColumn(name = "writer")
     private User user;
 
+    @NotNull(message = "제목은 필수 항목입니다.")
+    private String title;
+
     @NotNull(message = "지원 회사는 필수 항목입니다.")
     private String company;
 
