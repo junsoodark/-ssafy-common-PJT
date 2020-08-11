@@ -49,7 +49,11 @@ public class Study {
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH })
 	@JoinTable(name = "study_member", joinColumns = @JoinColumn(name = "study_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
 	private Set<User> members;
-
+	
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH })
+	@JoinTable(name = "study_approval", joinColumns = @JoinColumn(name = "study_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+	private Set<User> memberApproval;
+	
 	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "study")
 	// @JoinTable(name = "post", joinColumns = @JoinColumn(name = "study_id"))
 	private Set<Post> posts;

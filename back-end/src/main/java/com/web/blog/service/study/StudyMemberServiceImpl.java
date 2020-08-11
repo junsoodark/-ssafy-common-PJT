@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.web.blog.dao.study.StudyDao;
+import com.web.blog.dao.study.StudyMemberDao;
 import com.web.blog.model.study.Study;
 import com.web.blog.model.user.User;
 
@@ -15,11 +16,19 @@ public class StudyMemberServiceImpl implements StudyMemberService {
 	@Autowired
 	private StudyDao studyDao;
 	
+	
+	
 	@Override
-	public boolean join(Study study, User user) {
-		return studyDao.addMember(study, user);
+	public boolean approve(Study study, User user) {
+		return studyDao.approve(study, user);
 	}
+	
+	@Override
+	public boolean disapprove(Study study, User user) {
 
+		return studyDao.disapprove(study, user);
+	}
+	
 	@Override
 	public boolean leave(Study study, User user) {
 		return studyDao.removeMember(study, user);

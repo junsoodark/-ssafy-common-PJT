@@ -81,7 +81,7 @@ public class StudyController {
 		if(study == null)
 			return new ResponseEntity("스터디를 생성할 수 없습니다. 관리자에게 문의하세요.", HttpStatus.FORBIDDEN);
 		
-		studyMemberService.join(study, user);
+		//studyMemberService.join(study, user);
 		return new ResponseEntity("스터디 생성에 성공했습니다.", HttpStatus.OK);
 	}
 
