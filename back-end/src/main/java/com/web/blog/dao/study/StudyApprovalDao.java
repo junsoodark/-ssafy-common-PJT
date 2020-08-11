@@ -1,5 +1,6 @@
 package com.web.blog.dao.study;
 
+import java.util.List;
 import java.util.Set;
 
 import com.web.blog.model.study.Study;
@@ -10,5 +11,5 @@ public interface StudyApprovalDao {
 	public boolean disapply(Study study, User member);
 	public boolean isExistMemberApproval(Study study, User member);
 	public Set<User> getMemberApproval(Study study);
-	
+	Set<User> getStudyApprovalUserList(Study study);
 }
