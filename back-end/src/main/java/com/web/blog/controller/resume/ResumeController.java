@@ -61,7 +61,7 @@ public class ResumeController {
         if(resume == null){
             return new ResponseEntity<Object>("자소서를 생성할 수 없습니다.", HttpStatus.FORBIDDEN);
         }
-        return new ResponseEntity<Object>("자소서 생성에 성공했습니다.", HttpStatus.OK);
+        return new ResponseEntity<Object>(resume.getId(), HttpStatus.OK);
     }
 
     @DeleteMapping("/resume")
