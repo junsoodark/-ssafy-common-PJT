@@ -51,16 +51,17 @@ public class ResumeController {
     public ResponseEntity<Object> create(   @RequestParam String title,
                                             @RequestParam String email,
                                             @RequestParam String company, 
-                                            @RequestParam String job){
+                                            @RequestParam String job,
+                                            @RequestParam String category){
         User user = userService.findUserByEmail(email);
         if(user == null){
             return new ResponseEntity<Object>("존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND);
         }
-        Resume resume = resumeService.create(user, title, company, job);
+        Resume resume = resumeService.create(user, title, company, job, category);
         if(resume == null){
             return new ResponseEntity<Object>("자소서를 생성할 수 없습니다.", HttpStatus.FORBIDDEN);
         }
-        return new ResponseEntity<Object>("자소서 생성에 성공했습니다.", HttpStatus.OK);
+        return new ResponseEntity<Object>(resume.getId(), HttpStatus.OK);
     }
 
     @DeleteMapping("/resume")
