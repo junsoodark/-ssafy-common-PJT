@@ -10,7 +10,7 @@
         <b-form-input v-model="job" placeholder="직무를 입력해주세요" class="col-8"></b-form-input>
       </b-row>
       <b-button class="my-2" @click="addQuestion">자소서 항목 추가</b-button> | <b-button class="my-2" @click="delQuestion">자소서 항목 삭제</b-button>
-      <div v-for="item in items" :key="item" class="my-3">
+      <div v-for="item in items" :key="item.num" class="my-3">
         <b-button v-b-toggle="'my-'+item.num">
             <span class="when-open">{{item.num+1}}번 질문 닫기</span><span class="when-closed">{{item.num+1}}번 질문 열기</span>
         </b-button>
