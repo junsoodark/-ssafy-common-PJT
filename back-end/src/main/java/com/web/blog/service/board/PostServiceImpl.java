@@ -1,7 +1,9 @@
 package com.web.blog.service.board;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import com.web.blog.dao.board.PostDao;
@@ -80,6 +82,23 @@ public class PostServiceImpl implements PostService {
     public Post findPostById(int id) {
         Optional<Post> postOpt = postDao.findPostById(id);
         return postOpt.isPresent() ? postOpt.get() : null;
+    }
+
+    @Override
+    public Map<String, Object> Post2DetailInfo(Post post) {
+        Map<String, Object> ret = new HashMap<>();
+        ret.put("id", post.getId());
+        ret.put("content", post.getContent());
+        ret.put("study_id", post.getStudy().getStudyId());
+        ret.put("title", post.getTitle());
+        ret.put("writer", post.getUser().getId());
+        return ret;
+    }
+
+    @Override
+    public Map<String, Object> findPostDetailInfoByPostId(final int postId) {
+        Post post = findPostById(postId);
+        return post == null ? null : Post2DetailInfo(post);
     }
 
 }

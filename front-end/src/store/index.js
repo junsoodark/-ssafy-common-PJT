@@ -55,6 +55,7 @@ export default new Vuex.Store({
         router.push({ name: 'Home' })
       })
       .catch(err => {
+        console.log(err)
         alert(err.response.data)
       })
     },

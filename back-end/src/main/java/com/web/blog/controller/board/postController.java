@@ -1,6 +1,7 @@
 package com.web.blog.controller.board;
 
 import java.util.List;
+import java.util.Map;
 
 import com.web.blog.model.board.Post;
 import com.web.blog.model.study.Study;
@@ -59,11 +60,10 @@ public class postController {
     @GetMapping("/post/{id}")
     @ApiOperation(value = "")
     public ResponseEntity<Object> read(@PathVariable int id) {
-        Post post = postService.findPostById(id);
-        if (post == null) {
+        Map<String, Object> res = postService.findPostDetailInfoByPostId(id);
+        if (res == null)
             return new ResponseEntity<Object>("존재하지 않는 글입니다.", HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<Object>(post, HttpStatus.OK);
+        return new ResponseEntity<Object>(res, HttpStatus.OK);
     }
 
     @GetMapping("/post/study/{studyId}")
