@@ -17,7 +17,8 @@ export default {
       studyId: this.$route.params.studyid,
       articleId: this.$route.params.articleid,
       article: {},
-      writer: {}
+      writer: {},
+      isWriter: false
     }
   },
   computed: {
@@ -51,6 +52,9 @@ export default {
       this.article = res.data
       const articleContent = document.getElementById('content')
       articleContent.innerHTML = this.article.content
+      if (this.studyId==res.data.writer) {
+        this.isWriter = true
+      }
     })
     .catch(() => {alert('글 정보를 불러올 수 없습니다')})
   }

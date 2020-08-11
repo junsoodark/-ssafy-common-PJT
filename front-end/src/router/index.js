@@ -22,6 +22,7 @@ import NotFound from '../views/error/NotFound.vue'
 //추가기능
 import Search from '../views/Search.vue'
 import Chat from '../views/chat.vue'
+import ApplyCalander from "../views/applyCalander.vue"
 // 자소서 관련
 import letterList from '../views/coverletter/letterList.vue'
 import letterDetail from '../views/coverletter/letterDetail.vue'
@@ -134,6 +135,11 @@ const routes = [
     path: "/chat",
     name: "Chat",
     component: Chat
+  },
+  {
+    path: '/calander',
+    name: 'ApplyCalander',
+    component: ApplyCalander
   },
   {
     path: "*",

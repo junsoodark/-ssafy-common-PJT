@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import { mapActions, mapMutations } from "vuex";
+import { mapActions } from "vuex";
 export default {
   data() {
     return {
@@ -71,8 +71,7 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["UPDATE_IMAGEURL", null]),
-    ...mapActions(["login", "update_email"]),
+    ...mapActions(["login"]),
   },
 };
 </script>
