@@ -10,7 +10,7 @@
           toggle-class="nav-link-custom text-decoration-none text-light"
           right
         >
-          <b-dropdown-item :to="{ name: 'StudyList' }">스터디 리스트</b-dropdown-item>
+          <b-dropdown-item :to="{ name: 'StudyList' }">스터디 목록</b-dropdown-item>
           <b-dropdown-item :to="{ name: 'CreateTeam'}">스터디 만들기</b-dropdown-item>
         </b-nav-item-dropdown>
         <b-nav-item-dropdown
