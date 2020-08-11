@@ -199,7 +199,6 @@
       </b-col>
     </b-row>
   </b-container>
-  <Caffe class="mt-3 mb-5" v-bind:si="team.si" v-bind:gu="team.gu"></Caffe>
 </div>
 </template>
 
@@ -207,7 +206,6 @@
 <script>
 import Axios from 'axios'
 import { mapGetters, mapState } from 'vuex'
-import Caffe from '../../components/Caffe.vue'
 const API_URL = process.env.VUE_APP_LOCAL_URL
 
 export default {
@@ -346,7 +344,6 @@ export default {
     })
   },
   components: {
-    Caffe
   }
 }
 </script>

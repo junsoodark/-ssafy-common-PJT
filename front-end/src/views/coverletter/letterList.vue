@@ -1,6 +1,7 @@
 <template>
   <div>
     <h1 class="my-3">자소서 게시판</h1>
+    <b-button :to="{name:'createLetter'}">글쓰기</b-button>
     <b-container class="my-3">
       <b-list-group>
         <b-row>
