@@ -3,9 +3,11 @@ package com.web.blog.service.study;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,9 @@ public class StudyServiceImpl implements StudyService {
 		study.setStartDate(startDate);
 		study.setEndDate(endDate);
 		study.setMaxMembers(maxMembers);
+		Set <User> set = new HashSet<User>();
+		set.add(user);
+		study.setMembers(set);
 		return studyDao.save(study);
 	}
 
