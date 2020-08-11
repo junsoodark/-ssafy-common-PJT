@@ -59,4 +59,10 @@ public class StudyMemberDaoImpl implements StudyMemberDao {
 		Set<User> members = study.getMembers();
 		return (members==null || members.isEmpty()) ? false : members.contains(member);
 	}
+
+	@Override
+	public Set<User> getStudyUserList(Study study) {
+		
+		return study.getMembers();
+	}
 }

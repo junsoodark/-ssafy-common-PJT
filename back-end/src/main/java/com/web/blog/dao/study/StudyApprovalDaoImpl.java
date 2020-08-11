@@ -43,6 +43,11 @@ public class StudyApprovalDaoImpl implements StudyApprovalDao {
 		return (members==null || members.isEmpty()) ? false : members.contains(member);
 	}
 
+	@Override
+	public Set<User> getStudyApprovalUserList(Study study) {
+		return study.getMemberApproval();
+	}
+
 	
 
 }
