@@ -125,6 +125,7 @@ export default {
       })
       .then(res => {
         console.log(res)
+        this.$emit('endSubmit')
       })
       .catch(err => {
         console.log(err)

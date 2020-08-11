@@ -272,7 +272,6 @@ export default {
           }
         })
         .then(respon => {
-          console.log(i,resItem.length)
           if (respon.data.mgrEmail == this.email) {
             resItem[i]['isMine'] = true
             this.myStudy.push(resItem[i])
