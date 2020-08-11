@@ -7,7 +7,7 @@ import com.web.blog.model.resume.Resume;
 import com.web.blog.model.user.User;
 
 public interface ResumeService {
-    public Resume create(User user, String title, String company, String job);
+    public Resume create(User user, String title, String company, String job, String category);
 
     public boolean create(Resume resume);
 

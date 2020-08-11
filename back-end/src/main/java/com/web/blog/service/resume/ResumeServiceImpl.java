@@ -77,6 +77,7 @@ public class ResumeServiceImpl implements ResumeService {
         ret.put("title", resume.getTitle());
         ret.put("userId", resume.getUser().getId());
         ret.put("email", resume.getUser().getEmail());
+        ret.put("category", resume.getCategory());
 
         return ret;
     }
@@ -90,12 +91,13 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     @Override
-    public Resume create(User user, String title, String company, String job) {
+    public Resume create(User user, String title, String company, String job, String category) {
         Resume resume = new Resume();
         resume.setUser(user);
         resume.setJob(job);
         resume.setTitle(title);
         resume.setCompany(company);
+        resume.setCategory(category);
         return resumeDao.save(resume);
     }
 
