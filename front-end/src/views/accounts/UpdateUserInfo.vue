@@ -162,7 +162,12 @@ export default {
       )
       
       console.log(params)
-      Axios.put(`${API_URL}user`, params)
+      Axios.put(`${API_URL}user`, params, {
+        headers: {
+          'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+          'user-email': sessionStorage.getItem('user-email')
+        }
+      })
       .then((res) => {
         alert(res.data)
         this.$store.commit('EDIT_USER_INFO', params)
@@ -175,9 +180,13 @@ export default {
     
   },
   created () {
-    Axios.get(`${API_URL}user/${this.email}`)
+    Axios.get(`${API_URL}user/${this.email}`, {
+        headers: {
+          'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+          'user-email': sessionStorage.getItem('user-email')
+        }
+      })
     .then(res => {
-      console.log(res.data)
       this.form.name = res.data.name
       this.form.sex = res.data.sex
       this.form.age = res.data.age

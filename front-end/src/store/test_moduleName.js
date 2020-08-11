@@ -4,49 +4,23 @@ const API_URL = process.env.VUE_APP_LOCAL_URL
 
 const initialState = {
   email: '',
-  name: "",
-  age: 0,
-  sex: 1,
   imageName: null,
 };
 
 const mutations = {
-  UPDATE_IMAGEURL(state, value) {
-    console.log('updateimageurl', value)
-    state.imageName = value
-  },
   UPDATE_EMAIL(state, value) {
-    // state.email = value.data.email
-    // state.age = value.data.age
-    // state.name = value.data.name
-    // state.sex = value.data.sex
     state.email = value
   },
   deleteUserInfo(state , value) {
     state.email = value
-    state.age = value
-    state.name = value
-    state.sex = value
   },
   EDIT_USER_INFO(state, value) {
     state.email = value.email
-    state.age = value.age
-    state.name = value.name
-    state.sex = value.sex
     router.push({ name: 'Mypage' })
   },
 };
 
 const actions = {
-  // update_email({commit}, $data) {
-  //   const email = $data
-  //   Axios.get(`${API_URL}user/${email}`)
-  //   .then(res => {
-  //     commit('UPDATE_EMAIL', res)
-  //   })
-  //   .catch( err => {console.log(err)} )
-  // },
-
   update_user_info(params) {
     console.log(params)
       
