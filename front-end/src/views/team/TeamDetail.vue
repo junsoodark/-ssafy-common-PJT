@@ -238,7 +238,7 @@ export default {
       if (this.checkDelete === this.checkDeleteForm) {
         var params = new URLSearchParams()
         params.append('studyId',this.study_id)
-        Axios({method:'DELETE',url:`${API_URL}study`,params:params,headers:{'Content-Type': 'application/json; charset=utf-8'}})
+        Axios({method:'DELETE',url:`${API_URL}study`,params:params,headers:{'Content-Type': 'application/json; charset=utf-8','jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),'user-email': sessionStorage.getItem('user-email')}})
         .then(() => {
           alert('스터디가 삭제되었습니다.')
           this.checkDelete = ''
@@ -287,7 +287,7 @@ export default {
         this.team.numMembers += 1
       })
       .catch(err => {
-        alert(err.response.data)
+        alert(err.response.data.msg)
       })
 
 
@@ -303,7 +303,7 @@ export default {
         var params = new URLSearchParams()
         params.append('email',this.email)
         params.append('studyId',this.study_id)
-        Axios({method:'DELETE',url:`${API_URL}study/member`,params:params,headers:{'Content-Type': 'application/json; charset=utf-8'}})
+        Axios({method:'DELETE',url:`${API_URL}study/member`,params:params,headers:{'Content-Type': 'application/json; charset=utf-8','jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),'user-email': sessionStorage.getItem('user-email')}})
         .then(() => {
           alert('탈퇴가 성공적으로 진행되었습니다.')
           this.checkDelete = ''
