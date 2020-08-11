@@ -53,7 +53,7 @@
         
 
 
-        <b-button class="mt-2" type="submit" @click="update_email(email)"  block variant="secondary">비밀번호 변경</b-button>
+        <b-button class="mt-2" type="submit"  block variant="secondary">비밀번호 변경</b-button>
       </b-form>
     </div>
   </b-container>
@@ -62,6 +62,7 @@
 <script>
 import Axios from "axios"
 import router from "@/router"
+import firebase from 'firebase'
 
 const API_URL = process.env.VUE_APP_LOCAL_URL
 
@@ -117,7 +118,11 @@ export default {
         method: "POST",
         url: `${API_URL}verify/help`,
         params: params,
-        headers: { "Content-Type": "application/json; charset=utf-8" },
+        headers: { 
+          "Content-Type": "application/json; charset=utf-8",
+          'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+          'user-email': sessionStorage.getItem('user-email')
+        },
       })
       .then((res) => {
         const putParams = {
@@ -130,18 +135,43 @@ export default {
           method: "PUT",
           url: `${API_URL}user/help`,
           params: putParams,
-          headers: { "Content-Type": "application/json; charset=utf-8" },
+          headers: { 
+            "Content-Type": "application/json; charset=utf-8",
+            'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+            'user-email': sessionStorage.getItem('user-email') },
          })
         .then((res) => {
-          alert(res.data)
-          
+
           const loginData = {
             'email': this.email,
             'password': password,
           }
           // 로그인
-          this.$store.dispatch('update_email', email)
+          alert(res.data)
           this.$store.dispatch('login', loginData)
+
+          // // 억지 firebase 비밀번호 찾기
+          // // firebase 사용자 로그인
+          // console.log(this.email, password)
+          // firebase.auth().signInWithEmailAndPassword(this.email, password).catch(function(error) {
+          //   // Handle Errors here.
+          //   var errorCode = error.code;
+          //   var errorMessage = error.message;
+          //   console.log('파이어베이스 로그인 에러')
+          //   console.log(errorCode)
+          //   console.log(errorMessage)
+          //   // ...
+          // })
+          // // 비밀번호 업데이트
+          // var user = firebase.auth().currentUser;
+          // var newPassword = password
+          // console.log(newPassword, password)
+          // user.updatePassword(newPassword).then(function() {
+          //   console.log('firebase password success')
+          // }).catch(function(error) {
+          //   console.log('firebase new password error',error)
+          // })
+          
         })
         .catch((err) => {
           // alert(err)

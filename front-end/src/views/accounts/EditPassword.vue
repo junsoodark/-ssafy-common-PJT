@@ -62,6 +62,7 @@
 import { mapState } from 'vuex';
 import Axios from 'axios';
 import router from "@/router";
+import firebase from 'firebase'
 const API_URL = process.env.VUE_APP_LOCAL_URL
 
 export default {
@@ -89,13 +90,20 @@ export default {
       }
       var JsonForm = JSON.stringify(params)
 
-      Axios({method:'POST',url:`${API_URL}login`,params:params,data:JsonForm,headers:{'Content-Type': 'application/json; charset=utf-8'}})
+      Axios({method:'POST',url:`${API_URL}login`,params:params,data:JsonForm,headers:{
+        'Content-Type': 'application/json; charset=utf-8',
+        }})
       .then(() => {
         alert("비밀번호 인증되었습니다.")
         this.nowPasswordVerifyState = true
         
         //get 요쳥
-        Axios.get(`${API_URL}user/${this.email}`)
+        Axios.get(`${API_URL}user/${this.email}`, {
+          headers: {
+            'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+            'user-email': sessionStorage.getItem('user-email')
+          }
+        })
         .then(res => {
           this.name = res.data.name
           this.age = res.data.age
@@ -134,9 +142,28 @@ export default {
         'password' : this.newPassword
       }
 
-      Axios.put(`${API_URL}user`, params)
+      
+
+
+      Axios.put(`${API_URL}user`, params,{
+        headers: {
+          'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+          'user-email': sessionStorage.getItem('user-email')
+        }
+      })
       .then(() => {
+
+        var user = firebase.auth().currentUser;
+        var newPassword = this.newPassword
+
+        user.updatePassword(newPassword).then(function() {
+          console.log('firebase password success')
+        }).catch(function(error) {
+          console.log('firebase new password error',error)
+        })
+
         alert("비밀번호 수정을 완료하였습니다.")
+
         router.push({ name: "Mypage" })
       })
       .catch((err) => {
