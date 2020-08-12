@@ -81,7 +81,7 @@ export default {
       })
     },
     updatePost () {
-      this.$router.push({ name: "updateArticle" , params: {id:this.articleId,}})
+      this.$router.push({ name: "updateArticle" , params: {studyid:this.studyId,articleid:this.articleId}})
     }
   }
 }
