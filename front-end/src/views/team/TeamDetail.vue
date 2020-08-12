@@ -157,8 +157,8 @@
     
     <b-row>
       <b-col v-if="email == team.mgrEmail" class="totheright my-3 text-center" offset="8" cols="4">
-        <router-link :to="{ name: 'UpdateTeam', params: {id:study_id} }" variant="primary" tag="b-button">스터디 수정</router-link> |
-        <b-button v-if="isLoggedIn" @click="$bvModal.show('modal-scoped')" variant="danger">스터디 삭제</b-button>
+        <router-link :to="{ name: 'UpdateTeam', params: {id:study_id} }" variant="primary" tag="b-button">스터디 수정</router-link>
+        <b-button v-if="isLoggedIn" class="ml-2" @click="$bvModal.show('modal-scoped')" variant="danger">스터디 삭제</b-button>
 
         <b-modal
           id="modal-scoped"

@@ -56,5 +56,5 @@ public class Resume {
 
     @JsonIgnore
     @OneToMany(cascade = { CascadeType.ALL }, mappedBy = "resume")
-    private Set<Resumeitem> resumeItems;
+    private Set<ResumeItem> resumeItems;
 }
