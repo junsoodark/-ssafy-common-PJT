@@ -23,7 +23,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResumeItem {
+public class Resumeitem {
     // `id` int(11) NOT NULL AUTO_INCREMENT,
     // `resume_id` int(11) NOT NULL,
     // `title` varchar(50) NOT NULL,
