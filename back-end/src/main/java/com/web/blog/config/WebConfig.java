@@ -14,13 +14,12 @@ import com.web.blog.interceptor.JwtInterceptor;
 public class WebConfig implements WebMvcConfigurer{
 	@Autowired
 	private JwtInterceptor jwtInterceptor;
-	
+
 	private final String[] exclude = {"/swagger-ui.html/**", "/swagger-resources/**", "/webjars/**", // 개발 완료시 삭제바랍니다.
 									  "/login",
 									  "/verify/**",
 									  "/address/**",
-									  "/study/all",
-									  "/study/{studyId}",
+									  "/study/?*",
 									  "/user/signUp",
 									  "/user/help"};
 	

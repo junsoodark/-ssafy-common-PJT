@@ -271,7 +271,7 @@ export default {
 
       Axios({
         method: "POST",
-        url: `${API_URL}study/member/join`,
+        url: `${API_URL}study/member/apply`,
         params: params,
         headers: { 
           "Content-Type": "application/json; charset=utf-8", 
@@ -282,7 +282,6 @@ export default {
       .then(res => {
         alert(res.data)
         this.isMember = true
-        this.team.numMembers += 1
       })
       .catch(err => {
         alert(err.response.data.msg)
