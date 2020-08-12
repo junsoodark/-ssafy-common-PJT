@@ -199,7 +199,6 @@
       </b-col>
     </b-row>
   </b-container>
-  <Caffe class="mt-3 mb-5" v-bind:si="team.si" v-bind:gu="team.gu"></Caffe>
 </div>
 </template>
 
@@ -207,7 +206,6 @@
 <script>
 import Axios from 'axios'
 import { mapGetters, mapState } from 'vuex'
-import Caffe from '../../components/Caffe.vue'
 const API_URL = process.env.VUE_APP_LOCAL_URL
 
 export default {
@@ -273,7 +271,7 @@ export default {
 
       Axios({
         method: "POST",
-        url: `${API_URL}study/member/join`,
+        url: `${API_URL}study/member/apply`,
         params: params,
         headers: { 
           "Content-Type": "application/json; charset=utf-8", 
@@ -284,7 +282,6 @@ export default {
       .then(res => {
         alert(res.data)
         this.isMember = true
-        this.team.numMembers += 1
       })
       .catch(err => {
         alert(err.response.data.msg)
@@ -346,7 +343,6 @@ export default {
     })
   },
   components: {
-    Caffe
   }
 }
 </script>

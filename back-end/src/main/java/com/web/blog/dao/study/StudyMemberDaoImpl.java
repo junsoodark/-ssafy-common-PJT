@@ -10,6 +10,25 @@ import com.web.blog.model.user.User;
 
 @Repository
 public class StudyMemberDaoImpl implements StudyMemberDao {
+	
+	@Override
+	public boolean approve(Study study, User member) {
+		Set<User> members = study.getMembers();
+		if(!study.getMemberApproval().remove(member)) return false;
+		if(members==null) {
+			members = new HashSet<>();
+			boolean ret = members.add(member);
+			study.setMembers(members);
+			return ret;
+		}
+		else return members.add(member);
+	}
+	
+	@Override
+	public boolean disapprove(Study study, User member) {
+		return study.getMemberApproval().remove(member);
+	}
+
 	@Override
 	public boolean addMember(Study study, User member) {
 		Set<User> members = study.getMembers();

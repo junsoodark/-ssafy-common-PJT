@@ -98,10 +98,17 @@
           </b-col>
         </b-row>
         <b-row v-for="item in items" :key="item.studyId">
-          <b-col cols="4" class="p-0"><b-list-group-item id="myStudyList" route :to="{ name: 'StudyDetail', params: {id:item.studyId} }">{{ item.title }}</b-list-group-item></b-col>
-          <b-col cols="8" class="p-0"><b-list-group-item route :to="{ name: 'StudyDetail', params: {id:item.studyId} }">{{ item.content }}</b-list-group-item></b-col>
+
+          <b-col cols="4" class="p-0"><b-list-group-item id="myStudyList" route :to="{ name: 'StudyDetail', params: {id:item.studyId} }">{{ item.title }} <i class="fas fa-book-reader" v-if="item.isMine"></i></b-list-group-item></b-col>
+          <b-col cols="8" class="p-0"><b-list-group-item route :to="{ name: 'StudyDetail', params: {id:item.studyId} }">{{ item.content }} <i class="fas fa-book-reader" v-if="item.isMine"></i></b-list-group-item></b-col>
         </b-row>
       </b-list-group>
+      <!-- 이 밑에 의미없는게 re rendering효과를 줘서 위에 표시를 나타나게 함-->
+      <b-list-group>
+        <b-row v-for="item in myStudy" :key="item.studyId">
+        </b-row>
+      </b-list-group>
+      <!-- 의미 없지만 지우지는 말 것 -->
     </div>
 
     <div id="newStudy">
@@ -187,8 +194,10 @@ export default {
         name: null,
       },
       progressUpload: 0,
+      ch: true,
       uploadTask: '',
       defaultImageUrl: 'https://previews.123rf.com/images/salamatik/salamatik1801/salamatik180100019/92979836-%ED%94%84%EB%A1%9C%ED%95%84-%EC%9D%B5%EB%AA%85%EC%9D%98-%EC%96%BC%EA%B5%B4-%EC%95%84%EC%9D%B4%EC%BD%98-%ED%9A%8C%EC%83%89-%EC%8B%A4%EB%A3%A8%EC%97%A3-%EC%82%AC%EB%9E%8C%EC%9E%85%EB%8B%88%EB%8B%A4-%EB%82%A8%EC%84%B1-%EA%B8%B0%EB%B3%B8-%EC%95%84%EB%B0%94%ED%83%80-%EC%82%AC%EC%A7%84-%EC%9E%90%EB%A6%AC-%ED%91%9C%EC%8B%9C-%EC%9E%90-%ED%9D%B0%EC%83%89-%EB%B0%B0%EA%B2%BD%EC%97%90-%EA%B3%A0%EB%A6%BD-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4-%EC%85%98.jpg',
+      myStudy: [],
     }
   },
 
@@ -288,18 +297,39 @@ export default {
         }
       })
     },
+    check (resItem,i) {
+      Axios.get(`${API_URL}study/${resItem[i].studyId}`,{
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+          'user-email': sessionStorage.getItem('user-email')
+          }
+        })
+        .then(respon => {
+          if (respon.data.mgrEmail == this.email) {
+            resItem[i]['isMine'] = true
+            this.myStudy.push(resItem[i])
+          } else {resItem[i]['isMine'] = false}
+        })
+        .catch(error => {console.log(error)})
+    }
   },
   created () {
     // 해당 아이디에 대한 스터디 정보 가져오기
     Axios.get(`${API_URL}study/email?email=${this.email}`, {
       headers: {
+        "Content-Type": "application/json; charset=utf-8",
         'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
         'user-email': sessionStorage.getItem('user-email')
       }
     })
     .then(res => {
-      this.items = res.data
-      this.countStudy = res.data.length
+      var resItem = res.data
+      for (var i=0; i<resItem.length; i++) {
+        this.check(resItem,i)
+      }
+      this.items = resItem
+      this.countStudy = resItem.length
     })
     .catch(err => {
       console.log(err)
@@ -343,12 +373,9 @@ export default {
         // ...
       }
     })
-
-
-    
-    
   },
-
+  mounted() {
+  },
 }
 </script>
 

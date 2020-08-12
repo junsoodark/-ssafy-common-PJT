@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.web.blog.model.study.Study;
 import com.web.blog.model.user.User;
+import com.web.blog.service.study.StudyApprovalService;
 import com.web.blog.service.study.StudyMemberService;
 import com.web.blog.service.study.StudyService;
 import com.web.blog.service.user.UserService;
@@ -27,14 +28,50 @@ public class StudyMemberController {
 	StudyMemberService studyMemberService;
 	
 	@Autowired
+	StudyApprovalService studyApprovalService;
+	
+	@Autowired
 	StudyService studyService;
 	
 	@Autowired
 	UserService userService;
 	
-	@PostMapping("/study/member/join")
-	@ApiOperation(value="스터디 아이디와 사용자 이메일을 입력받아 가입 여부를 확인하고, 해당 스터디에 사용자를 가입시킵니다.")
-	public ResponseEntity join(@RequestParam final int studyId, @RequestParam final String email) {
+	@PostMapping("/study/member/apply")
+	@ApiOperation(value="사이트 회원이 스터디에 가입신청을 합니다.")
+	public ResponseEntity apply(@RequestParam final int studyId, @RequestParam final String email) {
+		User user = userService.findUserByEmail(email);
+		if(user==null) return new ResponseEntity("존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND);
+		
+		Study study = studyService.findStudyByStudyId(studyId);
+		if(study==null) return new ResponseEntity("존재하지 않는 스터디입니다.", HttpStatus.NOT_FOUND);
+			
+		if(studyMemberService.isExistMember(study, user)) return new ResponseEntity("이미 가입된 멤버입니다.", HttpStatus.CONFLICT);
+		
+		if(studyMemberService.isFull(study)) return new ResponseEntity("스터디 정원이 가득찼습니다.", HttpStatus.CONFLICT);
+		if(studyApprovalService.apply(study, user)==false) return new ResponseEntity("스터디에 가입신청을할 수 없습니다. 관리자에게 문의바랍니다.", HttpStatus.FORBIDDEN);
+		return new ResponseEntity("스터디 가입을 승인했습니다.", HttpStatus.OK);
+		
+	}
+	
+	@PostMapping("/study/member/disapply")
+	@ApiOperation(value="사이트 회원이 스터디 가입신청을 취소합니다.")
+	public ResponseEntity disapply(@RequestParam final int studyId, @RequestParam final String email) {
+		User user = userService.findUserByEmail(email);
+		if(user==null) return new ResponseEntity("존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND);
+		
+		Study study = studyService.findStudyByStudyId(studyId);
+		if(study==null) return new ResponseEntity("존재하지 않는 스터디입니다.", HttpStatus.NOT_FOUND);
+		
+		if(studyMemberService.isExistMember(study, user)) return new ResponseEntity("이미 가입된 멤버입니다.", HttpStatus.CONFLICT);
+				
+		if(studyApprovalService.disapply(study, user)==false) return new ResponseEntity("스터디에 거절 에러 발생. 관리자에게 문의바랍니다.", HttpStatus.FORBIDDEN);
+		return new ResponseEntity("스터디 가입을 거절했습니다.", HttpStatus.OK);
+	}
+	
+	
+	@PostMapping("/study/member/approve")
+	@ApiOperation(value="관지라자가 해당 스터디에 사용자를 가입시킵니다.")
+	public ResponseEntity approve(@RequestParam final int studyId, @RequestParam final String email) {
 		User user = userService.findUserByEmail(email);
 		if(user==null) return new ResponseEntity("존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND);
 		
@@ -44,10 +81,30 @@ public class StudyMemberController {
 		if(studyMemberService.isExistMember(study, user)) return new ResponseEntity("이미 가입된 멤버입니다.", HttpStatus.CONFLICT);
 	
 		if(studyMemberService.isFull(study)) return new ResponseEntity("스터디 멤버 수가 초과하여 가입할 수 없습니다.", HttpStatus.CONFLICT);
+		if(!studyApprovalService.in(study,user)) return new ResponseEntity("가입 신청 목록에 없는 사용자입니다.",HttpStatus.CONFLICT);
+			
+		if(studyMemberService.approve(study, user)==false) return new ResponseEntity("스터디에 가입승인에 실패했습니다. 관리자에게 문의바랍니다.", HttpStatus.FORBIDDEN);
 		
-		if(studyMemberService.join(study, user)==false) return new ResponseEntity("스터디에 가입할 수 없습니다. 관리자에게 문의바랍니다.", HttpStatus.FORBIDDEN);
+		return new ResponseEntity("스터디 가입승인이 성공되었습니다.", HttpStatus.OK);
+	}
+	
+	@PostMapping("/study/member/disapprove")
+	@ApiOperation(value="관지라자가 해당 스터디에 사용자를 가입을 거절합니다.")
+	public ResponseEntity disapprove(@RequestParam final int studyId, @RequestParam final String email) {
+		User user = userService.findUserByEmail(email);
+		if(user==null) return new ResponseEntity("존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND);
 		
-		return new ResponseEntity("스터디에 가입되었습니다.", HttpStatus.OK);
+		Study study = studyService.findStudyByStudyId(studyId);
+		if(study==null) return new ResponseEntity("존재하지 않는 스터디입니다.", HttpStatus.NOT_FOUND);
+		
+		if(studyMemberService.isExistMember(study, user)) return new ResponseEntity("이미 가입된 멤버입니다.", HttpStatus.CONFLICT);
+	
+		//if(studyMemberService.isFull(study)) return new ResponseEntity("스터디 멤버 수가 초과하여 가입할 수 없습니다.", HttpStatus.CONFLICT);
+		if(!studyApprovalService.in(study,user)) return new ResponseEntity("가입 신청 목록에 없는 사용자입니다.",HttpStatus.CONFLICT);
+		
+		if(studyMemberService.disapprove(study, user)==false) return new ResponseEntity("스터디 가입승인 거절에 실패했습니다. 관리자에게 문의바랍니다.", HttpStatus.FORBIDDEN);
+		
+		return new ResponseEntity("스터디 가입승인을 거절했습니다.", HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/study/member")

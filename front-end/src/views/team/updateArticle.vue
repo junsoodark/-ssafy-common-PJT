@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <b-container>
     <b-form-input v-model="title" placeholder="제목을 입력해주세요"></b-form-input>
     <hr>
     <div class="sample-toolbar">
@@ -30,7 +30,7 @@
     />
     <hr>
     <button class='btn btn-success' @click.prevent='Submit'>제출</button>
-  </div>
+  </b-container>
 </template>
 
 <script>
@@ -49,11 +49,25 @@ export default {
       UV: false,
       fontColor: '#000000',
       backColor: '#ffffff',
+      id: this.$route.params.id,
+      studyId : null
     };
   },
   props: {
-    studyId: Number,
     writer: Number
+  },
+  created () {
+    Axios({
+      method: "GET",
+      url: `${API_URL}post/${this.id}`,
+      headers: { "Content-Type": "application/json; charset=utf-8",
+                'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+                'user-email': sessionStorage.getItem('user-email')},
+    })
+    .then(res => {
+      this.title = res.data.title
+      this.studyId = res.data.study_id
+    })
   },
   mounted() {
     document.getElementById('paragraph').setAttribute('contenteditable', 'true');
@@ -111,12 +125,11 @@ export default {
       const articleData = document.querySelector('#paragraph')
       const params = {
         'content': articleData.innerHTML,
-        'studyId': this.studyId,
+        'id': this.id,
         'title': this.title,
-        "writer": this.writer
       }
       Axios({
-        method: "POST",
+        method: "PUT",
         url: `${API_URL}post`,
         params: params,
         headers: { "Content-Type": "application/json; charset=utf-8",
@@ -125,7 +138,7 @@ export default {
       })
       .then(res => {
         console.log(res)
-        this.$emit('endSubmit')
+        this.$router.push({ name: "StudyArticle" ,params:{id:this.studyId}})
       })
       .catch(err => {
         console.log(err)
@@ -135,3 +148,7 @@ export default {
   },
 };
 </script>
+
+<style>
+
+</style>
