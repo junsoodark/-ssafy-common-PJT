@@ -13,6 +13,7 @@ public interface StudyService {
 	public boolean delete(final int studyId);
 	public boolean update(final Address address, final int studyId, final String title, final String content, final LocalDate startDate, final LocalDate endDate, final int maxMembers);
 
+	public boolean isManager(final int studyId, final int userId);
 	public Study findStudyByStudyId(final int studyId);
 	public Map<String, Object> Study2SimpleInfo(final Study study);
 	public Map<String, Object> Study2DetailInfo(final Study study);

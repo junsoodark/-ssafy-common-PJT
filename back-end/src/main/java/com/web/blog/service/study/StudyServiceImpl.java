@@ -65,6 +65,12 @@ public class StudyServiceImpl implements StudyService {
 	}
 	
 	@Override
+	public boolean isManager(final int studyId, final int userId) {
+		Optional<Study> studyOpt = studyDao.findStudyByStudyId(studyId);
+		return studyOpt.isPresent() ? studyOpt.get().getUser().getId()==userId : false;
+	}
+	
+	@Override
 	public Study findStudyByStudyId(final int studyId) {
 		Optional<Study> studyOpt = studyDao.findStudyByStudyId(studyId);
 		return studyOpt.isPresent() ? studyOpt.get() : null;

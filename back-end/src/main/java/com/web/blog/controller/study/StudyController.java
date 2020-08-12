@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,6 +22,7 @@ import com.web.blog.model.address.Address;
 import com.web.blog.model.study.Study;
 import com.web.blog.model.user.User;
 import com.web.blog.service.address.AddressService;
+import com.web.blog.service.auth.JwtService;
 import com.web.blog.service.study.StudyMemberService;
 import com.web.blog.service.study.StudyService;
 import com.web.blog.service.user.UserService;
@@ -35,6 +37,9 @@ public class StudyController {
 	@Autowired
 	UserService userService;
 
+	@Autowired
+	JwtService jwtService;
+	
 	@Autowired
 	AddressService addressService;
 	
@@ -58,7 +63,7 @@ public class StudyController {
 
 	@PostMapping("/study")
 	@ApiOperation(value = "스터디 데이터를 입력받아 데이터를 검증하고 새로운 스터디를 생성합니다.")
-	public ResponseEntity create(@RequestParam final String email,
+	public ResponseEntity create(@RequestHeader(value="jwt-auth-token") final String token,
 								 @RequestParam final String title,
 								 @RequestParam final String content,
 								 @DateTimeFormat(iso = ISO.DATE) @RequestParam final LocalDate startDate,
@@ -66,6 +71,7 @@ public class StudyController {
 								 @RequestParam final int maxMembers,
 								 @RequestParam final String si,
 								 @RequestParam final String gu) {
+		final String email = jwtService.parseEmail(token);
 		final User user = userService.findUserByEmail(email);
 		if (user == null)
 			return new ResponseEntity("존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND);
@@ -87,15 +93,22 @@ public class StudyController {
 
 	@DeleteMapping("/study")
 	@ApiOperation(value = "스터디 아이디를 입력받아 존재 여부를 확인하고, 해당 스터디를 삭제합니다.")
-	public ResponseEntity delete(@RequestParam final int studyId) {
-		if(studyService.delete(studyId)==false) return new ResponseEntity("해당 스터디가 존재하지 않습니다.", HttpStatus.NOT_FOUND);
+	public ResponseEntity delete(@RequestHeader(value="jwt-auth-token") final String token, @RequestParam final int studyId) {
+		final String email = jwtService.parseEmail(token);
+		final User user = userService.findUserByEmail(email);
+		if(user==null)
+			return new ResponseEntity("존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND);
+		else if(studyService.isManager(studyId, user.getId())==false)
+			return new ResponseEntity("스터디 삭제 권한이 없습니다.", HttpStatus.UNAUTHORIZED);
+		else if(studyService.delete(studyId)==false)
+			return new ResponseEntity("해당 스터디가 존재하지 않습니다.", HttpStatus.NOT_FOUND);
 		return new ResponseEntity("스터디 삭제에 성공했습니다.", HttpStatus.OK);
 	}
 
 	@PutMapping("/study")
 	@ApiOperation(value = "스터디 정보를 입력받아 데이터를 검증하고, 해당 스터디의 정보를 수정합니다.")
-	public ResponseEntity update(@RequestParam final int studyId,
-								 @RequestParam final String email,
+	public ResponseEntity update(@RequestHeader(value="jwt-auth-token") final String token,
+								 @RequestParam final int studyId,
 								 @RequestParam final String title,
 								 @RequestParam final String content,
 								 @DateTimeFormat(iso = ISO.DATE) @RequestParam final LocalDate startDate,
@@ -103,13 +116,15 @@ public class StudyController {
 								 @RequestParam final int maxMembers,
 								 @RequestParam final String si,
 								 @RequestParam final String gu) {
+		final String email = jwtService.parseEmail(token);
 		final User user = userService.findUserByEmail(email);
 		if(user==null) return new ResponseEntity("존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND);
-
-		final Study study = studyService.findStudyByStudyId(studyId);
-		if(study==null) return new ResponseEntity("존재하지 않는 스터디입니다.", HttpStatus.NOT_FOUND);
 		
-		if(study.getUser().getId()!=user.getId()) return new ResponseEntity("스터디 수정 권한이 없습니다.", HttpStatus.UNAUTHORIZED);
+		final Study study = studyService.findStudyByStudyId(studyId);
+		if(study==null)
+			return new ResponseEntity("존재하지 않는 스터디입니다.", HttpStatus.NOT_FOUND);
+		else if(studyService.isManager(studyId, user.getId())==false)
+			return new ResponseEntity("스터디 수정 권한이 없습니다.", HttpStatus.UNAUTHORIZED);
 		
 		final Address address = addressService.findAddressBySiAndGu(si, gu);
 		if (address == null)
