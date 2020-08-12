@@ -17,6 +17,7 @@ import CreateTeam from "../views/team/CreateTeam.vue"
 import UpdateTeam from "../views/team/UpdateTeam.vue"
 import StudyArticle from '../views/team/TeamArticleList.vue'
 import ArticleDetail from "../views/team/ArticleDetail.vue"
+import updateArticle from "../views/team/updateArticle.vue"
 //error
 import NotFound from '../views/error/NotFound.vue'
 //추가기능
@@ -27,6 +28,7 @@ import ApplyCalander from "../views/applyCalander.vue"
 import letterList from '../views/coverletter/letterList.vue'
 import letterDetail from '../views/coverletter/letterDetail.vue'
 import createLetter from '../views/coverletter/createLetter.vue'
+import UpdateCover from '../views/coverletter/updateCover.vue'
 
 
 Vue.use(VueRouter);
@@ -92,6 +94,11 @@ const routes = [
     component: TeamDetail,
   },
   {
+    path: '/study/update/:id',
+    name: 'updateArticle',
+    component: updateArticle,
+  },
+  {
     path: '/study/:id/article',
     name: 'StudyArticle',
     component: StudyArticle
@@ -130,6 +137,11 @@ const routes = [
     path: "/coverletter/:id",
     name: "coverLetterDetail",
     component: letterDetail
+  },
+  {
+    path: "/coverletter/update/:id",
+    name: "UpdateCover",
+    component: UpdateCover
   },
   {
     path: "/chat",

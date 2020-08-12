@@ -64,7 +64,6 @@ export default {
                 'user-email': sessionStorage.getItem('user-email')},
     })
     .then(res => {
-      console.log(res)
       this.articles = res.data
     })
     .catch(() => {alert('스터디팀 정보를 불러올 수 없습니다')})

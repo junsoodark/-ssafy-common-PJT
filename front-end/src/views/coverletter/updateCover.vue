@@ -1,6 +1,6 @@
 <template>
   <div class="my-3">
-    <h1>자소서 작성</h1>
+    <h1>자소서 수정</h1>
     <b-container>
       <hr>
       <b-row>
@@ -10,7 +10,7 @@
         <b-form-input v-model="job" placeholder="직무를 입력해주세요" class="col-8"></b-form-input>
       </b-row>
       <b-button class="my-2" @click="addQuestion">자소서 항목 추가</b-button> | <b-button class="my-2" @click="delQuestion">자소서 항목 삭제</b-button>
-      <div v-for="item in items" :key="item.num" class="my-3">
+      <div v-for="item in items" :key="item" class="my-3">
         <b-button v-b-toggle="'my-'+item.num">
             <span class="when-open">{{item.num+1}}번 질문 닫기</span><span class="when-closed">{{item.num+1}}번 질문 열기</span>
         </b-button>
@@ -38,6 +38,7 @@ const API_URL = process.env.VUE_APP_LOCAL_URL
 export default {
   data () {
     return {
+      id: this.$route.params.id,
       items: [],
       question:0,
       title: null,
@@ -76,12 +77,12 @@ export default {
       const params = {
         'category': this.category,
         'company': this.company,
-        'email': this.email,
-        'job':this.job,
-        'title':this.title
+        'job': this.job,
+        'resumeId': this.id,
+        'title': this.title
       }
       Axios({
-        method: "POST",
+        method: "PUT",
         url: `${API_URL}resume`,
         params: params,
         headers: { "Content-Type": "application/json; charset=utf-8",
@@ -89,14 +90,8 @@ export default {
                   'user-email': sessionStorage.getItem('user-email')},
       })
       .then(res => {
-        const resumeId = res.data
-        if (resumeId == -1) {
-          alert('글 작성이 알 수 없는 이유로 실패했습니다')
-          return false
-        }
-        for (var i; i<this.items.length; i++) {
-          this.submitQuestion(resumeId,this.items[i])
-        }
+        console.log(res)
+        this.$router.push({ name: "StudyArticle"})
       })
       .catch(err => {
         console.log(err)
