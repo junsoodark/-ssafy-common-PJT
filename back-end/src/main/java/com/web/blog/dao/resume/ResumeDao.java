@@ -4,16 +4,16 @@ import java.util.List;
 import java.util.Optional;
 
 import com.web.blog.model.resume.Resume;
+import com.web.blog.model.user.User;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ResumeDao extends JpaRepository<Resume, String> {
     Optional<Resume> findResumeById(int id);
 
-    List<Resume> findResumeByUser(int userId);
+    List<Resume> findResumeByUser(User user);
 
     Optional<Resume> findResumeByCompany(String company);
 

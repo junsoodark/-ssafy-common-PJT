@@ -9,6 +9,8 @@ import com.web.blog.model.resume.Resumeitem;
 public interface ResumeitemService {
     public Resumeitem create(Resume resume, String title, String content);
 
+    public boolean create(Resumeitem resumeitem);
+
     public Resumeitem read(int id);
 
     public List<Resumeitem> readByResume(int resumeId);
