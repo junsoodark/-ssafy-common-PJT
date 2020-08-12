@@ -1,9 +1,11 @@
 <template>
   <div>
-    <b-navbar toggleable="lg" style="background-color: rgb(24,44,141)" type="dark">
-      <router-link to="/" class="ml-2 mr-5 text-decoration-none text-light"><img src="../../assets/logo.png" style="height:30px">Home</router-link>
+    <b-navbar toggleable="lg" style="background-color: rgb(25, 84, 241)" type="dark">
+      <router-link to="/" class="ml-2 mr-5 text-decoration-none text-light">
+        <img src style="height:30px" />StudyJobs
+      </router-link>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-        <b-collapse id="nav-collapse" is-nav>
+      <b-collapse id="nav-collapse" is-nav>
         <b-nav-item-dropdown
           id="my-nav-dropdown"
           text="스터디"
@@ -29,7 +31,7 @@
             <b-button size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
           </b-nav-form>
 
-            <!-- Using 'button-content' slot -->
+          <!-- Using 'button-content' slot -->
           <div v-if="isLoggedIn" class="ml-3">
             <router-link class="text-light mx-1" :to="{ name: 'Logout' }">Logout</router-link>
             <router-link class="text-light ml-2" :to="{ name: 'Mypage' }">마이페이지</router-link>
@@ -45,25 +47,28 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations, mapActions } from 'vuex'
+import { mapGetters, mapMutations, mapActions } from "vuex";
 
 export default {
-  data () {
+  data() {
     return {
-      searchData: null
-    }
+      searchData: null,
+    };
   },
   computed: {
-    ...mapGetters(['isLoggedIn'])
+    ...mapGetters(["isLoggedIn"]),
   },
   methods: {
-    ...mapMutations(['deleteUserInfo']),
-    ...mapActions(['delete_email']),
+    ...mapMutations(["deleteUserInfo"]),
+    ...mapActions(["delete_email"]),
     search() {
-      this.$router.push({ name: 'Search', params: {search:this.searchData} })
-    }
-  }
-}
+      this.$router.push({
+        name: "Search",
+        params: { search: this.searchData },
+      });
+    },
+  },
+};
 </script>
 
 <style>
