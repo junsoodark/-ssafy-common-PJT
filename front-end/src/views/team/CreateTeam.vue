@@ -151,7 +151,6 @@ export default {
     studyCreate() {
       const params = {
         content: this.form.content,
-        email: this.email,
         endDate: this.form.enddate,
         gu: this.form.guArea,
         si: this.form.city,
