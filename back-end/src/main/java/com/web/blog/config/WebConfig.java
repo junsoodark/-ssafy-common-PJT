@@ -19,7 +19,9 @@ public class WebConfig implements WebMvcConfigurer{
 									  "/login",
 									  "/verify/**",
 									  "/address/**",
-									  "/study/?*",
+									  "/resume/all",
+									  "/study/all",
+									  "/study/{studyId:[0-9]+}",
 									  "/user/signUp",
 									  "/user/help"};
 	
