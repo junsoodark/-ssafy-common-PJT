@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.web.blog.dao.resume.ResumeDao;
+import com.web.blog.dao.user.UserDao;
 import com.web.blog.model.resume.Resume;
 import com.web.blog.model.user.User;
 
@@ -19,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class ResumeServiceImpl implements ResumeService {
     @Autowired
     private ResumeDao resumeDao;
+    @Autowired
+    private UserDao userDao;
 
     @Override
     public boolean create(Resume resume) {
@@ -100,6 +103,17 @@ public class ResumeServiceImpl implements ResumeService {
         resume.setCompany(company);
         resume.setCategory(category);
         return resumeDao.save(resume);
+    }
+
+    @Override
+    public List<Resume> findResumeByUser(int userId) {
+        Optional<User> userOpt = userDao.findUserById(userId);
+        if (!userOpt.isPresent()) {
+            return null;
+        }
+        User user = userOpt.get();
+        List<Resume> list = resumeDao.findResumeByUser(user);
+        return list;
     }
 
 }
