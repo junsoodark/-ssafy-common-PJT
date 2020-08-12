@@ -1,5 +1,7 @@
 package com.web.blog.service.resume;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -43,32 +45,46 @@ public class ResumeitemServiceImpl implements ResumeitemService {
             return null;
         }
         Resume resume = resumeOpt.get();
-        List<Resumeitem> list = resumeitemDao.findByResume(resume);
+        List<Resumeitem> list = resumeitemDao.findResumeitemByResume(resume);
         return list;
     }
 
     @Override
     public boolean update(Resumeitem resumeitem) {
-        // TODO Auto-generated method stub
-        return false;
+        Optional<Resumeitem> resumeitemOpt = resumeitemDao.findResumeitemById(resumeitem.getId());
+        if (!resumeitemOpt.isPresent()) {
+            return false;
+        }
+        resumeitemDao.save(resumeitem);
+        return true;
     }
 
     @Override
     public boolean delete(int id) {
-        // TODO Auto-generated method stub
-        return false;
+        Optional<Resumeitem> resumeitemOpt = resumeitemDao.findResumeitemById(id);
+        if (!resumeitemOpt.isPresent()) {
+            return false;
+        }
+        resumeitemDao.delete(resumeitemOpt.get());
+        return true;
     }
 
     @Override
     public List<Map<String, Object>> findAllResumeitem() {
-        // TODO Auto-generated method stub
-        return null;
+        List<Map<String, Object>> ret = new ArrayList<>();
+        for (Resumeitem resumeitem : resumeitemDao.findAll())
+            ret.add(Resumeitem2Map(resumeitem));
+        return ret;
     }
 
     @Override
     public Map<String, Object> Resumeitem2Map(Resumeitem resumeitem) {
-        // TODO Auto-generated method stub
-        return null;
+        Map<String, Object> ret = new HashMap<>();
+        ret.put("title", resumeitem.getTitle());
+        ret.put("resumeId", resumeitem.getResume().getId());
+        ret.put("name", resumeitem.getResume().getUser().getName());
+        ret.put("content", resumeitem.getContent());
+        return ret;
     }
 
     @Override

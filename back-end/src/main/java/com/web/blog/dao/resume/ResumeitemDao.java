@@ -13,8 +13,8 @@ import org.springframework.stereotype.Repository;
 public interface ResumeitemDao extends JpaRepository<Resumeitem, String> {
     Optional<Resumeitem> findResumeitemById(int id);
 
-    List<Resumeitem> findByResume(Resume resume);
+    List<Resumeitem> findResumeitemByResume(Resume resume);
 
-    List<Resumeitem> findByTitleLike(String title);
+    List<Resumeitem> findResumeitemByTitleLike(String title);
 
 }
