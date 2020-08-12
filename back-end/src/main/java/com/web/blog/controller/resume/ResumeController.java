@@ -46,19 +46,23 @@ public class ResumeController {
         return new ResponseEntity<Object>(res, HttpStatus.OK);
     }
 
+    @GetMapping("/resume/user/{userId}")
+    @ApiOperation(value = "")
+    public ResponseEntity<Object> readByUser(@PathVariable int userId) {
+        List<Resume> list = resumeService.findResumeByUser(userId);
+        return new ResponseEntity<Object>(list, HttpStatus.OK);
+    }
+
     @PostMapping("/resume")
     @ApiOperation(value = "")
-    public ResponseEntity<Object> create(   @RequestParam String title,
-                                            @RequestParam String email,
-                                            @RequestParam String company, 
-                                            @RequestParam String job,
-                                            @RequestParam String category){
+    public ResponseEntity<Object> create(@RequestParam String title, @RequestParam String email,
+            @RequestParam String company, @RequestParam String job, @RequestParam String category) {
         User user = userService.findUserByEmail(email);
-        if(user == null){
+        if (user == null) {
             return new ResponseEntity<Object>("존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND);
         }
         Resume resume = resumeService.create(user, title, company, job, category);
-        if(resume == null){
+        if (resume == null) {
             return new ResponseEntity<Object>("자소서를 생성할 수 없습니다.", HttpStatus.FORBIDDEN);
         }
         return new ResponseEntity<Object>(resume.getId(), HttpStatus.OK);
@@ -66,8 +70,8 @@ public class ResumeController {
 
     @DeleteMapping("/resume")
     @ApiOperation(value = "")
-    public ResponseEntity<Object> delete(int resumeId){
-        if(!resumeService.delete(resumeId)){
+    public ResponseEntity<Object> delete(int resumeId) {
+        if (!resumeService.delete(resumeId)) {
             return new ResponseEntity<Object>("삭제에 실패했습니다.", HttpStatus.FORBIDDEN);
         }
         return new ResponseEntity<Object>("삭제에 성공했습니다.", HttpStatus.OK);
@@ -75,15 +79,13 @@ public class ResumeController {
 
     @PutMapping("/resume")
     @ApiOperation(value = "")
-    public ResponseEntity<Object> update(   @RequestParam int resumeId,
-                                            @RequestParam String title,
-                                            @RequestParam String company, 
-                                            @RequestParam String job){
+    public ResponseEntity<Object> update(@RequestParam int resumeId, @RequestParam String title,
+            @RequestParam String company, @RequestParam String job) {
         Resume resume = resumeService.read(resumeId);
         resume.setCompany(company);
         resume.setJob(job);
         resume.setTitle(title);
-        if(!resumeService.update(resume)){
+        if (!resumeService.update(resume)) {
             return new ResponseEntity<Object>("업데이트에 실패하였습니다.", HttpStatus.FORBIDDEN);
         }
         return new ResponseEntity<Object>("업데이트에 성공하였습니다.", HttpStatus.OK);

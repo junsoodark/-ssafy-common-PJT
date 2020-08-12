@@ -32,6 +32,11 @@ public class JwtServiceImpl implements JwtService {
 	}
 	
 	@Override
+	public String parseEmail(final String token) {
+		return parseAllClaims(token).getSubject();
+	}
+	
+	@Override
 	public Claims parseAllClaims(final String token) throws ExpiredJwtException {
 		return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
 	}
@@ -44,6 +49,6 @@ public class JwtServiceImpl implements JwtService {
 	
 	@Override
 	public boolean isValidToken(final String token, final String email) {
-		return (!isExpiredToken(token) && parseAllClaims(token).getSubject().equals(email));
+		return (!isExpiredToken(token) && parseEmail(token).equals(email));
 	}
 }
