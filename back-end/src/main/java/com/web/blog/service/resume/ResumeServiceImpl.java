@@ -78,6 +78,7 @@ public class ResumeServiceImpl implements ResumeService {
         ret.put("userId", resume.getUser().getId());
         ret.put("email", resume.getUser().getEmail());
         ret.put("category", resume.getCategory());
+        ret.put("name", resume.getUser().getName());
 
         return ret;
     }
