@@ -106,16 +106,16 @@
       
       <b-card header-tag="header" footer-tag="footer">
         <template v-slot:header>
-          <b-icon icon="hand-thumbs-up" aria-hidden="true"></b-icon> 성실도
+          <b-icon icon="hand-thumbs-up" aria-hidden="true"></b-icon> 온/오프라인
         </template>
-        <b-card-text>88% 이상</b-card-text>
+        <b-card-text>{{ team.place }}</b-card-text>
       </b-card>
       
       <b-card header-tag="header" footer-tag="footer">
         <template v-slot:header>
           <b-icon icon="file-text" aria-hidden="true"></b-icon> 분야
         </template>
-        <b-card-text>개발 > Algorithm</b-card-text>
+        <b-card-text>{{ team.category }}</b-card-text>
       </b-card>
       <b-card header-tag="header" footer-tag="footer">
         <template v-slot:header>
@@ -136,13 +136,13 @@
         <template v-slot:header>
           <b-icon icon="list-check" aria-hidden="true"></b-icon> 일정
         </template>
-        <b-card-text>추후 협의 2회</b-card-text>
+        <b-card-text>{{ team.period }} / {{ team.numMeetings }}회</b-card-text>
       </b-card>
       <b-card header-tag="header" footer-tag="footer">
         <template v-slot:header>
-          <b-icon icon="alarm" aria-hidden="true"></b-icon> 시간
+          <b-icon icon="alarm" aria-hidden="true"></b-icon> 주중/시간
         </template>
-        <b-card-text>주말 시간 협의</b-card-text>
+        <b-card-text>{{ team.week }} / {{ team.shift }}</b-card-text>
       </b-card>
     </b-card-group>
     <br>

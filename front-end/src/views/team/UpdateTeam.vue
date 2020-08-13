@@ -78,26 +78,31 @@
           <div class="input-group-prepend">
             <span class="input-group-text" style="width: 9rem;">일정</span>
           </div>
-          <b-form-select v-model="form.periodId" :options="period" required></b-form-select>
-          <!-- <b-form-radio-group class="mx-2" v-model="form.schedule" :options="schedules"></b-form-radio-group> -->
+          <!-- <b-form-select v-model="form.periodId" :options="period" required></b-form-select> -->
+          <b-form-radio-group v-model="form.periodId" :options="period" required></b-form-radio-group>
           <b-form-spinbutton
-            v-model="form.count"
-            :options="counts"
+            v-model="form.numMeetings"
             min="1"
-            max="100"
+            max="31"
             required
             placeholder="횟수를 입력해주세요"
           ></b-form-spinbutton>
         </b-col>
       </b-row>
       <br>
-      <!-- 요일 -->
+      <!-- 주중/시간 -->
       <b-row>
         <b-col class="input-group input-group-lg">
-          <div class="input-group-prepend">
-            <span class="input-group-text" style="width: 9rem;">시간</span>
+          <div class="input-group-prepend m-0 p-0">
+            <span class="input-group-text" style="width: 9rem;">주중/시간</span>
           </div>
-          <b-form-radio-group v-model="form.shiftId" :options="shift"></b-form-radio-group>
+          <b-col cols="5">
+            <b-form-radio-group v-model="form.weekId" :options="week"></b-form-radio-group>
+          </b-col>
+          <b-col style="font-size: 30px;">|</b-col>
+          <b-col cols="5">
+            <b-form-radio-group v-model="form.shiftId" :options="shift"></b-form-radio-group>
+          </b-col>
         </b-col>
       </b-row>
       <br>
@@ -132,7 +137,6 @@ export default {
     return {
       form: {
         studyId: this.$route.params.id,
-        email: this.email,
         categoryId: null,
         content: null,
         endDate: null,
@@ -145,8 +149,7 @@ export default {
         startDate: null,
         title: null,
         weekId: null,
-
-        count: null,
+        numMeetings: null,
       },
       category: [
         { text: "원하는 분야를 선택해주세요", value: null },
@@ -168,7 +171,6 @@ export default {
         { text: "추후협의", value: 3 },
       ],
       period: [
-        { text: "일정을 선택해주세요", value: null },
         { text: "매일", value: 1 },
         { text: "매주", value: 2 },
         { text: "매월", value: 3 },
@@ -186,7 +188,6 @@ export default {
         { text: "야간", value: 3 },
         { text: "추후협의", value: 4 },
       ],
-      counts: [{ text: "횟수", value: null }],
     };
   },
   computed: {
@@ -195,13 +196,15 @@ export default {
     }),
   },
   created () {
+    // @@시 가져오기
     Axios.get(`${API_URL}address/`)
     .then((res) => {
-      this.siAreas.push(res.data)
+      this.siAreas.push(res.data[0])
     })
     .catch((err) => {
       console.log(err)
     });
+    // 스터디 정보 가져오기
     Axios.get(`${API_URL}study/${this.form.studyId}`, {
       headers: {
         'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
@@ -213,9 +216,53 @@ export default {
         alert('팀 매니저가 아닙니다')
         this.$router.push({ name: "Home" })
       }
-      this.form = res.data
+      this.form.periodId = null
+      this.form.weekId = null
+      this.form.endDate = res.data.endDate
+      this.form.shiftId = null
+      this.form.numMeetings = res.data.numMeetings
+      this.form.title = res.data.title
+      this.form.content = res.data.content
+      this.form.gu = res.data.gu
+      this.form.numMembers = res.data.numMembers
+      this.form.maxMembers = res.data.maxMembers
+      this.form.si = res.data.si
       this.form.studyId = this.$route.params.id
-      console.log(this.form)
+      this.form.placeId = null
+      this.form.categoryId = res.data.categoryId
+      this.form.startDate = res.data.startDate
+
+      for (var a=0; a < this.period.length; a++) {
+        if (this.period[a].text === res.data.period)
+        this.form.periodId = this.period[a].value
+      }
+      for (var b=0; b < this.week.length; b++) {
+        if (this.week[b].text === res.data.week)
+        this.form.weekId = this.week[b].value
+      }
+      for (var c=0; c < this.shift.length; c++) {
+        if (this.shift[c].text === res.data.shift)
+        this.form.shiftId = this.shift[c].value
+      }
+      for (var i=0; i < this.category.length; i++) {
+        if (this.category[i].text === res.data.category) {
+          this.form.categoryId = this.category[i].value
+          break
+        }
+      }
+      for (var j=0; j < this.place.length; j++) {
+        if (this.place[j].text === res.data.place) {
+          this.form.placeId = this.place[j].value
+          break
+        }
+      }
+      for (var k=0; k < this.place.length; k++) {
+        if (this.place[k].text === res.data.place) {
+          this.form.placeId = this.place[k].value
+          break
+        }
+      }
+      this.changeGu()
     })
     .catch(err => {
       console.log(err)
@@ -225,17 +272,22 @@ export default {
     ...mapActions(["createTeam"]),
     studyUpdate() {
       const params = {
+        categoryId: this.form.categoryId,
         content: this.form.content,
-        email: this.email,
         endDate: this.form.endDate,
         gu: this.form.gu,
         maxMembers: this.form.maxMembers,
+        numMeetings: this.form.numMeetings,
+        periodId: this.form.periodId,
+        placeId: this.form.placeId,
+        shiftId: this.form.shiftId,
         si: this.form.si,
         startDate: this.form.startDate,
         studyId: this.form.studyId,
         title: this.form.title,
+        weekId: this.form.weekId,
       };
-
+      console.log(params)
       const JsonParams = JSON.stringify(params);
       Axios({
         method: "PUT",
@@ -253,7 +305,7 @@ export default {
         router.push({ name: 'StudyDetail', params: {id:this.form.studyId}})
       })
       .catch((err) => {
-        console.log(err.response.data);
+        console.log('aa',err.response.data);
       });
     },
     
