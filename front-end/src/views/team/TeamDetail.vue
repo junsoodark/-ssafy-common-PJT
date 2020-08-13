@@ -514,7 +514,15 @@ export default {
       alert(err.response.msg)
     })
 
-    Axios.get(`${API_URL}study/email?email=${this.email}`)
+    Axios({
+      method: "GET",
+      url: `${API_URL}study/email?email=${this.email}`,
+      headers: { 
+        "Content-Type": "application/json; charset=utf-8", 
+        'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+        'user-email': sessionStorage.getItem('user-email')
+      }
+    })
     .then(res => {
       for (var i=0; i<res.data.length; i++) {
         if (res.data[i].studyId == this.study_id) {
