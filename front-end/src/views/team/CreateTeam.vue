@@ -1,79 +1,118 @@
 <template>
-  <b-container>
-    <b-form @submit.prevent="studyCreate" @reset="onReset" v-if="show">
-      <b-form-group id="input-group-1" label="스터디 이름:" label-for="input-1">
-        <b-form-input
-          id="input-1"
-          v-model="form.studyname"
-          type="text"
-          required
-          placeholder="스터디 이름을 적어 주세요."
-        ></b-form-input>
-      </b-form-group>
+  <b-container><br>
+    <h1>스터디 생성 페이지</h1>
+    <br>
+    <b-form @submit.prevent="studyCreate">
+      <!-- 스터디 이름 -->
+      <b-row>
+        <b-col class="input-group input-group-lg">
+          <div class="input-group-prepend">
+            <span class="input-group-text" style="width: 9rem;">스터디 이름</span>
+          </div>
+          <input v-model="form.title" type="text" class="form-control text-center" placeholder="스터디 이름을 입력해주세요">
+        </b-col>
+      </b-row>
+      <br>
+      <!-- 지역 -->
+      <b-row>
+        <b-col class="input-group input-group-lg">
+          <div class="input-group-prepend">
+            <span class="input-group-text" style="width: 9rem;">지역</span>
+          </div>
+          <b-form-select v-model="form.si" :options="siAreas" required></b-form-select>
+          <b-form-select v-model="form.gu" :options="guAreas" required></b-form-select>
+        </b-col>
+      </b-row>
+      <br>
+      <!-- 인원수 -->
+      <b-row>
+        <b-col class="input-group input-group-lg">
+          <div class="input-group-prepend">
+            <span class="input-group-text" style="width: 9rem;">인원수</span>
+          </div>
+          <b-form-spinbutton
+            v-model="form.maxMembers"
+            min="1"
+            max="100"
+            required
+            placeholder="최대 인원수를 정하세요" 
+          ></b-form-spinbutton>
+        </b-col>
+      </b-row>
+      <br>
+      <!-- 분야 -->
+      <b-row>
+        <b-col class="input-group input-group-lg">
+          <div class="input-group-prepend">
+            <span class="input-group-text" style="width: 9rem;">분야</span>
+          </div>
+          <b-form-select v-model="form.field" :options="fields" required></b-form-select>
+        </b-col>
+      </b-row>
+      <br>
+      <!-- 온/오프 -->
+      <b-row>
+        <b-col class="input-group input-group-lg">
+          <div class="input-group-prepend">
+            <span class="input-group-text" style="width: 9rem;">온/오프라인</span>
+          </div>
+          <b-form-select v-model="form.contact" :options="contacts" required></b-form-select>
+        </b-col>
+      </b-row>
+      <br>
+      <!-- 기간 -->
+      <b-row>
+        <b-col class="input-group input-group-lg">
+          <div class="input-group-prepend">
+            <span class="input-group-text" style="width: 9rem;">기간</span>
+          </div>
+          <b-form-datepicker placeholder="시작 기간" v-model="form.startDate"></b-form-datepicker>
+          <b-form-datepicker placeholder="마침 기간" v-model="form.endDate"></b-form-datepicker>
+        </b-col>
+      </b-row>
+      <br>
+      <!-- 일정 -->
+      <b-row>
+        <b-col class="input-group input-group-lg">
+          <div class="input-group-prepend">
+            <span class="input-group-text" style="width: 9rem;">일정</span>
+          </div>
+          <b-form-select v-model="form.schedule" :options="schedules" required></b-form-select>
+          <!-- <b-form-radio-group class="mx-2" v-model="form.schedule" :options="schedules"></b-form-radio-group> -->
+          <b-form-spinbutton
+            v-model="form.count"
+            :options="counts"
+            min="1"
+            max="100"
+            required
+            placeholder="횟수를 입력해주세요"
+          ></b-form-spinbutton>
+        </b-col>
+      </b-row>
+      <br>
+      <!-- 요일 -->
+      <b-row>
+        <b-col class="input-group input-group-lg">
+          <div class="input-group-prepend">
+            <span class="input-group-text" style="width: 9rem;">요일</span>
+          </div>
+          <b-form-radio-group v-model="form.day" :options="days"></b-form-radio-group>
+        </b-col>
+      </b-row>
+      <br>
+      <!-- 소개글 -->
+      <b-row>
+        <b-col class="input-group input-group-lg">
+          <div class="input-group-prepend">
+            <span class="input-group-text" style="width: 9rem;">소개글</span>
+          </div>
+          <b-form-textarea v-model="form.content" placeholder="스터디에 관련된 소개글을 입력해주세요" rows="3" no-resize></b-form-textarea>
+        </b-col>
+      </b-row>
+      <br>
 
-      <b-form-group id="input-group-2" label="분야:" label-for="input-2">
-        <b-form-select id="input-2" v-model="form.field" :options="fields" required></b-form-select>
-      </b-form-group>
 
-      <b-form-group id="input-group-3" label="방식:" label-for="input-5">
-        <b-form-radio-group id="input-3" v-model="form.contact" :options="contacts"></b-form-radio-group>
-      </b-form-group>
-
-      <b-form-group id="input-group-4" label="지역:" label-for="input-4">
-        <b-form-select id="input-4" v-model="form.city" :options="cities" @change="getGu" required></b-form-select>
-        <b-form-select id="input-4" v-model="form.guArea" :options="guAreas" required></b-form-select>
-      </b-form-group>
-
-      <b-form-group id="input-group-5" label="스터디 일정:" label-for="input-5">
-        <b-form-radio-group id="input-5" v-model="form.schedule" :options="schedules"></b-form-radio-group>
-        <b-form-spinbutton
-          id="input-5"
-          v-model="form.count"
-          :options="counts"
-          min="1"
-          max="7"
-          required
-        ></b-form-spinbutton>
-      </b-form-group>-->
-      <b-form-group id="input-group-6" label="요일:" label-for="input-6">
-        <b-form-radio-group id="input-6" v-model="form.day" :options="days"></b-form-radio-group>
-      </b-form-group>
-
-      <b-form-group id="input-group-7" label="시간대:" label-for="input-7">
-        <b-form-radio-group id="input-7" v-model="form.time" :options="times"></b-form-radio-group>
-        <vue-slider
-          v-model="form.time"
-          :min-range="0"
-          :max-range="24"
-          :min="0"
-          :max="24"
-          :interval="1"
-        ></vue-slider>
-      </b-form-group>
-
-      <b-form-group id="input-group-8" label="스터디 기간:" laebl-for="input-8">
-        <label for="start-datepicker">시작날짜</label>
-        <b-form-datepicker id="start-datepicker" v-model="form.startdate" class="mb-2"></b-form-datepicker>
-        <label for="end-datepicker">종료날짜</label>
-        <b-form-datepicker id="end-datepicker" v-model="form.enddate" class="mb-2"></b-form-datepicker>
-      </b-form-group>
-
-      <b-form-group id="input-group-9" label="인원:" laebl-for="input-9">
-        <vue-slider v-model="form.maxMembers" :min="1" :max="30" :interval="1"></vue-slider>
-      </b-form-group>
-
-      <b-form-group id="input-group-10" label="스터디 소개:" laebl-for="input-10">
-        <b-form-textarea
-          v-model="form.content"
-          id="input-10"
-          placeholder="스터디 소개 글을 입력해주세요."
-          rows="3"
-          no-resize
-        ></b-form-textarea>
-      </b-form-group>
-
-      <b-button type="submit" variant="primary">스터디 생성</b-button>
-      <b-button type="reset" variant="danger">초기화</b-button>
+    <b-button type="submit" v-b-modal.modal-prevent-closing block size="lg" variant="info">생성하기</b-button>
     </b-form>
   </b-container>
 </template>
@@ -94,19 +133,21 @@ export default {
   data() {
     return {
       form: {
-        studyname: null,
+        content: null,
+        email: this.email,
+        endDate: null,
+        gu: null,
+        maxMembers: null,
+        si: null,
+        startDate: null,
+        title: null,
+
         field: null,
         contact: null,
-        city: null,
-        guArea: null,
         schedule: null,
         count: null,
         day: null,
         period: null,
-        maxMembers: 1,
-        startdate: null,
-        enddate: null,
-        content: null,
         time: [0, 2],
       },
       fields: [
@@ -114,13 +155,19 @@ export default {
         "공기업",
         "사기업",
       ],
-      cities: [],
-      guAreas: [],
+      siAreas: [
+        { text: "시를 선택해주세요", value: null}
+      ],
+      guAreas: [
+        { text: "구를 선택해주세요", }
+      ],
       contacts: [
+        { text: "온/오프라인을 선택해주세요", value: null},
         { text: "오프라인", value: "오프라인" },
         { text: "온라인", value: "온라인" },
       ],
       schedules: [
+        { text: "일정을 선택해주세요", value: null },
         { text: "매월", value: "매월" },
         { text: "매주", value: "매주" },
         { text: "추후협의", value: "추후협의" },
@@ -152,11 +199,11 @@ export default {
       const params = {
         content: this.form.content,
         email: this.email,
-        endDate: this.form.enddate,
-        gu: this.form.guArea,
-        si: this.form.city,
-        startDate: this.form.startdate,
-        title: this.form.studyname,
+        endDate: this.form.endDate,
+        gu: this.form.gu,
+        si: this.form.si[0],
+        startDate: this.form.startDate,
+        title: this.form.title,
         maxMembers: this.form.maxMembers
       };
       console.log("params", params);
@@ -178,45 +225,34 @@ export default {
           console.log(res);
         })
         .catch((err) => {
-          alert(err.response.data);
-          console.log(err);
-        });
-    },
-    onReset(evt) {
-      evt.preventDefault();
-
-      // Reset our form valuess
-      this.form.email = "";
-      // this.form.name = "";
-      // this.form.food = null;
-      // Trick to reset/clear native browser form validation state
-      this.show = false;
-      this.$nextTick(() => {
-        this.show = true;
-      });
-    },
-    getGu() {
-      Axios.get(`${API_URL}address/${this.form.city}`)
-        .then((res) => {
-          this.guAreas = res.data;
-          // console.log(this.guAreas);
-        })
-        .catch((err) => {
+          // alert(err.response.data);
           console.log(err);
         });
     },
   },
   created() {
-    const self = this;
     Axios.get(`${API_URL}address/`)
       .then((res) => {
-        self.cities = res.data;
-        // console.log(this.cities);
+        this.siAreas.push(res.data)
+        console.log(this.siAreas);
+      })
+      .catch((err) => {
+        console.log(err)
+      });
+  },
+  updated() {
+    if (this.form.si !== null) {
+        Axios.get(`${API_URL}address/${this.form.si}`)
+      .then((res) => {
+        this.guAreas = res.data
       })
       .catch((err) => {
         console.log(err);
       });
+    }
   },
+    
+  
 }
 </script>
 
