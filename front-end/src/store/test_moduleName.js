@@ -4,48 +4,32 @@ const API_URL = process.env.VUE_APP_LOCAL_URL
 
 const initialState = {
   email: '',
-  name: "",
-  age: 0,
-  sex: 1,
+  loginTime: null,
 };
 
 const mutations = {
   UPDATE_EMAIL(state, value) {
-    state.email = value.data.email
-    state.age = value.data.age
-    state.name = value.data.name
-    state.sex = value.data.sex
-  },
-  deleteUserInfo(state , value) {
     state.email = value
-    state.age = value
-    state.name = value
-    state.sex = value
+  },
+  UPDATE_LOGIN_TIME(state, value) {
+    state.loginTime = value
   },
   EDIT_USER_INFO(state, value) {
     state.email = value.email
-    state.age = value.age
-    state.name = value.name
-    state.sex = value.sex
-    console.log('vvvvalue', value)
     router.push({ name: 'Mypage' })
   },
 };
 
 const actions = {
-  update_email({commit}, $data) {
-    const email = $data
-    Axios.get(`${API_URL}user/${email}`)
-    .then(res => {
-      commit('UPDATE_EMAIL', res)
-    })
-    .catch( err => {console.log(err)} )
-  },
-
   update_user_info(params) {
     console.log(params)
       
-      Axios.put(`${API_URL}user`, params)
+      Axios.put(`${API_URL}user`, params, {
+        headers: {
+          'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+          'user-email': sessionStorage.getItem('user-email')
+        }
+      })
       .then((res) => {
         alert(res.data)
         console.log(res)

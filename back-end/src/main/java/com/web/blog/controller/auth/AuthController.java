@@ -27,11 +27,27 @@ public class AuthController {
 	
 	@PostMapping("/verify")
 	@ApiOperation(value="이메일을 입력받아 사용중인 이메일인지 확인하고, 사용중이지 않다면 인증 메일을 전송합니다.")
-	public ResponseEntity sendVerifyMail(@RequestParam final String email) {
+	public ResponseEntity sendVerifyMailForSignUP(@RequestParam final String email) {
 		if(verifyService.isDuplicated(email)) return new ResponseEntity("이미 사용중인 이메일 입니다.", HttpStatus.CONFLICT);
 		
 		mailService.sendMail(verifyService.generateVerifyMail(email));
 		return new ResponseEntity("인증 메일을 전송했습니다.", HttpStatus.OK);
+	}
+	
+	@GetMapping("/verify/help")
+	@ApiOperation(value="이메일을 입력받아 가입된 이메일인지 확인하고, 가입된 이메일이면 인증 메일을 발송합니다.")
+	public ResponseEntity sendVerifyMailForHelp(@RequestParam final String email) {
+		if(verifyService.isDuplicated(email)==false) return new ResponseEntity("등록되지 않은 이메일 입니다.", HttpStatus.NOT_FOUND);
+		
+		mailService.sendMail(verifyService.generateVerifyMail(email));
+		return new ResponseEntity("인증 메일을 전송했습니다.", HttpStatus.OK);
+	}
+	
+	@PostMapping("/verify/help")
+	@ApiOperation(value="이메일과 인증번호를 입력받아 유효성을 검증하고 결과를 반환합니다.")
+	public ResponseEntity isValidCode(@RequestParam final String email, @RequestParam final String code) {
+		if(verifyService.isValidCode(email, code)==false) return new ResponseEntity("인증번호가 유효하지 않습니다.", HttpStatus.FORBIDDEN);
+		return new ResponseEntity("이메일 인증에 성공했습니다.", HttpStatus.OK);
 	}
 	
 	@PostMapping("/login")
@@ -41,15 +57,15 @@ public class AuthController {
 		return new ResponseEntity(jwtService.generateToken(email), HttpStatus.OK);
 	}
 	
-	@PostMapping("/login/valid")
-	@ApiOperation(value="이메일과 토큰을 입력받아 사용자 정보를 검증하고 결과를 반환합니다.")
-	public ResponseEntity isValidToken(@RequestParam final String email, @RequestParam final String token) {
-		try {
-			if(jwtService.isValidToken(token, email)==false)
-				return new ResponseEntity("유효하지 않은 토큰입니다.", HttpStatus.NOT_FOUND);
-		} catch (Exception e) {
-			return new ResponseEntity("유효하지 않은 토큰입니다.", HttpStatus.FORBIDDEN);
-		}
-		return new ResponseEntity("토큰 인증에 성공했습니다.", HttpStatus.OK);
-	}
+//	@PostMapping("/login/valid")
+//	@ApiOperation(value="이메일과 토큰을 입력받아 사용자 정보를 검증하고 결과를 반환합니다.")
+//	public ResponseEntity isValidToken(@RequestParam final String email, @RequestParam final String token) {
+//		try {
+//			if(jwtService.isValidToken(token, email)==false)
+//				return new ResponseEntity("유효하지 않은 토큰입니다.", HttpStatus.NOT_FOUND);
+//		} catch (Exception e) {
+//			return new ResponseEntity("유효하지 않은 토큰입니다.", HttpStatus.FORBIDDEN);
+//		}
+//		return new ResponseEntity("토큰 인증에 성공했습니다.", HttpStatus.OK);
+//	}
 }

@@ -6,6 +6,7 @@ import VueCookies from "vue-cookies";
 
 import createPersistedState from "vuex-persistedstate";
 import moduleName from "./test_moduleName";
+import firebase from 'firebase'
 
 Vue.use(Vuex);
 
@@ -17,7 +18,7 @@ const plugins = [
     paths: ["moduleName"],
   }),
 ];
-const API_URL = process.env.VUE_APP_LOCAL_URL
+const API_URL = process.env.VUE_APP_LOCAL_URL;
 export default new Vuex.Store({
   state: {
     authToken: VueCookies.get("auth-token"),
@@ -32,8 +33,8 @@ export default new Vuex.Store({
   },
   mutations: {
     SET_TOKEN(state, token) {
-      state.authToken = token
-      VueCookies.set("auth-token", token)
+      state.authToken = token;
+      VueCookies.set("auth-token", token);
     },
   },
   actions: {
@@ -46,10 +47,48 @@ export default new Vuex.Store({
       Axios({method:'POST',url:`${API_URL}login`,params:params,data:JsonForm,headers:{'Content-Type': 'application/json; charset=utf-8'}})
       .then(res => {
         commit('SET_TOKEN', res.data)
-        alert("로그인 성공")
+        commit('UPDATE_EMAIL', loginData.email)
+
+        sessionStorage.setItem('jwt-auth-token', res.data);
+        sessionStorage.setItem('user-email', loginData.email);
+
+        // 로그인 시간 저장
+        let date = new Date()
+        var loginH = date.getHours()
+        var loginM = date.getMinutes()
+        var loginS = date.getSeconds()
+
+        if (loginH < 10) {
+          loginH = '0' + loginH
+        }
+        if (loginM < 10) {
+          loginM = '0' + loginM
+        }
+        if (loginS < 10) {
+          loginS = '0' + loginS
+        }
+
+        const loginTime = loginH + ":" + loginM + ":" + loginS
+        commit('UPDATE_LOGIN_TIME', loginTime)
+
+        // firebase 사용자 로그인
+        firebase.auth().signInWithEmailAndPassword(loginData.email, loginData.password).catch(function(error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          console.log('파이어베이스 로그인 에러')
+          console.log(errorCode)
+          console.log(errorMessage)
+          // ...
+        })
+        
+        
+        alert("로그인")
+
         router.push({ name: 'Home' })
       })
       .catch(err => {
+        console.log(err)
         alert(err.response.data)
       })
     },
@@ -66,31 +105,41 @@ export default new Vuex.Store({
       var JsonForm = JSON.stringify(form);
       Axios({
         method: "POST",
-        url: `${API_URL}user`,
+        url: `${API_URL}user/signUp`,
         params: params,
         data: JsonForm,
         headers: { "Content-Type": "application/json; charset=utf-8" },
       })
         .then((res) => {
-          alert("회원가입 성공!")
-          console.log(res);
-          router.push({ name: "Login" })
+          alert(res.data);
+          router.push({ name: "Login" });
         })
         .catch((err) => {
-          alert(err.response.data)
-          console.log(err)
-        })
+          alert(err.response.data);
+          console.log(err);
+        });
     },
 
     logout({ commit }) {
-      alert('로그아웃')
       commit("SET_TOKEN", null); // state 에서도 삭제
       VueCookies.remove("auth-token"); // cookie 에서는 삭제
-      commit("deleteUserInfo", null)
+      
+      localStorage.clear();
+      sessionStorage.clear();
+      
+      // 파이어베이스 로그아웃
+      firebase.auth().signOut().then(function() {
+        // Sign-out successful.
+      }).catch(function(error) {
+        // An error happened.
+        console.log(error)
+      });
+
+      alert("로그아웃");
       router.push({ name: "Home" });
     },
     createTeam(state, form) {
-      console.log('fffff', form)
+      console.log("fffff", form);
       Axios.post(`${API_URL}study/create`, form)
         .then((res) => {
           alert("스터디 생성");

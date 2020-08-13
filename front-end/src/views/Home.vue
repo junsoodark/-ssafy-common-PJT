@@ -1,92 +1,12 @@
 <template>
   <div class="home">
-    <div id="top-carousel" class="mb-3">
-    <b-carousel
-      id="carousel-1"
-      v-model="slide"
-      :interval="4000"
-      controls
-      indicators
-      background="#ababab"
-      img-width="1024"
-      img-height="480"
-      style="text-shadow: 1px 1px 2px #333;"
-      @sliding-start="onSlideStart"
-      @sliding-end="onSlideEnd"
-    >
-      <!-- Text slides with image -->
-      <b-carousel-slide>
-        <template v-slot:img>
-          <img
-            class="d-block img-fluid"
-            style="width:100%; height:90vh;"
-            src="../assets/12314.png"
-            alt="image slot"
-          >
-        </template>
-      </b-carousel-slide>
-
-      <!-- Slides with custom text -->
-      <b-carousel-slide text="같이 공부할 친구들도 찾고">
-        <template v-slot:img>
-          <img
-            class="d-block img-fluid"
-            style="width:100%; height:90vh;"
-            src="../assets/first.jpg"
-            alt="image slot"
-          >
-        </template>
-      </b-carousel-slide>
-
-      <!-- Slides with image only -->
-      <b-carousel-slide text="이런 멋진 장소도 대여해서">
-        <template v-slot:img>
-          <img
-            class="d-block img-fluid"
-            style="width:100%; height:90vh;"
-            src="../assets/second.jpg"
-            alt="image slot"
-          >
-        </template>
-      </b-carousel-slide>
-
-      <!-- Slides with img slot -->
-      <!-- Note the classes .d-block and .img-fluid to prevent browser default image alignment -->
-      <b-carousel-slide text="성공적인 스터디를 해보자">
-        <template v-slot:img>
-          <img
-            class="d-block img-fluid"
-            style="width:100%; height:90vh;"
-            src="../assets/third.jpg"
-            alt="image slot"
-          >
-        </template>
-      </b-carousel-slide>
-
-      <!-- Slide with blank fluid image to maintain slide aspect ratio -->
-      <b-carousel-slide text="성공적인 스터디를 위해">
-        <template v-slot:img>
-          <img
-            class="d-block img-fluid"
-            style="width:100%; height:90vh;"
-            src="../assets/7e2565951387291c85127b653e4c9919.jpg"
-            alt="image slot"
-          >
-        </template>
-      </b-carousel-slide>
-    </b-carousel>
-
-    <p class="mt-4 d-none">
-      Slide #: {{ slide }}<br>
-      Sliding: {{ sliding }}
-    </p>
-    </div>
+    <img class="d-block img-fluid" style="width:100%; height:90vh;" src="../assets/second.jpg" alt="image slot">
     <div id="bot-div">
       <b-container class="bv-example-row">
         <b-row>
           <h2 class="col-12">지금도 {{TeamCnt}}개의 스터디 팀이 활동하는 중!</h2>
           <h2 class="col-12">최근 만들어진 팀들</h2>
-          <TeamListItem class="col-4" v-for="team in TeamList" :key="team" v-bind:team="team"></TeamListItem>
+          <TeamListItem class="col-4" v-for="team in TeamList" :key="team.studyId" v-bind:team="team"></TeamListItem>
         </b-row>
       </b-container>
     </div>

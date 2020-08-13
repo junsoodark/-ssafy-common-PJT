@@ -30,13 +30,13 @@
         </b-row>
         <b-row>
           <b-col class="text-right py-1 pr-1">
-            <router-link :to="{ name: 'Signup' }">아이디/비밀번호 찾기</router-link>
+            <router-link :to="{ name: 'FindPassword' }">아이디/비밀번호 찾기</router-link>
           </b-col>
         </b-row>
         <br />
         <b-row>
+            <!-- @click="update_email(loginData.email)" -->
           <b-button
-            @click="update_email(loginData.email)"
             type="submit"
             block
             variant="info"
@@ -71,7 +71,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["login", "update_email"]),
+    ...mapActions(["login"]),
   },
 };
 </script>

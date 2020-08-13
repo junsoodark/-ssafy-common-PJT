@@ -1,72 +1,124 @@
 <template>
   <b-container>
-    <b-form @submit.prevent="studyUpdate" @reset="onReset" v-if="show">
-      <b-form-group id="input-group-1" label="스터디 이름:" label-for="input-1">
-        <b-form-input
-          id="input-1"
-          v-model="form.studyname"
-          type="text"
-          required
-          placeholder="스터디 이름을 적어 주세요."
-        ></b-form-input>
-      </b-form-group>
+    <br>
+    <h1>스터디 수정 페이지</h1>
+    <br>
+    <b-form @submit.prevent="studyUpdate">
+      <!-- 스터디 이름 -->
+      <b-row>
+        <b-col class="input-group input-group-lg">
+          <div class="input-group-prepend">
+            <span class="input-group-text" style="width: 9rem;">스터디 이름</span>
+          </div>
+          <input v-model="form.title" type="text" class="form-control text-center" placeholder="스터디 이름을 입력해주세요">
+        </b-col>
+      </b-row>
+      <br>
+      <!-- 지역 -->
+      <b-row>
+        <b-col class="input-group input-group-lg">
+          <div class="input-group-prepend">
+            <span class="input-group-text" style="width: 9rem;">지역</span>
+          </div>
+          <b-form-select v-model="form.si" :options="siAreas" @change="changeGu" required></b-form-select>
+          <b-form-select v-model="form.gu" :options="guAreas" required></b-form-select>
+        </b-col>
+      </b-row>
+      <br>
+      <!-- 인원수 -->
+      <b-row>
+        <b-col class="input-group input-group-lg">
+          <div class="input-group-prepend">
+            <span class="input-group-text" style="width: 9rem;">인원수</span>
+          </div>
+          <b-form-spinbutton
+            v-model="form.maxMembers"
+            min="1"
+            max="100"
+            required
+            placeholder="최대 인원수를 정하세요" 
+          ></b-form-spinbutton>
+        </b-col>
+      </b-row>
+      <br>
+      <!-- 분야 -->
+      <b-row>
+        <b-col class="input-group input-group-lg">
+          <div class="input-group-prepend">
+            <span class="input-group-text" style="width: 9rem;">분야</span>
+          </div>
+          <b-form-select v-model="form.categoryId" :options="category" required></b-form-select>
+        </b-col>
+      </b-row>
+      <br>
+      <!-- 온/오프 -->
+      <b-row>
+        <b-col class="input-group input-group-lg">
+          <div class="input-group-prepend">
+            <span class="input-group-text" style="width: 9rem;">온/오프라인</span>
+          </div>
+          <b-form-select v-model="form.placeId" :options="place" required></b-form-select>
+        </b-col>
+      </b-row>
+      <br>
+      <!-- 기간 -->
+      <b-row>
+        <b-col class="input-group input-group-lg">
+          <div class="input-group-prepend">
+            <span class="input-group-text" style="width: 9rem;">기간</span>
+          </div>
+          <b-form-datepicker placeholder="시작 기간" v-model="form.startDate"></b-form-datepicker>
+          <b-form-datepicker placeholder="마침 기간" v-model="form.endDate"></b-form-datepicker>
+        </b-col>
+      </b-row>
+      <br>
+      <!-- 일정 -->
+      <b-row>
+        <b-col class="input-group input-group-lg">
+          <div class="input-group-prepend">
+            <span class="input-group-text" style="width: 9rem;">일정</span>
+          </div>
+          <!-- <b-form-select v-model="form.periodId" :options="period" required></b-form-select> -->
+          <b-form-radio-group v-model="form.periodId" :options="period" required></b-form-radio-group>
+          <b-form-spinbutton
+            v-model="form.numMeetings"
+            min="1"
+            max="31"
+            required
+            placeholder="횟수를 입력해주세요"
+          ></b-form-spinbutton>
+        </b-col>
+      </b-row>
+      <br>
+      <!-- 주중/시간 -->
+      <b-row>
+        <b-col class="input-group input-group-lg">
+          <div class="input-group-prepend m-0 p-0">
+            <span class="input-group-text" style="width: 9rem;">주중/시간</span>
+          </div>
+          <b-col cols="5">
+            <b-form-radio-group v-model="form.weekId" :options="week"></b-form-radio-group>
+          </b-col>
+          <b-col style="font-size: 30px;">|</b-col>
+          <b-col cols="5">
+            <b-form-radio-group v-model="form.shiftId" :options="shift"></b-form-radio-group>
+          </b-col>
+        </b-col>
+      </b-row>
+      <br>
+      <!-- 소개글 -->
+      <b-row>
+        <b-col class="input-group input-group-lg">
+          <div class="input-group-prepend">
+            <span class="input-group-text" style="width: 9rem;">소개글</span>
+          </div>
+          <b-form-textarea v-model="form.content" placeholder="스터디에 관련된 소개글을 입력해주세요" rows="3" no-resize></b-form-textarea>
+        </b-col>
+      </b-row>
+      <br>
 
-      <!-- <b-form-group id="input-group-2" label="분야:" label-for="input-2">
-        <b-form-select id="input-2" v-model="form.field" :options="fields" required></b-form-select>
-      </b-form-group>-->
 
-      <!-- <b-form-group id="input-group-3" label="방식:" label-for="input-5">
-        <b-form-radio-group id="input-3" v-model="form.contact" :options="contacts"></b-form-radio-group>
-      </b-form-group>-->
-
-      <b-form-group id="input-group-4" label="지역:" label-for="input-4">
-        <b-form-select id="input-4" v-model="form.siArea" :options="siAreas" required></b-form-select>
-        <b-form-select id="input-4" v-model="form.guArea" :options="guAreas" required></b-form-select>
-      </b-form-group>
-
-      <!-- <b-form-group id="input-group-5" label="스터디 일정:" label-for="input-5">
-        <b-form-radio-group id="input-5" v-model="form.schedule" :options="schedules"></b-form-radio-group>
-        <b-form-spinbutton
-          id="input-5"
-          v-model="form.count"
-          :options="counts"
-          min="1"
-          max="7"
-          required
-        ></b-form-spinbutton>
-      </b-form-group>-->
-
-      <!-- <b-form-group id="input-group-6" label="요일:" label-for="input-6">
-        <b-form-radio-group id="input-6" v-model="form.day" :options="days"></b-form-radio-group>
-      </b-form-group>-->
-
-      <!-- <b-form-group id="input-group-7" label="시간대:" label-for="input-7">
-        <b-form-radio-group id="input-7" v-model="form.time" :options="times"></b-form-radio-group>
-      </b-form-group>-->
-
-      <b-form-group id="input-group-8" label="스터디 기간:" laebl-for="input-8">
-        <label for="start-datepicker">시작날짜</label>
-        <b-form-datepicker id="start-datepicker" v-model="form.startdate" class="mb-2"></b-form-datepicker>
-        <label for="end-datepicker">종료날짜</label>
-        <b-form-datepicker id="end-datepicker" v-model="form.enddate" class="mb-2"></b-form-datepicker>
-      </b-form-group>
-
-      <!-- <b-form-group id="input-group-9" label="인원:" laebl-for="input-9">
-        <vue-slider v-model="form.value" :min="1" :max="30" :interval="1"></vue-slider>
-      </b-form-group>-->
-
-      <b-form-group id="input-group-10" label="스터디 소개:" laebl-for="input-10">
-        <b-form-textarea
-          v-model="form.content"
-          id="input-10"
-          placeholder="스터디 소개 글을 입력해주세요."
-          rows="3"
-          no-resize
-        ></b-form-textarea>
-      </b-form-group>
-
-      <b-button type="submit" variant="primary">Submit</b-button>
-      <b-button type="reset" variant="danger">Reset</b-button>
+    <b-button type="submit" v-b-modal.modal-prevent-closing block size="lg" variant="info">수정하기</b-button>
     </b-form>
   </b-container>
 </template>
@@ -81,84 +133,61 @@ import router from "@/router";
 const API_URL = process.env.VUE_APP_LOCAL_URL;
 
 export default {
-  components: {
-    // VueSlider,
-  },
   data() {
     return {
       form: {
-        studyname: "",
-        field: null,
-        contact: null,
-        siArea: null,
-        guArea: null,
-        schedule: null,
-        count: null,
-        day: null,
-        time: null,
-        period: null,
-        value: 0,
-        startdate: null,
-        enddate: null,
-        content: null,
         studyId: this.$route.params.id,
+        categoryId: null,
+        content: null,
+        endDate: null,
+        gu: null,
+        maxMembers: null,
+        periodId: null,
+        placeId: null,
+        shiftId: null,
+        si: null,
+        startDate: null,
+        title: null,
+        weekId: null,
+        numMeetings: null,
       },
-      fields: [
+      category: [
         { text: "원하는 분야를 선택해주세요", value: null },
-        "공기업",
-        "사기업",
+        { text: "면접", value: 1 },
+        { text: "인적성/NCS", value: 2},
+        { text: "코딩 테스트", value: 3},
+        { text: "기타", value: 4},
       ],
-      siAreas: [{ text: "원하는 지역을 선택해주세요", value: null }, "서울시"],
+      siAreas: [
+        { text: "시를 선택해주세요", value: null}
+      ],
       guAreas: [
-        { text: "원하는 지역을 선택해주세요", value: null },
-        "강남구",
-        "강동구",
-        "강북구",
-        "강서구",
-        "관악구",
-        "광진구",
-        "구로구",
-        "금천구",
-        "노원구",
-        "도봉구",
-        "동대문구",
-        "동작구",
-        "마포구",
-        "서대문구",
-        "서초구",
-        "성동구",
-        "성북구",
-        "송파구",
-        "양천구",
-        "영등포구",
-        "용산구",
-        "은평구",
-        "중구",
-        "중랑구",
+        { text: "구를 선택해주세요", }
       ],
-      contacts: [
-        { text: "오프라인", value: "오프라인" },
-        { text: "온라인", value: "온라인" },
+      place: [
+        { text: "온/오프라인을 선택해주세요", value: null},
+        { text: "오프라인", value: 1 },
+        { text: "온라인", value: 2 },
+        { text: "추후협의", value: 3 },
       ],
-      schedules: [
-        { text: "매월", value: "매월" },
-        { text: "매주", value: "매주" },
-        { text: "추후협의", value: "추후협의" },
+      period: [
+        { text: "매일", value: 1 },
+        { text: "매주", value: 2 },
+        { text: "매월", value: 3 },
+        { text: "추후협의", value: 4 },
       ],
-      days: [
-        { text: "평일", value: "평일" },
-        { text: "주말", value: "주말" },
-        { text: "혼합", value: "혼합" },
-        { text: "추후협희", value: "추후협희" },
+      week: [
+        { text: "평일", value: 1 },
+        { text: "주말", value: 2 },
+        { text: "혼합", value: 3 },
+        { text: "추후협의", value: 4 },
       ],
-      times: [
-        { text: "오전", value: "오전" },
-        { text: "오후", value: "오후" },
-        { text: "저녁", value: "저녁" },
-        { text: "추후협의", value: "추후협의" },
+      shift: [
+        { text: "오전", value: 1 },
+        { text: "오후", value: 2 },
+        { text: "야간", value: 3 },
+        { text: "추후협의", value: 4 },
       ],
-      counts: [{ text: "횟수", value: null }],
-      show: true,
     };
   },
   computed: {
@@ -167,60 +196,132 @@ export default {
     }),
   },
   created () {
-      Axios.get(`${API_URL}study/${this.studyId}`)
-      .then(res => {
-        if (this.email != res.data.mgrEmail) {
-          alert('팀 매니저가 아닙니다')
-          this.$router.push({ name: "Home" })
+    // @@시 가져오기
+    Axios.get(`${API_URL}address/`)
+    .then((res) => {
+      this.siAreas.push(res.data[0])
+    })
+    .catch((err) => {
+      console.log(err)
+    });
+    // 스터디 정보 가져오기
+    Axios.get(`${API_URL}study/${this.form.studyId}`, {
+      headers: {
+        'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+        'user-email': sessionStorage.getItem('user-email')
+      }
+    })
+    .then(res => {
+      if (this.email != res.data.mgrEmail) {
+        alert('팀 매니저가 아닙니다')
+        this.$router.push({ name: "Home" })
+      }
+      this.form.periodId = null
+      this.form.weekId = null
+      this.form.endDate = res.data.endDate
+      this.form.shiftId = null
+      this.form.numMeetings = res.data.numMeetings
+      this.form.title = res.data.title
+      this.form.content = res.data.content
+      this.form.gu = res.data.gu
+      this.form.numMembers = res.data.numMembers
+      this.form.maxMembers = res.data.maxMembers
+      this.form.si = res.data.si
+      this.form.studyId = this.$route.params.id
+      this.form.placeId = null
+      this.form.categoryId = null
+      this.form.startDate = res.data.startDate
+      
+      for (var a=0; a < this.period.length; a++) {
+        if (this.period[a].text === res.data.period)
+        this.form.periodId = this.period[a].value
+      }
+      for (var b=0; b < this.week.length; b++) {
+        if (this.week[b].text === res.data.week)
+        this.form.weekId = this.week[b].value
+      }
+      for (var c=0; c < this.shift.length; c++) {
+        if (this.shift[c].text === res.data.shift)
+        this.form.shiftId = this.shift[c].value
+      }
+      for (var i=0; i < this.category.length; i++) {
+        if (this.category[i].text === res.data.category) {
+          this.form.categoryId = this.category[i].value
+          break
         }
-      })
+      }
+      for (var j=0; j < this.place.length; j++) {
+        if (this.place[j].text === res.data.place) {
+          this.form.placeId = this.place[j].value
+          break
+        }
+      }
+      for (var k=0; k < this.place.length; k++) {
+        if (this.place[k].text === res.data.place) {
+          this.form.placeId = this.place[k].value
+          break
+        }
+      }
+
+      this.changeGu()
+      console.log(this.form)
+    })
+    .catch(err => {
+      console.log(err)
+    })
   },
   methods: {
     ...mapActions(["createTeam"]),
     studyUpdate() {
       const params = {
+        categoryId: this.form.categoryId,
         content: this.form.content,
-        email: this.email,
-        endDate: this.form.enddate,
-        gu: this.form.guArea,
-        si: "서울",
-        startDate: this.form.startdate,
+        endDate: this.form.endDate,
+        gu: this.form.gu,
+        maxMembers: this.form.maxMembers,
+        numMeetings: this.form.numMeetings,
+        periodId: this.form.periodId,
+        placeId: this.form.placeId,
+        shiftId: this.form.shiftId,
+        si: this.form.si,
+        startDate: this.form.startDate,
         studyId: this.form.studyId,
-        title: this.form.studyname,
+        title: this.form.title,
+        weekId: this.form.weekId,
       };
-
-      console.log("params", params);
-
+      console.log(params)
       const JsonParams = JSON.stringify(params);
       Axios({
         method: "PUT",
         url: `${API_URL}study`,
         params: params,
         data: JsonParams,
-        headers: { "Content-Type": "application/json; charset=utf-8" },
+        headers: { 
+          "Content-Type": "application/json; charset=utf-8",
+          'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+          'user-email': sessionStorage.getItem('user-email') 
+        },
       })
-        .then((res) => {
-          alert("스터디 수정 성공");
-
-          router.push({ name: "StudyList" });
-          console.log(res);
-        })
-        .catch((err) => {
-          alert(err.response.data);
-        });
-    },
-    onReset(evt) {
-      evt.preventDefault();
-
-      // Reset our form valuess
-      this.form.email = "";
-      // this.form.name = "";
-      // this.form.food = null;
-      // Trick to reset/clear native browser form validation state
-      this.show = false;
-      this.$nextTick(() => {
-        this.show = true;
+      .then(() => {
+        alert("스터디 수정 성공")
+        router.push({ name: 'StudyDetail', params: {id:this.form.studyId}})
+      })
+      .catch((err) => {
+        console.log('aa',err.response.data);
       });
+    },
+    
+    changeGu() {
+      Axios.get(`${API_URL}address/${this.form.si}`)
+      .then((res) => {
+        this.guAreas = res.data
+      })
+      .catch((err) => {
+        this.guAreas = [
+          { text: "구를 선택해주세요", }
+        ],
+        console.log(err);
+      })  
     },
   },
 };
