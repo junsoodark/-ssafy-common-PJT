@@ -106,7 +106,7 @@ export default {
             this.updateQuestion(this.items[i])
           }
         }
-        this.$router.push({ name: "coverLetterDetail", params: {id:this.id}})
+        this.$router.push({ name: "coverLetterDetail", params: {id: this.id}}),2000
       })
       .catch(err => {
         console.log(err)
