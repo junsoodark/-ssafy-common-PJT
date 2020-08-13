@@ -1,8 +1,17 @@
 <template>
   <b-container class="rounded p-2" style="cursor:pointer;" @click="clickCard">
     <div class="card">
-      <div class="mycard-header text-left pt-2">
-        <b-icon icon="person-circle" font-scale="1"></b-icon> 4/6
+      <div v-if="team.category === '코딩 테스트'" class="mycard-header1 text-left pt-2">
+        <b-icon icon="person-circle" font-scale="1"></b-icon> {{ team.numMembers }}/{{ team.maxMembers }}
+      </div>
+      <div v-if="team.category === '인적성/NCS'" class="mycard-header2 text-left pt-2">
+        <b-icon icon="person-circle" font-scale="1"></b-icon> {{ team.numMembers }}/{{ team.maxMembers }}
+      </div>
+      <div v-if="team.category === '면접'" class="mycard-header3 text-left pt-2">
+        <b-icon icon="person-circle" font-scale="1"></b-icon> {{ team.numMembers }}/{{ team.maxMembers }}
+      </div>
+      <div v-if="team.category === '기타'" class="mycard-header4 text-left pt-2">
+        <b-icon icon="person-circle" font-scale="1"></b-icon> {{ team.numMembers }}/{{ team.maxMembers }}
       </div>
       <div class="card-body text-center">
         <img :src="defaultImageUrl" style="width:140px;margin-top:-85px" alt="User" class="img-fluid img-thumbnail rounded-circle border-0 mb-2">
@@ -11,15 +20,15 @@
         </b-row>
         <b-row class="my-1">
           <b-col md="1" offset-md="1"><b-icon icon="building" font-scale="1"></b-icon></b-col>
-          <b-col md="8" offset-md="1" class="text-left"><b-badge pill variant="secondary" class="studyCard">서울 / 강남</b-badge></b-col>
+          <b-col md="8" offset-md="1" class="text-left"><b-badge pill variant="secondary" class="studyCard">{{ team.si }} {{ team.gu }}</b-badge></b-col>
         </b-row>
         <b-row class="my-1">
           <b-col md="1" offset-md="1"><b-icon icon="calendar2-check-fill" font-scale="1"></b-icon></b-col>
-          <b-col md="8" offset-md="1" class="text-left"> <b-badge pill variant="secondary" class="studyCard">추후 협의 / 2회</b-badge></b-col>
+          <b-col md="8" offset-md="1" class="text-left"> <b-badge pill variant="secondary" class="studyCard">{{ team.period }} / {{ team.numMeetings }}회</b-badge></b-col>
         </b-row>
         <b-row class="my-1">
           <b-col md="1" offset-md="1"><b-icon icon="tv-fill" font-scale="1"></b-icon></b-col>
-          <b-col md="8" offset-md="1" class="text-left"><b-badge pill variant="secondary"  class="studyCard">오프라인</b-badge></b-col>
+          <b-col md="8" offset-md="1" class="text-left"><b-badge pill variant="secondary"  class="studyCard">{{ team.place }}</b-badge></b-col>
         </b-row>
       </div>
       <!-- <div class="card-footer">
@@ -42,8 +51,8 @@ export default {
   props: {
     team: Object
   },
-  computed: {
-
+  created() {
+    console.log(this.team)
   },
   methods: {
     clickCard() {
@@ -59,8 +68,26 @@ export default {
   width: 150px;
 }
 
-.mycard-header {
+.mycard-header1 {
 	background-color: rgb(46, 204, 113);
+	padding: 5px 10px;
+  height: 120px;
+  cursor:pointer;
+}
+.mycard-header2 {
+	background-color: rgb(242, 142, 240);
+	padding: 5px 10px;
+  height: 120px;
+  cursor:pointer;
+}
+.mycard-header3 {
+	background-color: rgb(243, 156, 18);
+	padding: 5px 10px;
+  height: 120px;
+  cursor:pointer;
+}
+.mycard-header4 {
+	background-color: #00BFFF;
 	padding: 5px 10px;
   height: 120px;
   cursor:pointer;
@@ -69,5 +96,6 @@ export default {
 .card-body {
   z-index: 1;
 }
+
 
 </style>
