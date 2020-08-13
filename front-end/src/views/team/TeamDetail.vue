@@ -465,6 +465,7 @@ export default {
     }
   },
   created() {
+    // 스터디 디테일 정보 가져오기
     Axios({
       method: "GET",
       url: `${API_URL}study/${this.study_id}`,
@@ -476,12 +477,17 @@ export default {
     })
     .then(res => {
       this.team = res.data
+      console.log(this.team)
     })
     .catch(err => {
       console.log(err)
       this.$router.push({ name: "NotFound" })
     })
+    if (!this.isLoggedIn) { 
+      return false 
+    }
 
+    // 해당 스터디의
     Axios({
       method: "GET",
       url: `${API_URL}study/${this.study_id}/list`,
@@ -513,8 +519,15 @@ export default {
     .catch(err => {
       alert(err.response.msg)
     })
-
-    Axios.get(`${API_URL}study/email?email=${this.email}`)
+    // 로그인 후 내가 스터디 멤버 또는 가입 신청한 멤버인가
+    Axios({
+      method: "GET",
+      url: `${API_URL}study/email?email=${this.email}`,
+      headers: { 
+        'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+        'user-email': sessionStorage.getItem('user-email')
+      }
+    })
     .then(res => {
       for (var i=0; i<res.data.length; i++) {
         if (res.data[i].studyId == this.study_id) {

@@ -47,9 +47,9 @@ public class ResumeitemController {
         return new ResponseEntity<Object>(list, HttpStatus.OK);
     }
 
-    @PostMapping("/resumeitem")
-    @ApiOperation(value = "")
-    public ResponseEntity<Object> create() {
+    // @PostMapping("/resumeitem")
+    // @ApiOperation(value = "")
+    // public ResponseEntity<Object> create() {
 
-    }
+    // }
 }

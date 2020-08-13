@@ -11,7 +11,6 @@ import Header from "./components/common/Header.vue";
 
 export default {
   name: "App",
-
   computed: {
     ...mapGetters(["isLoggedIn"]),
   },
@@ -19,7 +18,9 @@ export default {
   components: {
     Header,
   },
-
+  updated() {
+    console.log('update HI')
+  },
   methods: {},
 };
 </script>
