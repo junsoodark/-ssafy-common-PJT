@@ -3,7 +3,7 @@
     <h1>{{searchData}} 검색결과</h1>
     <hr>
     <h2 class="my-2">팀 검색 결과</h2>
-    <h2 v-if="!emptyTeam">검색 결과가 없습니다</h2>
+    <h2 v-if="!emptyTeam">{{teamSearchResult}}</h2>
     <b-container v-else>
       <b-row>
         <TeamListItem class="col-4 my-2" v-for="team in TeamList" :key="team.studyId" v-bind:team="team"></TeamListItem>
@@ -11,7 +11,7 @@
     </b-container>
     <hr>
     <h2>자소서 검색 결과</h2>
-    <h2 v-if="!emptyLetters">검색 결과가 없습니다</h2>
+    <h2 v-if="!emptyLetters">{{letterSearchResult}}</h2>
     <b-container class="my-3" v-else>
       <b-list-group>
         <b-row>
@@ -40,6 +40,8 @@ export default {
       letters: [],
       SearchTeam: [],
       SearchLetters: [],
+      teamSearchResult: '검색중입니다',
+      letterSearchResult: '검색중입니다'
     }
   },
   computed: {
@@ -57,6 +59,7 @@ export default {
           this.TeamList.push(res.data[i])
         }
       }
+      if (this.TeamList.length == 0) {this.teamSearchResult = '검색 결과가 없습니다'}
     })
     .catch(err => {
       console.log(err)
@@ -76,6 +79,7 @@ export default {
           this.letters.push(res.data[i])
         }
       }
+      if (this.letters.length == 0) {this.letterSearchResult = '검색 결과가 없습니다'}
     })
     .catch(err => {
       const msg = err.response.data.msg
