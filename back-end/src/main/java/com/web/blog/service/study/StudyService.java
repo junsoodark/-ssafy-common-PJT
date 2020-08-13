@@ -10,6 +10,7 @@ import com.web.blog.model.study.Period;
 import com.web.blog.model.study.Place;
 import com.web.blog.model.study.Shift;
 import com.web.blog.model.study.Study;
+import com.web.blog.model.study.Week;
 import com.web.blog.model.user.User;
 
 public interface StudyService {
@@ -23,7 +24,9 @@ public interface StudyService {
 						final Category category,
 						final Period period,
 						final Place place,
-						final Shift shift);
+						final Shift shift,
+						final Week week,
+						final int numMeetings);
 	
 	public boolean delete(final int studyId);
 	
@@ -37,13 +40,13 @@ public interface StudyService {
 						  final Category category,
 						  final Period period,
 						  final Place place,
-						  final Shift shift);
+						  final Shift shift,
+						  final Week week,
+						  final int numMeetings);
 
 	public boolean isManager(final int studyId, final int userId);
 	public Study findStudyByStudyId(final int studyId);
-	public Map<String, Object> Study2SimpleInfo(final Study study);
-	public Map<String, Object> Study2DetailInfo(final Study study);
-
+	public Map<String, Object> Study2Map(final Study study);
 	public List<Map<String, Object>> findAllStudiesSimpleInfo();
 	public Map<String, Object> findStudyDetailInfoByStudyId(final int studyId);
 }

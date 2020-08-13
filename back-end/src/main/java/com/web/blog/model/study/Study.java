@@ -88,6 +88,11 @@ public class Study {
 	@JoinColumn(name = "shift_id")
 	private Shift shift;
 	
+	@JsonIgnore
+	@ManyToOne(targetEntity = Week.class, fetch = FetchType.LAZY)
+	@JoinColumn(name = "week_id")
+	private Week week;
+	
 	@Version
 	private Long version;
 
@@ -96,6 +101,7 @@ public class Study {
 	private LocalDate startDate;
 	private LocalDate endDate;
 	private int maxMembers;
+	private int numMeetings;
 
 	public List<Post> getPostList(){
 		return new ArrayList<>(posts);

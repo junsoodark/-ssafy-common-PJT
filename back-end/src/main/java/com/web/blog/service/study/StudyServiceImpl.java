@@ -21,6 +21,7 @@ import com.web.blog.model.study.Period;
 import com.web.blog.model.study.Place;
 import com.web.blog.model.study.Shift;
 import com.web.blog.model.study.Study;
+import com.web.blog.model.study.Week;
 import com.web.blog.model.user.User;
 
 @Service
@@ -40,7 +41,9 @@ public class StudyServiceImpl implements StudyService {
 						final Category category,
 						final Period period,
 						final Place place,
-						final Shift shift) {
+						final Shift shift,
+						final Week week,
+						final int numMeetings) {
 		Study study = new Study();
 		study.setUser(user);
 		study.setAddress(address);
@@ -53,6 +56,8 @@ public class StudyServiceImpl implements StudyService {
 		study.setPeriod(period);
 		study.setPlace(place);
 		study.setShift(shift);
+		study.setWeek(week);
+		study.setNumMeetings(numMeetings);
 		Set <User> set = new HashSet<User>();
 		set.add(user);
 		study.setMembers(set);
@@ -79,7 +84,9 @@ public class StudyServiceImpl implements StudyService {
 						  final Category category,
 						  final Period period,
 						  final Place place,
-						  final Shift shift) {
+						  final Shift shift,
+						  final Week week,
+						  final int numMeetings) {
 		Optional<Study> studyOpt = studyDao.findStudyByStudyId(studyId);
 		if(studyOpt.isPresent()==false) return false;
 		studyOpt.ifPresent(study->{
@@ -93,6 +100,8 @@ public class StudyServiceImpl implements StudyService {
 			study.setPeriod(period);
 			study.setPlace(place);
 			study.setShift(shift);
+			study.setWeek(week);
+			study.setNumMeetings(numMeetings);
 			studyDao.save(study);
 		}); return true;
 	}
@@ -110,18 +119,9 @@ public class StudyServiceImpl implements StudyService {
 	}
 
 	@Override
-	public Map<String, Object> Study2SimpleInfo(Study study) {
+	public Map<String, Object> Study2Map(Study study){
 		Map<String, Object> ret = new HashMap<>();
 		ret.put("studyId", study.getStudyId());
-		ret.put("title", study.getTitle());
-		ret.put("content", study.getContent());
-		// ret.put("img", study.getImage());
-		return ret;
-	}
-	
-	@Override
-	public Map<String, Object> Study2DetailInfo(Study study) {
-		Map<String, Object> ret = new HashMap<>();
 		ret.put("title", study.getTitle());
 		ret.put("content", study.getContent());
 		ret.put("mgrEmail", study.getUser().getEmail());
@@ -132,20 +132,26 @@ public class StudyServiceImpl implements StudyService {
 		ret.put("endDate", study.getEndDate());
 		ret.put("si", study.getAddress().getSi());
 		ret.put("gu", study.getAddress().getGu());
+		ret.put("category", study.getCategory().getName());
+		ret.put("period", study.getPeriod().getName());
+		ret.put("place", study.getPlace().getName());
+		ret.put("shift", study.getShift().getName());
+		ret.put("week", study.getWeek().getName());
+		ret.put("numMeetings", study.getNumMeetings());
 		return ret;
 	}
-
+	
 	@Override
 	public List<Map<String, Object>> findAllStudiesSimpleInfo() {
 		List<Map<String, Object>> ret = new ArrayList<>();
 		for(Study study : studyDao.findAll())
-			ret.add(Study2SimpleInfo(study));
+			ret.add(Study2Map(study));
 		return ret;
 	}
 
 	@Override
 	public Map<String, Object> findStudyDetailInfoByStudyId(final int studyId) {
 		Study study = findStudyByStudyId(studyId);
-		return study==null ? null : Study2DetailInfo(study);
+		return study==null ? null : Study2Map(study);
 	}
 }

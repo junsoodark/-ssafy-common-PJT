@@ -24,6 +24,7 @@ import com.web.blog.model.study.Period;
 import com.web.blog.model.study.Place;
 import com.web.blog.model.study.Shift;
 import com.web.blog.model.study.Study;
+import com.web.blog.model.study.Week;
 import com.web.blog.model.user.User;
 import com.web.blog.service.address.AddressService;
 import com.web.blog.service.auth.JwtService;
@@ -82,7 +83,9 @@ public class StudyController {
 								 @RequestParam final int categoryId,
 								 @RequestParam final int placeId,
 								 @RequestParam final int periodId,
-								 @RequestParam final int shiftId) {
+								 @RequestParam final int shiftId,
+								 @RequestParam final int weekId,
+								 @RequestParam final int numMeetings) {
 		final String email = jwtService.parseEmail(token);
 		final User user = userService.findUserByEmail(email);
 		if (user == null) return new ResponseEntity("존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND);
@@ -104,8 +107,11 @@ public class StudyController {
 
 		Shift shift = studyTypeService.findShiftById(shiftId);
 		if (shift == null) return new ResponseEntity("존재하지 않는 시간대입니다.", HttpStatus.NOT_FOUND);
+		
+		Week week = studyTypeService.findWeekById(weekId);
+		if (week == null) return new ResponseEntity("존재하지 않는 요일입니다.", HttpStatus.NOT_FOUND);
 
-		Study study = studyService.create(user, address, title, content, startDate, endDate, maxMembers, category, period, place, shift);
+		Study study = studyService.create(user, address, title, content, startDate, endDate, maxMembers, category, period, place, shift, week, numMeetings);
 		if(study == null) return new ResponseEntity("스터디를 생성할 수 없습니다. 관리자에게 문의하세요.", HttpStatus.FORBIDDEN);
 		
 		return new ResponseEntity("스터디 생성에 성공했습니다.", HttpStatus.OK);
@@ -139,7 +145,9 @@ public class StudyController {
 								 @RequestParam final int categoryId,
 								 @RequestParam final int placeId,
 								 @RequestParam final int periodId,
-								 @RequestParam final int shiftId) {
+								 @RequestParam final int shiftId,
+								 @RequestParam final int weekId,
+								 @RequestParam final int numMeetings) {
 		final String email = jwtService.parseEmail(token);
 		final User user = userService.findUserByEmail(email);
 		if(user==null) return new ResponseEntity("존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND);
@@ -167,7 +175,10 @@ public class StudyController {
 		Shift shift = studyTypeService.findShiftById(shiftId);
 		if (shift == null) return new ResponseEntity("존재하지 않는 시간대입니다.", HttpStatus.NOT_FOUND);
 		
-		if(studyService.update(address, studyId, title, content, startDate, endDate, maxMembers, category, period, place, shift)==false)
+		Week week = studyTypeService.findWeekById(weekId);
+		if (week == null) return new ResponseEntity("존재하지 않는 요일입니다.", HttpStatus.NOT_FOUND);
+
+		if(studyService.update(address, studyId, title, content, startDate, endDate, maxMembers, category, period, place, shift, week, numMeetings)==false)
 			return new ResponseEntity("스터디를 수정할 수 없습니다. 관리자에게 문의바랍니다.", HttpStatus.FORBIDDEN);
 		return new ResponseEntity("스터디 수정에 성공했습니다.", HttpStatus.OK);
 	}
