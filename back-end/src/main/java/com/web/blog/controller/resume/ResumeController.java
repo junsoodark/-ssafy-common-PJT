@@ -80,11 +80,12 @@ public class ResumeController {
     @PutMapping("/resume")
     @ApiOperation(value = "")
     public ResponseEntity<Object> update(@RequestParam int resumeId, @RequestParam String title,
-            @RequestParam String company, @RequestParam String job) {
+            @RequestParam String company, @RequestParam String job, @RequestParam String category) {
         Resume resume = resumeService.read(resumeId);
         resume.setCompany(company);
         resume.setJob(job);
         resume.setTitle(title);
+        resume.setCategory(category);
         if (!resumeService.update(resume)) {
             return new ResponseEntity<Object>("업데이트에 실패하였습니다.", HttpStatus.FORBIDDEN);
         }

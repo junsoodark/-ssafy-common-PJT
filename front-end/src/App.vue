@@ -1,7 +1,7 @@
 <template>
   <div id="app" @click="timeCheck" @keyup="timeCheck">
-    <Header @change="timeCheck" />
-    <router-view  @change="timeCheck" />
+    <Header />
+    <router-view :key="$route.fullPath"/>
   </div>
 </template>
 

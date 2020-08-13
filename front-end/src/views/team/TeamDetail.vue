@@ -523,6 +523,7 @@ export default {
       method: "GET",
       url: `${API_URL}study/email?email=${this.email}`,
       headers: { 
+        "Content-Type": "application/json; charset=utf-8", 
         'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
         'user-email': sessionStorage.getItem('user-email')
       }
@@ -543,6 +544,9 @@ export default {
     })
   },
   components: {
+  },
+  updated () {
+    console.log('hi')
   }
 }
 </script>

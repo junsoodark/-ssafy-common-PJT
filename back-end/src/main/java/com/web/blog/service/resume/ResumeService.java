@@ -24,4 +24,6 @@ public interface ResumeService {
     public Map<String, Object> Resume2Map(Resume resume);
 
     public List<Resume> findResumeByUser(int userId);
+
+    public Resume findResumeById(int id);
 }

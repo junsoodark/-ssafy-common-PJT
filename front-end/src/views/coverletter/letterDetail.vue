@@ -6,11 +6,19 @@
       <h3>글 작성자: {{writer}}</h3>
     </div>
     <div v-if="isWriter" class="d-flex justify-content-end">
-      <b-button>글 수정</b-button>
+      <b-button @click="updateCover">글 수정</b-button>
       <b-button @click="deleteCover">글 삭제</b-button>
     </div>
     <hr class="">
-    <div id="content" class="d-flex justify-content-center">{{content}}</div>
+    <div id="content" class="my-2" v-for="item in items" :key="item.title">
+      질문: {{item.title}}
+      <hr>
+      대답: {{item.content}} <br>
+      <div class="d-flex justify-content-end" v-if="isWriter">
+        <b-button @click="updateQuest(item.id)">항목 수정</b-button> | <b-button @click="deleteQuestion(item.id)">항목 삭제</b-button>
+      </div>
+      <hr>
+    </div>
   </b-container>
 </template>
 
@@ -25,10 +33,10 @@ export default {
       id: this.$route.params.id,
       title: "제목",
       writer: "작성자",
-      content: "글내용",
       company: null,
       job: null,
-      category: null
+      category: null,
+      items: []
     }
   },
   computed: {
@@ -47,12 +55,28 @@ export default {
       },
     })
     .then(res => {
+      this.writer = res.data.name
       this.title = res.data.title
       this.company = res.data.company
       this.category = res.data.category
       if (this.email == res.data.email) {
         this.isWriter = true
       }
+    })
+    Axios({
+      method: "GET",
+      url: `${API_URL}resumeitem/resume/${this.id}`,
+      headers: { 
+        "Content-Type": "application/json; charset=utf-8", 
+        'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+        'user-email': sessionStorage.getItem('user-email')
+      }
+    })
+    .then(res => {
+      this.items = res.data
+    })
+    .catch(err => {
+      alert(err.response.data.msg)
     })
   },
   methods: {
@@ -76,6 +100,31 @@ export default {
     },
     updateCover () {
       this.$router.push({ name: "UpdateCover", params: {id:this.id}})
+    },
+    deleteQuestion (id) {
+      Axios({
+        method: "DELETE",
+        url: `${API_URL}resumeitem`,
+        params: {'resumeitemId':id},
+        headers: { 
+          "Content-Type": "application/json; charset=utf-8", 
+          'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+          'user-email': sessionStorage.getItem('user-email')
+        }
+      })
+      .then(res => {
+        console.log(res)
+        var newQuest = []
+        for (var i=0; i<this.items.length; i++) {
+          if (this.items[i].id != id) {
+            newQuest.push(this.items[i])
+          }
+        }
+        this.items = newQuest
+      })
+    },
+    updateQuest (id) {
+      this.$router.push({ name: "UpdateQuest", params: {articleId:this.id,id:id}})
     }
   }
 }

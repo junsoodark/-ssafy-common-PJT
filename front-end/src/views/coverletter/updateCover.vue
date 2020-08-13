@@ -10,7 +10,7 @@
         <b-form-input v-model="job" placeholder="직무를 입력해주세요" class="col-8"></b-form-input>
       </b-row>
       <b-button class="my-2" @click="addQuestion">자소서 항목 추가</b-button> | <b-button class="my-2" @click="delQuestion">자소서 항목 삭제</b-button>
-      <div v-for="item in items" :key="item" class="my-3">
+      <div v-for="item in items" :key="item.num" class="my-3">
         <b-button v-b-toggle="'my-'+item.num">
             <span class="when-open">{{item.num+1}}번 질문 닫기</span><span class="when-closed">{{item.num+1}}번 질문 열기</span>
         </b-button>
@@ -49,7 +49,9 @@ export default {
         { value: null, text: '항목을 선택해주세요' },
         { value: '자소서 컨펌', text: '자소서 컨펌'},
         { value: '자소서 면접', text: '자소서 면접'}
-      ]
+      ],
+      isWritter: false,
+      delItems: []
     }
   },
   computed: {
@@ -61,13 +63,16 @@ export default {
     addQuestion () {
       var cover = new Object
       const numCover = this.question
-      cover = {num: numCover, title: null, answer: null}
+      cover = {num: numCover, title: null, answer: null, id: null}
       this.question += 1
       this.items.push(cover)
     },
     delQuestion () {
       this.question -= 1
-      this.items.pop()
+      const delItem = this.items.pop()
+      if (delItem.id != null) {
+        this.delItems.push(delItem.id)
+      }
     },
     submitCoverLetter () {
       if (this.category == null) {
@@ -89,17 +94,126 @@ export default {
                   'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
                   'user-email': sessionStorage.getItem('user-email')},
       })
-      .then(res => {
+      .then((res) => {
         console.log(res)
-        this.$router.push({ name: "StudyArticle"})
+        for (var j=0; j<this.delItems.length; j++) {
+          this.deleteQuest(this.delItems[j])
+        }
+        for (var i=0; i<this.items.length; i++) {
+          if (this.items[i].id == null) {
+            this.submitQuestion(this.id,this.items[i])
+          } else {
+            this.updateQuestion(this.items[i])
+          }
+        }
+        this.$router.push({ name: "coverLetterDetail", params: {id: this.id}}),2000
       })
       .catch(err => {
         console.log(err)
       })
     },
     submitQuestion (resumeId,quest) {
-      console.log(resumeId,quest)
+      const params = {
+        'content': quest.answer,
+        'resumeId': resumeId,
+        'title': quest.title
+      }
+      Axios({
+        method: "POST",
+        url: `${API_URL}resumeitem`,
+        params: params,
+        headers: { "Content-Type": "application/json; charset=utf-8",
+                  'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+                  'user-email': sessionStorage.getItem('user-email')},
+      })
+      .then(res => {
+        console.log(res)
+      })
+      .catch(err => {
+        alert(err.response.data.msg)
+      })
+    },
+    updateQuestion (quest) {
+      const params = {
+        'content': quest.answer,
+        'resumeitemId': quest.id,
+        'title': quest.title
+      }
+      Axios({
+        method: "PUT",
+        url: `${API_URL}resumeitem`,
+        params: params,
+        headers: { "Content-Type": "application/json; charset=utf-8",
+                  'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+                  'user-email': sessionStorage.getItem('user-email')},
+      })
+      .then(res => {
+        console.log(res)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    },
+    deleteQuest (id) {
+      Axios({
+        method: "DELETE",
+        url: `${API_URL}resumeitem`,
+        params: {'resumeitemId':id},
+        headers: { "Content-Type": "application/json; charset=utf-8",
+                  'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+                  'user-email': sessionStorage.getItem('user-email')},
+      })
+      .then(res => {
+        console.log(res)
+      })
+      .catch(err => {
+        console.log(err)
+      })
     }
+  },
+  created () {
+    // 자소서 정보 가져오기
+    Axios({
+      method: "GET",
+      url: `${API_URL}resume/${this.id}`,
+      headers: { "Content-Type": "application/json; charset=utf-8",
+                  'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+                  'user-email': sessionStorage.getItem('user-email')},
+    })
+    .then(res => {
+      if (res.data.email != this.email) {
+        this.isWritter = false
+        this.$router.push({ name: "coverLetterDetail", params: {id: this.id}})
+      } else { 
+        this.isWritter = true 
+      }
+      this.title = res.data.title
+      this.category = res.data.category
+      this.job = res.data.job
+      this.company = res.data.company
+    })
+    .catch(err => {
+      console.log(err)
+    })
+    // 자소서 항목 가져오기
+    Axios({
+      method: "GET",
+      url: `${API_URL}resumeitem/resume/${this.id}`,
+      headers: { "Content-Type": "application/json; charset=utf-8",
+                  'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+                  'user-email': sessionStorage.getItem('user-email')},
+    })
+    .then(res => {
+      for (var i=0; i<res.data.length; i++) {
+        const item = res.data[i]
+        item.num = this.question
+        this.question += 1
+        this.items.push(item)
+      }
+    })
+    .catch(err => {
+      console.log(err)
+    })
   }
 }
 </script>

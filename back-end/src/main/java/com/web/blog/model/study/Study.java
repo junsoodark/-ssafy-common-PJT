@@ -26,6 +26,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.web.blog.model.address.Address;
 import com.web.blog.model.board.Post;
 import com.web.blog.model.user.User;
+import com.web.blog.model.study.Week;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
