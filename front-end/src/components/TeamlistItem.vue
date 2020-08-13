@@ -78,7 +78,7 @@ export default {
 }
 
 .mycard-header {
-  background-color: rgb(46, 204, 113);
+  background-color: rgb(25, 84, 241);
   padding: 5px 10px;
   height: 120px;
   cursor: pointer;

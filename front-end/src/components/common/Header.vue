@@ -2,7 +2,7 @@
   <div>
     <b-navbar toggleable="lg" style="background-color: rgb(25, 84, 241)" type="dark">
       <router-link to="/" class="ml-2 mr-5 text-decoration-none text-light">
-        <img src style="height:30px" />StudyJobs
+        <img src="../../assets/logologo.png" style="height:40px" />StudyJobs
       </router-link>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
       <b-collapse id="nav-collapse" is-nav>
