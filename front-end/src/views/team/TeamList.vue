@@ -24,9 +24,9 @@
       </b-row>
     </div>
     <div class="my-badges">
-      <b-badge pill class="my-badge1">코딩테스트</b-badge>
-      <b-badge pill class="my-badge2">NCS/인적성</b-badge>
-      <b-badge pill class="my-badge3">면접</b-badge>
+      <b-badge pill class="my-badge1" @click="searchButton('코딩 테스트')">코딩테스트</b-badge>
+      <b-badge pill class="my-badge2" @click="searchButton('인적성/NCS')">NCS/인적성</b-badge>
+      <b-badge pill class="my-badge3" @click="searchButton('면접')">면접</b-badge>
     </div>
 
     <br><br>
@@ -77,6 +77,19 @@ export default {
       this.SearchData = []
       for (var i=0; i<this.TeamList.length; i++) {
         if (this.TeamList[i].content.indexOf(this.SearchText) != -1 || this.TeamList[i].title.indexOf(this.SearchText) != -1) {
+          this.SearchData.push(this.TeamList[i])
+        }
+      }
+      this.TeamList = this.SearchData
+    },
+    searchButton (data) {
+      if (this.SaveTeamList.length != 0) {
+        this.TeamList = this.SaveTeamList
+      }
+      this.SaveTeamList = this.TeamList
+      this.SearchData = []
+      for (var i=0; i<this.TeamList.length; i++) {
+        if (this.TeamList[i].category == data) {
           this.SearchData.push(this.TeamList[i])
         }
       }
