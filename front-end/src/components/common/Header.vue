@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   data () {
@@ -57,7 +57,6 @@ export default {
     ...mapGetters(['isLoggedIn'])
   },
   methods: {
-    ...mapMutations(['deleteUserInfo']),
     ...mapActions(['delete_email']),
     search() {
       this.$router.push({ name: 'Search', params: {search:this.searchData} })

@@ -4,15 +4,15 @@ const API_URL = process.env.VUE_APP_LOCAL_URL
 
 const initialState = {
   email: '',
-  imageName: null,
+  loginTime: null,
 };
 
 const mutations = {
   UPDATE_EMAIL(state, value) {
     state.email = value
   },
-  deleteUserInfo(state , value) {
-    state.email = value
+  UPDATE_LOGIN_TIME(state, value) {
+    state.loginTime = value
   },
   EDIT_USER_INFO(state, value) {
     state.email = value.email

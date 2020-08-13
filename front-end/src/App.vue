@@ -1,27 +1,60 @@
 <template>
-  <div id="app">
-    <Header />
-    <router-view />
+  <div id="app" @click="timeCheck" @keyup="timeCheck">
+    <Header @change="timeCheck" />
+    <router-view  @change="timeCheck" />
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import Header from "./components/common/Header.vue";
 
 export default {
   name: "App",
   computed: {
     ...mapGetters(["isLoggedIn"]),
+    ...mapState({
+      loginTime: state => state.moduleName.loginTime,
+    }),
   },
 
   components: {
     Header,
   },
-  updated() {
-    console.log('update HI')
+  methods: {
+    timeCheck() {
+      var date = new Date()
+      var H = date.getHours() * 1
+      var M = date.getMinutes() * 1
+      var S = date.getSeconds() * 1
+      
+      if (H === 0 && M < 16) {
+        H = 24
+      }
+
+      var limitHour = (this.loginTime[0] + this.loginTime[1]) * 1
+      var limitMinute = (this.loginTime[3] + this.loginTime[4]) * 1
+      var limitSecond = (this.loginTime[6] + this.loginTime[7]) * 1
+
+      limitMinute += 15
+
+      if (limitMinute >= 60 ) {
+        limitMinute -= 60
+        limitHour += 1
+      }
+
+      console.log(limitHour, limitMinute, limitSecond)
+      const limit = limitHour * 3600 + limitMinute * 60 + limitSecond
+      const now = H * 3600 + M * 60 + S
+
+      if (now >= limit) {
+        alert('로그인 기간이 만료되었습니다.')
+        this.$router.push({ name: "Logout" })
+      }
+
+      // console.log(this.loginTime)
+    }
   },
-  methods: {},
 };
 </script>
 <style>

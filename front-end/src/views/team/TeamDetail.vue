@@ -477,7 +477,6 @@ export default {
     })
     .then(res => {
       this.team = res.data
-      console.log(this.team)
     })
     .catch(err => {
       console.log(err)
