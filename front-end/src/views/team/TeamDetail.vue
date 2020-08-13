@@ -531,6 +531,9 @@ export default {
     })
   },
   components: {
+  },
+  updated () {
+    console.log('hi')
   }
 }
 </script>
