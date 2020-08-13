@@ -52,7 +52,24 @@ export default new Vuex.Store({
         sessionStorage.setItem('jwt-auth-token', res.data);
         sessionStorage.setItem('user-email', loginData.email);
 
-        alert("로그인")
+        // 로그인 시간 저장
+        let date = new Date()
+        var loginH = date.getHours()
+        var loginM = date.getMinutes()
+        var loginS = date.getSeconds()
+
+        if (loginH < 10) {
+          loginH = '0' + loginH
+        }
+        if (loginM < 10) {
+          loginM = '0' + loginM
+        }
+        if (loginS < 10) {
+          loginS = '0' + loginS
+        }
+
+        const loginTime = loginH + ":" + loginM + ":" + loginS
+        commit('UPDATE_LOGIN_TIME', loginTime)
 
         // firebase 사용자 로그인
         firebase.auth().signInWithEmailAndPassword(loginData.email, loginData.password).catch(function(error) {
@@ -64,8 +81,9 @@ export default new Vuex.Store({
           console.log(errorMessage)
           // ...
         })
-
         
+        
+        alert("로그인")
 
         router.push({ name: 'Home' })
       })
@@ -105,7 +123,7 @@ export default new Vuex.Store({
     logout({ commit }) {
       commit("SET_TOKEN", null); // state 에서도 삭제
       VueCookies.remove("auth-token"); // cookie 에서는 삭제
-      // commit("deleteUserInfo", null);
+      
       localStorage.clear();
       sessionStorage.clear();
       
