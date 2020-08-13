@@ -25,8 +25,9 @@
     </div>
     <div class="my-badges">
       <b-badge pill class="my-badge1">코딩테스트</b-badge>
-      <b-badge pill class="my-badge2">NCS/인적성</b-badge>
+      <b-badge pill class="my-badge2">인적성/NCS</b-badge>
       <b-badge pill class="my-badge3">면접</b-badge>
+      <b-badge pill class="my-badge4">기타</b-badge>
     </div>
 
     <br><br>
@@ -50,7 +51,7 @@ export default {
   data () {
     return {
       TeamList: [],
-      sizes: ['코딩테스트', '인적성', '면접'],
+      sizes: ['코딩테스트', '인적성/NCS', '면접'],
       SaveTeamList: [],
       SearchText: null,
       SearchData: [],
@@ -107,6 +108,12 @@ export default {
 }
 .my-badge3 {
   background-color:rgb(243, 156, 18) !important;
+  padding: 5px !important;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+.my-badge4 {
+  background-color:#00BFFF !important;
   padding: 5px !important;
   margin-right: 5px;
   margin-left: 5px;
