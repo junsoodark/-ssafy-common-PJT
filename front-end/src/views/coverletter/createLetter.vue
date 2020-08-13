@@ -90,20 +90,44 @@ export default {
       })
       .then(res => {
         const resumeId = res.data
+        var trigger = false
         if (resumeId == -1) {
           alert('글 작성이 알 수 없는 이유로 실패했습니다')
           return false
         }
-        for (var i; i<this.items.length; i++) {
+        for (var i=0; i<this.items.length; i++) {
           this.submitQuestion(resumeId,this.items[i])
+          if (i==this.items.length-1) {
+            trigger = true
+          }
         }
+        alert('작성이 완료되었습니다')
+        if (trigger) {this.$router.push({ name: "coverLetterDetail", params: {id:resumeId}})}
       })
       .catch(err => {
         console.log(err)
       })
     },
     submitQuestion (resumeId,quest) {
-      console.log(resumeId,quest)
+      const params = {
+        'content': quest.answer,
+        'resumeId': resumeId,
+        'title': quest.title
+      }
+      Axios({
+        method: "POST",
+        url: `${API_URL}resumeitem`,
+        params: params,
+        headers: { "Content-Type": "application/json; charset=utf-8",
+                  'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+                  'user-email': sessionStorage.getItem('user-email')},
+      })
+      .then(res => {
+        console.log(res)
+      })
+      .catch(err => {
+        alert(err.response.data.msg)
+      })
     }
   }
 }

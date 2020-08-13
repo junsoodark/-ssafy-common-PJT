@@ -29,6 +29,7 @@ import letterList from '../views/coverletter/letterList.vue'
 import letterDetail from '../views/coverletter/letterDetail.vue'
 import createLetter from '../views/coverletter/createLetter.vue'
 import UpdateCover from '../views/coverletter/updateCover.vue'
+import UpdateQuest from '../views/coverletter/updateLetter.vue'
 
 
 Vue.use(VueRouter);
@@ -142,6 +143,11 @@ const routes = [
     path: "/coverletter/update/:id",
     name: "UpdateCover",
     component: UpdateCover
+  },
+  {
+    path: "/coverletter/question/:articleId/:id",
+    name: "UpdateQuest",
+    component: UpdateQuest
   },
   {
     path: "/chat",
