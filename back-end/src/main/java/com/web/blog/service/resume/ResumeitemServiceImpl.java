@@ -10,6 +10,7 @@ import com.web.blog.dao.resume.ResumeDao;
 import com.web.blog.dao.resume.ResumeitemDao;
 import com.web.blog.model.resume.Resume;
 import com.web.blog.model.resume.Resumeitem;
+import com.web.blog.model.user.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -94,6 +95,11 @@ public class ResumeitemServiceImpl implements ResumeitemService {
         }
         resumeitemDao.save(resumeitem);
         return true;
+    }
+
+    @Override
+    public String findUserByResumeitem(int resumeitemId) {
+        return resumeitemDao.findUserEmailByResumeitemId(resumeitemId);
     }
 
 }

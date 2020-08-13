@@ -56,25 +56,24 @@ public class ResumeitemController {
 
     @PostMapping("/resumeitem")
     @ApiOperation(value = "")
-    public ResponseEntity<Object> create(   @RequestParam String title,
-                                            @RequestParam String content,
-                                            @RequestParam int resumeId) {
+    public ResponseEntity<Object> create(@RequestParam String title, @RequestParam String content,
+            @RequestParam int resumeId) {
         Resume resume = resumeService.findResumeById(resumeId);
-        if(resume == null){
+        if (resume == null) {
             return new ResponseEntity<Object>("존재하지 않는 자소서입니다.", HttpStatus.NOT_FOUND);
         }
         Resumeitem resumeitem = resumeitemService.create(resume, title, content);
-        if(resumeitem == null){
+        if (resumeitem == null) {
             return new ResponseEntity<Object>("항목을 생성할 수 없습니다.", HttpStatus.FORBIDDEN);
         }
-        return  new ResponseEntity<Object>("생성에 성공했습니다.", HttpStatus.OK);
+        return new ResponseEntity<Object>("생성에 성공했습니다.", HttpStatus.OK);
 
     }
 
     @DeleteMapping("/resumeitem")
     @ApiOperation(value = "")
-    public ResponseEntity<Object> delete(int resumeitemId){
-        if(!resumeitemService.delete(resumeitemId)){
+    public ResponseEntity<Object> delete(int resumeitemId) {
+        if (!resumeitemService.delete(resumeitemId)) {
             return new ResponseEntity<Object>("삭제에 실패했습니다.", HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<Object>("삭제에 성공했습니다.", HttpStatus.OK);
@@ -82,18 +81,24 @@ public class ResumeitemController {
 
     @PutMapping("/resumeitem")
     @ApiOperation(value = "")
-    public ResponseEntity<Object> update(   @RequestParam String title,
-                                            @RequestParam String content,
-                                            @RequestParam int resumeitemId){
+    public ResponseEntity<Object> update(@RequestParam String title, @RequestParam String content,
+            @RequestParam int resumeitemId) {
         Resumeitem resumeitem = resumeitemService.read(resumeitemId);
-        if(resumeitem == null){
+        if (resumeitem == null) {
             return new ResponseEntity<Object>("존재하지 않는 항목입니다.", HttpStatus.NOT_FOUND);
         }
         resumeitem.setContent(content);
         resumeitem.setTitle(title);
-        if(!resumeitemService.update(resumeitem)){
+        if (!resumeitemService.update(resumeitem)) {
             return new ResponseEntity<Object>("업데이트에 실패하였습니다.", HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<Object>("업데이트에 성공하였습니다.", HttpStatus.OK);
+    }
+
+    @GetMapping("/resumeitem/email/{resumeitemId}")
+    @ApiOperation(value = "")
+    public ResponseEntity<Object> findEmailbyResumeitemId(@PathVariable int resumeitemId) {
+        String email = resumeitemService.findUserByResumeitem(resumeitemId);
+        return new ResponseEntity<Object>(email, HttpStatus.OK);
     }
 }

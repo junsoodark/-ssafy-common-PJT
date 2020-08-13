@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.web.blog.model.resume.Resume;
 import com.web.blog.model.resume.Resumeitem;
+import com.web.blog.model.user.User;
 
 public interface ResumeitemService {
     public Resumeitem create(Resume resume, String title, String content);
@@ -20,6 +21,8 @@ public interface ResumeitemService {
     public boolean delete(int id);
 
     public List<Map<String, Object>> findAllResumeitem();
+
+    public String findUserByResumeitem(int resumeitemId);
 
     public Map<String, Object> Resumeitem2Map(Resumeitem resumeitem);
 
