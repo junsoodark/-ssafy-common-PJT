@@ -116,4 +116,10 @@ public class ResumeServiceImpl implements ResumeService {
         return list;
     }
 
+    @Override
+    public Resume findResumeById(int id) {
+        Optional<Resume> resumeOpt = resumeDao.findResumeById(id);
+        return resumeOpt.isPresent() ? resumeOpt.get() : null;
+    }
+
 }
