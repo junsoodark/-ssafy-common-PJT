@@ -158,7 +158,7 @@ export default {
         { text: "원하는 분야를 선택해주세요", value: null },
         { text: "면접", value: 1 },
         { text: "인적성/NCS", value: 2},
-        { text: "코딩 테스트", value: 4},
+        { text: "코딩 테스트", value: 3},
         { text: "기타", value: 4},
       ],
       siAreas: [

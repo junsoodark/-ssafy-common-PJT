@@ -155,7 +155,7 @@ export default {
         { text: "원하는 분야를 선택해주세요", value: null },
         { text: "면접", value: 1 },
         { text: "인적성/NCS", value: 2},
-        { text: "코딩 테스트", value: 4},
+        { text: "코딩 테스트", value: 3},
         { text: "기타", value: 4},
       ],
       siAreas: [
@@ -180,7 +180,7 @@ export default {
         { text: "평일", value: 1 },
         { text: "주말", value: 2 },
         { text: "혼합", value: 3 },
-        { text: "추후협희", value: 4 },
+        { text: "추후협의", value: 4 },
       ],
       shift: [
         { text: "오전", value: 1 },
@@ -229,9 +229,9 @@ export default {
       this.form.si = res.data.si
       this.form.studyId = this.$route.params.id
       this.form.placeId = null
-      this.form.categoryId = res.data.categoryId
+      this.form.categoryId = null
       this.form.startDate = res.data.startDate
-
+      
       for (var a=0; a < this.period.length; a++) {
         if (this.period[a].text === res.data.period)
         this.form.periodId = this.period[a].value
@@ -262,7 +262,9 @@ export default {
           break
         }
       }
+
       this.changeGu()
+      console.log(this.form)
     })
     .catch(err => {
       console.log(err)
