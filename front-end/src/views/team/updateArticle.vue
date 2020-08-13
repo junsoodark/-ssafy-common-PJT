@@ -1,6 +1,5 @@
 <template>
-  <b-container class="my-3">
-    <h1>글 수정</h1>
+  <b-container>
     <b-form-input v-model="title" placeholder="제목을 입력해주세요"></b-form-input>
     <hr>
     <div class="sample-toolbar">
@@ -50,8 +49,8 @@ export default {
       UV: false,
       fontColor: '#000000',
       backColor: '#ffffff',
-      articleid: this.$route.params.articleid,
-      studyId : this.$route.params.studyid
+      id: this.$route.params.id,
+      studyId : null
     };
   },
   props: {
@@ -60,7 +59,7 @@ export default {
   created () {
     Axios({
       method: "GET",
-      url: `${API_URL}post/${this.articleid}`,
+      url: `${API_URL}post/${this.id}`,
       headers: { "Content-Type": "application/json; charset=utf-8",
                 'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
                 'user-email': sessionStorage.getItem('user-email')},

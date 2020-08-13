@@ -8,7 +8,7 @@
         <b-col cols="4" id="mypageImage">
           <b-row>
             <b-col>
-              <b-img id="myimg" :src="defaultImageUrl" width="300" height="300" rounded="circle" alt="프로필 이미지"></b-img>
+              <b-img id="myimg" :src="defaultImageUrl" width="300" rounded="circle" alt="프로필 이미지"></b-img>
             </b-col>
           </b-row>
           <br>

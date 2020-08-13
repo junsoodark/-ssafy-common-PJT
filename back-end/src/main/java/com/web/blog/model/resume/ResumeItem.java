@@ -23,7 +23,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Resumeitem {
+public class ResumeItem {
     // `id` int(11) NOT NULL AUTO_INCREMENT,
     // `resume_id` int(11) NOT NULL,
     // `title` varchar(50) NOT NULL,
@@ -44,5 +44,4 @@ public class Resumeitem {
     private String title;
     @NotNull(message = "내용은 필수 항목입니다.")
     private String content;
-    
 }

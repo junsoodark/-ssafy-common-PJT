@@ -5,14 +5,41 @@ import java.util.List;
 import java.util.Map;
 
 import com.web.blog.model.address.Address;
+import com.web.blog.model.study.Category;
+import com.web.blog.model.study.Period;
+import com.web.blog.model.study.Place;
+import com.web.blog.model.study.Shift;
 import com.web.blog.model.study.Study;
 import com.web.blog.model.user.User;
 
 public interface StudyService {
-	public Study create(final User user, final Address address, final String title, final String content, final LocalDate startDate, final LocalDate endDate, final int maxMembers);
+	public Study create(final User user,
+						final Address address,
+						final String title,
+						final String content,
+						final LocalDate startDate,
+						final LocalDate endDate,
+						final int maxMembers,
+						final Category category,
+						final Period period,
+						final Place place,
+						final Shift shift);
+	
 	public boolean delete(final int studyId);
-	public boolean update(final Address address, final int studyId, final String title, final String content, final LocalDate startDate, final LocalDate endDate, final int maxMembers);
+	
+	public boolean update(final Address address,
+						  final int studyId,
+						  final String title,
+						  final String content,
+						  final LocalDate startDate,
+						  final LocalDate endDate,
+						  final int maxMembers,
+						  final Category category,
+						  final Period period,
+						  final Place place,
+						  final Shift shift);
 
+	public boolean isManager(final int studyId, final int userId);
 	public Study findStudyByStudyId(final int studyId);
 	public Map<String, Object> Study2SimpleInfo(final Study study);
 	public Map<String, Object> Study2DetailInfo(final Study study);

@@ -94,7 +94,7 @@ const routes = [
     component: TeamDetail,
   },
   {
-    path: '/study/:studyid/article/update/:articleid',
+    path: '/study/update/:id',
     name: 'updateArticle',
     component: updateArticle,
   },

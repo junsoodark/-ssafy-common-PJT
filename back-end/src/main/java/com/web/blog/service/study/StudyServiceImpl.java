@@ -13,8 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.web.blog.dao.study.CategoryDao;
 import com.web.blog.dao.study.StudyDao;
 import com.web.blog.model.address.Address;
+import com.web.blog.model.study.Category;
+import com.web.blog.model.study.Period;
+import com.web.blog.model.study.Place;
+import com.web.blog.model.study.Shift;
 import com.web.blog.model.study.Study;
 import com.web.blog.model.user.User;
 
@@ -25,7 +30,17 @@ public class StudyServiceImpl implements StudyService {
 	StudyDao studyDao;
 
 	@Override
-	public Study create(final User user, final Address address, final String title, final String content, final LocalDate startDate, final LocalDate endDate, final int maxMembers) {
+	public Study create(final User user,
+						final Address address,
+						final String title,
+						final String content,
+						final LocalDate startDate,
+						final LocalDate endDate,
+						final int maxMembers,
+						final Category category,
+						final Period period,
+						final Place place,
+						final Shift shift) {
 		Study study = new Study();
 		study.setUser(user);
 		study.setAddress(address);
@@ -34,6 +49,10 @@ public class StudyServiceImpl implements StudyService {
 		study.setStartDate(startDate);
 		study.setEndDate(endDate);
 		study.setMaxMembers(maxMembers);
+		study.setCategory(category);
+		study.setPeriod(period);
+		study.setPlace(place);
+		study.setShift(shift);
 		Set <User> set = new HashSet<User>();
 		set.add(user);
 		study.setMembers(set);
@@ -50,7 +69,17 @@ public class StudyServiceImpl implements StudyService {
 	}
 	
 	@Override
-	public boolean update(final Address address, final int studyId, final String title, final String content, final LocalDate startDate, final LocalDate endDate, final int maxMembers) {
+	public boolean update(final Address address,
+						  final int studyId,
+						  final String title,
+						  final String content,
+						  final LocalDate startDate,
+						  final LocalDate endDate,
+						  final int maxMembers,
+						  final Category category,
+						  final Period period,
+						  final Place place,
+						  final Shift shift) {
 		Optional<Study> studyOpt = studyDao.findStudyByStudyId(studyId);
 		if(studyOpt.isPresent()==false) return false;
 		studyOpt.ifPresent(study->{
@@ -60,8 +89,18 @@ public class StudyServiceImpl implements StudyService {
 			study.setStartDate(startDate);
 			study.setEndDate(endDate);
 			study.setMaxMembers(maxMembers);
+			study.setCategory(category);
+			study.setPeriod(period);
+			study.setPlace(place);
+			study.setShift(shift);
 			studyDao.save(study);
 		}); return true;
+	}
+	
+	@Override
+	public boolean isManager(final int studyId, final int userId) {
+		Optional<Study> studyOpt = studyDao.findStudyByStudyId(studyId);
+		return studyOpt.isPresent() ? studyOpt.get().getUser().getId()==userId : false;
 	}
 	
 	@Override
