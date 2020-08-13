@@ -51,8 +51,24 @@ export default new Vuex.Store({
 
         sessionStorage.setItem('jwt-auth-token', res.data);
         sessionStorage.setItem('user-email', loginData.email);
+
+        // 로그인 시간 저장
         let date = new Date()
-        const loginTime = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
+        var loginH = date.getHours()
+        var loginM = date.getMinutes()
+        var loginS = date.getSeconds()
+
+        if (loginH < 10) {
+          loginH = '0' + loginH
+        }
+        if (loginM < 10) {
+          loginM = '0' + loginM
+        }
+        if (loginS < 10) {
+          loginS = '0' + loginS
+        }
+
+        const loginTime = loginH + ":" + loginM + ":" + loginS
         commit('UPDATE_LOGIN_TIME', loginTime)
 
         // firebase 사용자 로그인
