@@ -154,7 +154,7 @@ public class StudyMemberController {
 		
 		List<Map<String, Object>> res = new ArrayList<>();
 		for(Study study : user.getStudies())
-			res.add(studyService.Study2SimpleInfo(study));
+			res.add(studyService.Study2Map(study));
 		return new ResponseEntity(res, HttpStatus.OK);
 	}
 }
