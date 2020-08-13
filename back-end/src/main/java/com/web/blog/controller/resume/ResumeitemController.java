@@ -12,9 +12,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.Response;
 
 @RestController
 public class ResumeitemController {
@@ -43,5 +45,11 @@ public class ResumeitemController {
     public ResponseEntity<Object> readByResume(@PathVariable int resumeId) {
         List<Resumeitem> list = resumeitemService.readByResume(resumeId);
         return new ResponseEntity<Object>(list, HttpStatus.OK);
+    }
+
+    @PostMapping("/resumeitem")
+    @ApiOperation(value = "")
+    public ResponseEntity<Object> create() {
+
     }
 }
