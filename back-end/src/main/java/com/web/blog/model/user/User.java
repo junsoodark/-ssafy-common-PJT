@@ -16,7 +16,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.web.blog.model.reply.Reply;
 import com.web.blog.model.study.Study;
 
 import lombok.AllArgsConstructor;
@@ -57,8 +59,12 @@ public class User {
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH })
 	@JoinTable(name = "study_member", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "study_id"))
 	private Set<Study> studies;
-	
+
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH })
 	@JoinTable(name = "study_approval", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "study_id"))
 	private Set<Study> approvingStudies;
+
+	@JsonIgnore
+	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "user")
+	private Set<Reply> reply;
 }
