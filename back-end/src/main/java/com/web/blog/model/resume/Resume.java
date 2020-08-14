@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.web.blog.model.reply.Reply;
 import com.web.blog.model.user.User;
 
 import lombok.AllArgsConstructor;
@@ -57,4 +58,8 @@ public class Resume {
     @JsonIgnore
     @OneToMany(cascade = { CascadeType.ALL }, mappedBy = "resume")
     private Set<Resumeitem> resumeItems;
+
+    @JsonIgnore
+    @OneToMany(cascade = { CascadeType.ALL }, mappedBy = "resume")
+    private Set<Reply> reply;
 }

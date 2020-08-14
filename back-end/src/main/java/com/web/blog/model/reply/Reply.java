@@ -25,30 +25,30 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Reply {
-    // `id` int(11) NOT NULL AUTO_INCREMENT,
-    // `user_id` int(11) NOT NULL,
-    // `resume_id` int(11) NOT NULL,
-    // `content` varchar(500) NOT NULL,
-    // PRIMARY KEY (`id`),
-    // FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-    // FOREIGN KEY (`resume_id`) REFERENCES `resume` (`id`)
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+        // `id` int(11) NOT NULL AUTO_INCREMENT,
+        // `user_id` int(11) NOT NULL,
+        // `resume_id` int(11) NOT NULL,
+        // `content` varchar(500) NOT NULL,
+        // PRIMARY KEY (`id`),
+        // FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+        // FOREIGN KEY (`resume_id`) REFERENCES `resume` (`id`)
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private int id;
 
-    @JsonIgnore
-    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE,
-            CascadeType.DETACH })
-    @JoinColumn(name = "user_id")
-    private User user;
+        @JsonIgnore
+        @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST,
+                        CascadeType.MERGE, CascadeType.DETACH })
+        @JoinColumn(name = "user_id")
+        private User user;
 
-    @JsonIgnore
-    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE,
-            CascadeType.DETACH })
-    @JoinColumn(name = "resume_id")
-    private Resume resume;
+        @JsonIgnore
+        @ManyToOne(targetEntity = Resume.class, fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST,
+                        CascadeType.MERGE, CascadeType.DETACH })
+        @JoinColumn(name = "resume_id")
+        private Resume resume;
 
-    @NotNull(message = "내용은 필수 항목입니다.")
-    private String content;
+        @NotNull(message = "내용은 필수 항목입니다.")
+        private String content;
 
 }
