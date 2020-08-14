@@ -18,6 +18,9 @@ export default {
     ...mapGetters(["isLoggedIn"]),
     ...mapState({
       loginTime: state => state.moduleName.loginTime,
+    ...mapState({
+      email: state => state.moduleName.email,
+    }),
     }),
   },
   created () {
