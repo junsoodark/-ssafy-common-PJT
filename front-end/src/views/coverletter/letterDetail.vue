@@ -6,16 +6,20 @@
       <h3>글 작성자: {{writer}}</h3>
     </div>
     <div v-if="isWriter" class="d-flex justify-content-end">
-      <b-button @click="updateCover">글 수정</b-button>
-      <b-button @click="deleteCover">글 삭제</b-button>
+      <b-button @click="updateCover" variant="warning">글 수정</b-button> | 
+      <b-button @click="deleteCover" variant="danger">글 삭제</b-button>
     </div>
     <hr class="">
-    <div id="content" class="my-2" v-for="item in items" :key="item.id">
-      질문: {{item.title}}
+    <span v-for="(item,index) in items" :key="item.id">
+      <b-button @click="changeLetter(index)" variant="info" v-if="index != isSelected">{{index+1}} 번</b-button><b-button @click="changeLetter(index)" variant="primary" v-else>{{index+1}} 번</b-button><span v-if="index != items.length-1"> | </span>
+    </span>
+    <hr>
+    <div>
+      질문: {{letterTitle}}
       <hr>
-      대답: {{item.content}} <br>
+      대답: {{letterContent}} <br>
       <div class="d-flex justify-content-end" v-if="isWriter">
-        <b-button @click="updateQuest(item.id)">항목 수정</b-button> | <b-button @click="deleteQuestion(item.id)">항목 삭제</b-button>
+        <b-button @click="updateQuest(letterId)">항목 수정</b-button> | <b-button @click="deleteQuestion(letterId)">항목 삭제</b-button>
       </div>
       <hr>
     </div>
@@ -38,6 +42,10 @@ export default {
       category: null,
       items: [],
       isChanged: true,
+      letterId: null,
+      letterTitle: null,
+      letterContent: null,
+      isSelected: 0,
     }
   },
   computed: {
@@ -75,6 +83,9 @@ export default {
     })
     .then(res => {
       this.items = res.data
+      this.letterTitle = res.data[0].title
+      this.letterId = res.data[0].id
+      this.letterContent = res.data[0].content
     })
     .catch(err => {
       alert(err.response.data.msg)
@@ -127,6 +138,13 @@ export default {
     updateQuest (id) {
       this.isChanged = true
       this.$router.push({ name: "UpdateQuest", params: {articleId:this.id,id:id}})
+    },
+    changeLetter (index) {
+      const item = this.items[index]
+      this.letterTitle = item.title
+      this.letterContent = item.content
+      this.letterId = item.id
+      this.isSelected = index
     }
   },
   beforeUpdate () {
