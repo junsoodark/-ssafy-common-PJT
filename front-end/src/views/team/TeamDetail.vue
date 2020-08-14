@@ -230,17 +230,33 @@
             </b-card-text>
           </b-tab>
 
-          <b-tab title="스터디원">
+          <b-tab title="스터디원" v-if="isMember">
             <b-card-text>
-              <div class="my-2" v-if="email == team.mgrEmail">
+              <div class="my-2">
                 <b-container>
                   <h1>스터디원</h1>
+                  <hr>
                   <b-row>
-                    <b-col md="6" offset-md="3"><b-list-group-item >이름</b-list-group-item></b-col>
-                  </b-row>
-                  <b-row v-for="item in memberList" :key="item.name">
-                    <b-col md="6" offset-md="3">
+                    <b-col cols="4" class="p-0">
+                      <b-list-group-item style="height:50px;" class="d-flex justify-content-center py-1">
+                        <b-button variant="primary">리더</b-button>
+                      </b-list-group-item>
+                    </b-col>
+                    <b-col cols="8" class="p-0">
                       <b-list-group-item style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; height:50px;">
+                        {{ team.mgrName }}
+                      </b-list-group-item>
+                    </b-col>
+                  </b-row>
+                  <!-- 스터디원 -->
+                  <b-row v-for="item in memberList" :key="item.name">
+                    <b-col cols="4" class="p-0">
+                      <b-list-group-item v-if="item.email != team.mgrEmail" style="height:50px;" class="d-flex justify-content-center py-1" @click="banMember(item.email)">
+                        <b-button variant="success" >멤버</b-button>
+                      </b-list-group-item>
+                    </b-col>
+                    <b-col cols="8" class="p-0">
+                      <b-list-group-item v-if="item.email != team.mgrEmail" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; height:50px;">
                         {{ item.name }}
                       </b-list-group-item>
                     </b-col>
@@ -249,29 +265,7 @@
               </div>
             </b-card-text>
           </b-tab>
-          <b-tab title="가입신청자">
-            <b-card-text>
-              <div class="my-2" v-if="email == team.mgrEmail">
-                <b-container>
-                  <h1>가입 신청자</h1>
-                  <br>
-                  <b-row>
-                    <b-col cols="6" class="p-0"><b-list-group-item >이름</b-list-group-item></b-col>
-                    <b-col cols="3" class="p-0"><b-list-group-item >승인</b-list-group-item></b-col>
-                    <b-col cols="3" class="p-0"><b-list-group-item >거부</b-list-group-item></b-col>
-                  </b-row>
-                  <hr>
-                  <b-row v-for="apply in applyList" :key="apply.name">
-                      <b-col cols="6" class="p-0"><b-list-group-item style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; height:50px;">{{ apply.name }}</b-list-group-item></b-col>
-                      <b-col cols="3" class="p-0"><b-list-group-item style="height:50px;" class="d-flex justify-content-center py-2"><b-button variant="success" @click="approveMember(apply.email,apply.name)">승인</b-button></b-list-group-item></b-col>
-                      <b-col cols="3" class="p-0"><b-list-group-item style="height:50px;" class="d-flex justify-content-center py-2"><b-button variant="danger" @click="disapproveMember(apply.email)">거부</b-button></b-list-group-item></b-col>
-
-                  </b-row>
-                </b-container>
-              </div>
-            </b-card-text>
-          </b-tab>
-          <b-tab title="게시판" >
+          <b-tab title="게시판" v-if="isMember">
             <b-card-text>
               <b-button v-if="isMember" @click="toAricle" class="mr-1">게시판 보기</b-button>
             </b-card-text>
@@ -281,29 +275,26 @@
               <b-button v-if="isMember" v-b-modal.modal-secession variant="info">탈퇴신청</b-button>
             </b-card-text>
           </b-tab>
-          <b-tab title="스터디원 관리">
+          <b-tab title="스터디원 관리" v-if="team.mgrEmail === this.email">
             <b-card-text>
               <div class="my-2" v-if="email == team.mgrEmail">
                 <b-container>
-                  <h1>스터디원</h1>
-                  <b-row>
-                    <b-col cols="8" class="p-0"><b-list-group-item >이름</b-list-group-item></b-col>
-                    <b-col cols="4" class="p-0"><b-list-group-item >강퇴</b-list-group-item></b-col>
-                  </b-row>
+                  <h1>스터디원 관리</h1>
                   <hr>
-                  <b-row v-for="item in memberList" :key="item.name">
+                  <!-- 스터디 리더 -->
+                  <b-row>
                     <b-col cols="8" class="p-0">
-                      <b-list-group-item v-if="item.email == team.mgrEmail" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; height:50px;">
-                        {{ item.name }}
+                      <b-list-group-item style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; height:50px;">
+                        {{ team.mgrName }}
                       </b-list-group-item>
                     </b-col>
                     <b-col cols="4" class="p-0">
-                      <b-list-group-item v-if="item.email == team.mgrEmail" style="height:50px;" class="d-flex justify-content-center py-1">
+                      <b-list-group-item style="height:50px;" class="d-flex justify-content-center py-1">
                         <b-button variant="primary">리더</b-button>
                       </b-list-group-item>
                     </b-col>
                   </b-row>
-
+                  <!-- 스터디원 -->
                   <b-row v-for="item in memberList" :key="item.name">
                     <b-col cols="8" class="p-0">
                       <b-list-group-item v-if="item.email != team.mgrEmail" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; height:50px;">
@@ -315,6 +306,27 @@
                         <b-button variant="danger" >강퇴</b-button>
                       </b-list-group-item>
                     </b-col>
+                  </b-row>
+                </b-container>
+              </div>
+            </b-card-text>
+          </b-tab>
+          <b-tab title="가입신청자" v-if="team.mgrEmail === this.email">
+            <b-card-text>
+              <div class="my-2" v-if="email == team.mgrEmail">
+                <b-container>
+                  <h1>가입 신청자</h1>
+                  <hr>
+                  <b-row>
+                    <b-col cols="6" class="p-0"><b-list-group-item >이름</b-list-group-item></b-col>
+                    <b-col cols="3" class="p-0"><b-list-group-item >승인</b-list-group-item></b-col>
+                    <b-col cols="3" class="p-0"><b-list-group-item >거부</b-list-group-item></b-col>
+                  </b-row>
+                  <b-row v-for="apply in applyList" :key="apply.name">
+                      <b-col cols="6" class="p-0"><b-list-group-item style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; height:50px;">{{ apply.name }}</b-list-group-item></b-col>
+                      <b-col cols="3" class="p-0"><b-list-group-item style="height:50px;" class="d-flex justify-content-center py-2"><b-button variant="success" @click="approveMember(apply.email,apply.name)">승인</b-button></b-list-group-item></b-col>
+                      <b-col cols="3" class="p-0"><b-list-group-item style="height:50px;" class="d-flex justify-content-center py-2"><b-button variant="danger" @click="disapproveMember(apply.email)">거부</b-button></b-list-group-item></b-col>
+
                   </b-row>
                 </b-container>
               </div>
@@ -571,6 +583,7 @@ export default {
     })
     .then(res => {
       this.team = res.data
+      console.log('스터디 디테일', this.team)
     })
     .catch(err => {
       console.log(err)
@@ -592,6 +605,7 @@ export default {
     })
     .then(res => {
       this.memberList = res.data
+      console.log('현재 스터디원', this.memberList)
       for (var i=0; i < this.memberList.length; i++) {
         if (this.email === this.memberList[i].email) {
           this.isMember  = true
@@ -614,6 +628,7 @@ export default {
     })
     .then(res => {
       this.applyList = res.data
+      console.log('가입 요청한 사람', this.applyList)
       for (var i=0; i < this.applyList.length; i++) {
         if (this.email === this.applyList[i].email) {
           this.isReady = true
@@ -652,9 +667,6 @@ export default {
   },
   components: {
   },
-  updated () {
-    console.log('hi')
-  }
 }
 </script>
 
