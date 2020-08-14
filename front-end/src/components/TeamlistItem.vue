@@ -54,12 +54,13 @@ export default {
   created() {
     console.log(this.team)
   },
+  computed: {},
   methods: {
     clickCard() {
-      router.push({ name: 'StudyDetail', params: {id:this.team.studyId}})
-    }
-  }
-}
+      router.push({ name: "StudyDetail", params: { id: this.team.studyId } });
+    },
+  },
+};
 </script>
 
 <style>
