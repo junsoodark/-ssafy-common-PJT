@@ -10,7 +10,7 @@
       <b-button @click="deleteCover">글 삭제</b-button>
     </div>
     <hr class="">
-    <div id="content" class="my-2" v-for="item in items" :key="item.title">
+    <div id="content" class="my-2" v-for="item in items" :key="item.id">
       질문: {{item.title}}
       <hr>
       대답: {{item.content}} <br>
@@ -36,7 +36,8 @@ export default {
       company: null,
       job: null,
       category: null,
-      items: []
+      items: [],
+      isChanged: true,
     }
   },
   computed: {
@@ -124,8 +125,48 @@ export default {
       })
     },
     updateQuest (id) {
+      this.isChanged = true
       this.$router.push({ name: "UpdateQuest", params: {articleId:this.id,id:id}})
     }
+  },
+  beforeUpdate () {
+    if (this.isChanged) {
+    console.log(this.isChanged)
+    this.isChanged = false
+    Axios({
+      method: "GET",
+      url: `${API_URL}resume/${this.id}`,
+      headers: { 
+        "Content-Type": "application/json; charset=utf-8", 
+        'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+        'user-email': sessionStorage.getItem('user-email')
+      },
+    })
+    .then(res => {
+      this.writer = res.data.name
+      this.title = res.data.title
+      this.company = res.data.company
+      this.category = res.data.category
+      if (this.email == res.data.email) {
+        this.isWriter = true
+      }
+    })
+    Axios({
+      method: "GET",
+      url: `${API_URL}resumeitem/resume/${this.id}`,
+      headers: { 
+        "Content-Type": "application/json; charset=utf-8", 
+        'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+        'user-email': sessionStorage.getItem('user-email')
+      }
+    })
+    .then(res => {
+      this.items = res.data
+    })
+    .catch(err => {
+      alert(err.response.data.msg)
+    })
+  }
   }
 }
 </script>
