@@ -52,7 +52,6 @@ export default {
     team: Object
   },
   created() {
-    console.log(this.team)
   },
   computed: {},
   methods: {
