@@ -234,7 +234,7 @@
             <b-card-text>
               <div class="my-2">
                 <b-container>
-                  <h1>스터디원</h1>
+                  <h1>{{ team.title }}의 스터디원</h1>
                   <hr>
                   <b-row>
                     <b-col cols="4" class="p-0">
@@ -267,7 +267,7 @@
           </b-tab>
           <b-tab title="게시판" v-if="isMember">
             <b-card-text>
-              <b-button v-if="isMember" @click="toAricle" class="mr-1">게시판 보기</b-button>
+              <TeamArticle :key="this.study_id"></TeamArticle>
             </b-card-text>
           </b-tab>
           <b-tab title="탈퇴하기" v-if="isMember" v-b-modal.modal-secession>
@@ -342,6 +342,7 @@
 <script>
 import Axios from 'axios'
 import { mapGetters, mapState } from 'vuex'
+import TeamArticle from "../../components/common/TeamArticle.vue";
 const API_URL = process.env.VUE_APP_LOCAL_URL
 
 export default {
@@ -639,33 +640,10 @@ export default {
     .catch(err => {
       alert(err.response.msg)
     })
-    // 로그인 후 내가 스터디 멤버 또는 가입 신청한 멤버인가
-    // Axios({
-    //   method: "GET",
-    //   url: `${API_URL}study/email?email=${this.email}`,
-    //   headers: { 
-    //     "Content-Type": "application/json; charset=utf-8", 
-    //     'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
-    //     'user-email': sessionStorage.getItem('user-email')
-    //   }
-    // })
-    // .then(res => {
-    //   for (var i=0; i<res.data.length; i++) {
-    //     if (res.data[i].studyId == this.study_id) {
-    //       this.isMember = true
-    //       break
-    //     }
-    //   }
-    //   for (var j=0; j<this.applyList.length; j++) {
-    //     if (this.applyList[j].email == this.email) {
-    //       this.isReady = true
-    //       break
-    //     }
-    //   }
-    // })
     
   },
   components: {
+    TeamArticle,
   },
 }
 </script>
