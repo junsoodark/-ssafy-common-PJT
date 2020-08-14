@@ -1,10 +1,12 @@
 <template>
   <div class="loginBackImage">
     <b-container
-      style="max-width:450px; background-color:white; margin-left:450px; margin-top:150px"
+      style="max-width:450px; background-color:white; margin-left:300px; margin-top:80px"
     >
       <br />
-      <h1>Login</h1>
+      <h1>
+        <img src="../../assets/logologo.png" style="height:80px" />Login
+      </h1>
       <br />
       <b-form @submit.prevent="login(loginData)" style="padding:1rem;">
         <b-row>이메일</b-row>
@@ -35,13 +37,8 @@
         </b-row>
         <br />
         <b-row>
-            <!-- @click="update_email(loginData.email)" -->
-          <b-button
-            type="submit"
-            block
-            variant="info"
-            size="lg"
-          >로그인</b-button>
+          <!-- @click="update_email(loginData.email)" -->
+          <b-button type="submit" block variant="info" size="lg">로그인</b-button>
         </b-row>
         <b-row>
           <p>Help Desk : 010-7374-5848</p>

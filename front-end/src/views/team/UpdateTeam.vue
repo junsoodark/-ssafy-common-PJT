@@ -8,9 +8,9 @@
       <b-row>
         <b-col class="input-group input-group-lg">
           <div class="input-group-prepend">
-            <span class="input-group-text" style="width: 9rem;" id="inputGroup-sizing-default">스터디 이름</span>
+            <span class="input-group-text" style="width: 9rem;">스터디 이름</span>
           </div>
-          <input v-model="form.title" type="text" class="form-control text-center">
+          <input v-model="form.title" type="text" class="form-control text-center" placeholder="스터디 이름을 입력해주세요">
         </b-col>
       </b-row>
       <br>
@@ -18,9 +18,9 @@
       <b-row>
         <b-col class="input-group input-group-lg">
           <div class="input-group-prepend">
-            <span class="input-group-text" style="width: 9rem;" id="inputGroup-sizing-default">지역</span>
+            <span class="input-group-text" style="width: 9rem;">지역</span>
           </div>
-          <b-form-select v-model="form.si" :options="siAreas" required></b-form-select>
+          <b-form-select v-model="form.si" :options="siAreas" @change="changeGu" required></b-form-select>
           <b-form-select v-model="form.gu" :options="guAreas" required></b-form-select>
         </b-col>
       </b-row>
@@ -29,13 +29,14 @@
       <b-row>
         <b-col class="input-group input-group-lg">
           <div class="input-group-prepend">
-            <span class="input-group-text" style="width: 9rem;" id="inputGroup-sizing-default">인원수</span>
+            <span class="input-group-text" style="width: 9rem;">인원수</span>
           </div>
           <b-form-spinbutton
             v-model="form.maxMembers"
-            :min="form.numMembers"
+            min="1"
             max="100"
             required
+            placeholder="최대 인원수를 정하세요" 
           ></b-form-spinbutton>
         </b-col>
       </b-row>
@@ -44,9 +45,9 @@
       <b-row>
         <b-col class="input-group input-group-lg">
           <div class="input-group-prepend">
-            <span class="input-group-text" style="width: 9rem;" id="inputGroup-sizing-default">분야</span>
+            <span class="input-group-text" style="width: 9rem;">분야</span>
           </div>
-          <b-form-select v-model="form.field" :options="fields" required></b-form-select>
+          <b-form-select v-model="form.categoryId" :options="category" required></b-form-select>
         </b-col>
       </b-row>
       <br>
@@ -54,9 +55,9 @@
       <b-row>
         <b-col class="input-group input-group-lg">
           <div class="input-group-prepend">
-            <span class="input-group-text" style="width: 9rem;" id="inputGroup-sizing-default">온/오프라인</span>
+            <span class="input-group-text" style="width: 9rem;">온/오프라인</span>
           </div>
-          <b-form-select v-model="form.contact" :options="contacts" required></b-form-select>
+          <b-form-select v-model="form.placeId" :options="place" required></b-form-select>
         </b-col>
       </b-row>
       <br>
@@ -64,10 +65,10 @@
       <b-row>
         <b-col class="input-group input-group-lg">
           <div class="input-group-prepend">
-            <span class="input-group-text" style="width: 9rem;" id="inputGroup-sizing-default">기간</span>
+            <span class="input-group-text" style="width: 9rem;">기간</span>
           </div>
-          <b-form-datepicker v-model="form.startDate"></b-form-datepicker>
-          <b-form-datepicker v-model="form.endDate"></b-form-datepicker>
+          <b-form-datepicker placeholder="시작 기간" v-model="form.startDate"></b-form-datepicker>
+          <b-form-datepicker placeholder="마침 기간" v-model="form.endDate"></b-form-datepicker>
         </b-col>
       </b-row>
       <br>
@@ -75,27 +76,33 @@
       <b-row>
         <b-col class="input-group input-group-lg">
           <div class="input-group-prepend">
-            <span class="input-group-text" style="width: 9rem;" id="inputGroup-sizing-default">일정</span>
+            <span class="input-group-text" style="width: 9rem;">일정</span>
           </div>
-          <b-form-select v-model="form.schedule" :options="schedules" required></b-form-select>
-          <!-- <b-form-radio-group class="mx-2" v-model="form.schedule" :options="schedules"></b-form-radio-group> -->
+          <!-- <b-form-select v-model="form.periodId" :options="period" required></b-form-select> -->
+          <b-form-radio-group v-model="form.periodId" :options="period" required></b-form-radio-group>
           <b-form-spinbutton
-            v-model="form.count"
-            :options="counts"
+            v-model="form.numMeetings"
             min="1"
-            max="100"
+            max="31"
             required
+            placeholder="횟수를 입력해주세요"
           ></b-form-spinbutton>
         </b-col>
       </b-row>
       <br>
-      <!-- 요일 -->
+      <!-- 주중/시간 -->
       <b-row>
         <b-col class="input-group input-group-lg">
-          <div class="input-group-prepend">
-            <span class="input-group-text" style="width: 9rem;" id="inputGroup-sizing-default">요일</span>
+          <div class="input-group-prepend m-0 p-0">
+            <span class="input-group-text" style="width: 9rem;">주중/시간</span>
           </div>
-          <b-form-radio-group v-model="form.day" :options="days"></b-form-radio-group>
+          <b-col cols="5">
+            <b-form-radio-group v-model="form.weekId" :options="week"></b-form-radio-group>
+          </b-col>
+          <b-col style="font-size: 30px;">|</b-col>
+          <b-col cols="5">
+            <b-form-radio-group v-model="form.shiftId" :options="shift"></b-form-radio-group>
+          </b-col>
         </b-col>
       </b-row>
       <br>
@@ -103,9 +110,9 @@
       <b-row>
         <b-col class="input-group input-group-lg">
           <div class="input-group-prepend">
-            <span class="input-group-text" style="width: 9rem;" id="inputGroup-sizing-default">소개글</span>
+            <span class="input-group-text" style="width: 9rem;">소개글</span>
           </div>
-          <b-form-textarea v-model="form.content" rows="3" no-resize></b-form-textarea>
+          <b-form-textarea v-model="form.content" placeholder="스터디에 관련된 소개글을 입력해주세요" rows="3" no-resize></b-form-textarea>
         </b-col>
       </b-row>
       <br>
@@ -129,80 +136,58 @@ export default {
   data() {
     return {
       form: {
+        studyId: this.$route.params.id,
+        categoryId: null,
         content: null,
-        email: this.email,
         endDate: null,
         gu: null,
         maxMembers: null,
+        periodId: null,
+        placeId: null,
+        shiftId: null,
         si: null,
         startDate: null,
-        studyId: this.$route.params.id,
         title: null,
-        numMembers: null,
-
-        field: null,
-        contact: null,
-        schedule: null,
-        count: null,
-        day: null,
-        time: null,
-        period: null,
-        value: 0,
+        weekId: null,
+        numMeetings: null,
       },
-        fields: [
-          "공기업",
-          "사기업",
-        ],
-        siAreas: [{ text: "시를 선택해주세요", value: null }, "서울"],
-        guAreas: [
-          { text: "구를 선택해주세요", value: null },
-          "강남구",
-          "강동구",
-          "강북구",
-          "강서구",
-          "관악구",
-          "광진구",
-          "구로구",
-          "금천구",
-          "노원구",
-          "도봉구",
-          "동대문구",
-          "동작구",
-          "마포구",
-          "서대문구",
-          "서초구",
-          "성동구",
-          "성북구",
-          "송파구",
-          "양천구",
-          "영등포구",
-          "용산구",
-          "은평구",
-          "중구",
-          "중랑구",
-        ],
-        contacts: [
-          { text: "오프라인", value: "오프라인" },
-          { text: "온라인", value: "온라인" },
-        ],
-        schedules: [
-          { text: "매월", value: "매월" },
-          { text: "매주", value: "매주" },
-          { text: "추후협의", value: "추후협의" },
-        ],
-        days: [
-          { text: "평일", value: "평일" },
-          { text: "주말", value: "주말" },
-          { text: "혼합", value: "혼합" },
-          { text: "추후협희", value: "추후협희" },
-        ],
-        times: [
-          { text: "오전", value: "오전" },
-          { text: "오후", value: "오후" },
-          { text: "저녁", value: "저녁" },
-          { text: "추후협의", value: "추후협의" },
-        ],
-        counts: [{ text: "횟수", value: null }],
+      category: [
+        { text: "원하는 분야를 선택해주세요", value: null },
+        { text: "면접", value: 1 },
+        { text: "인적성/NCS", value: 2},
+        { text: "코딩 테스트", value: 3},
+        { text: "기타", value: 4},
+      ],
+      siAreas: [
+        { text: "시를 선택해주세요", value: null}
+      ],
+      guAreas: [
+        { text: "구를 선택해주세요", }
+      ],
+      place: [
+        { text: "온/오프라인을 선택해주세요", value: null},
+        { text: "오프라인", value: 1 },
+        { text: "온라인", value: 2 },
+        { text: "추후협의", value: 3 },
+      ],
+      period: [
+        { text: "매일", value: 1 },
+        { text: "매주", value: 2 },
+        { text: "매월", value: 3 },
+        { text: "추후협의", value: 4 },
+      ],
+      week: [
+        { text: "평일", value: 1 },
+        { text: "주말", value: 2 },
+        { text: "혼합", value: 3 },
+        { text: "추후협의", value: 4 },
+      ],
+      shift: [
+        { text: "오전", value: 1 },
+        { text: "오후", value: 2 },
+        { text: "야간", value: 3 },
+        { text: "추후협의", value: 4 },
+      ],
     };
   },
   computed: {
@@ -211,6 +196,15 @@ export default {
     }),
   },
   created () {
+    // @@시 가져오기
+    Axios.get(`${API_URL}address/`)
+    .then((res) => {
+      this.siAreas.push(res.data[0])
+    })
+    .catch((err) => {
+      console.log(err)
+    });
+    // 스터디 정보 가져오기
     Axios.get(`${API_URL}study/${this.form.studyId}`, {
       headers: {
         'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
@@ -222,8 +216,55 @@ export default {
         alert('팀 매니저가 아닙니다')
         this.$router.push({ name: "Home" })
       }
-      this.form = res.data
+      this.form.periodId = null
+      this.form.weekId = null
+      this.form.endDate = res.data.endDate
+      this.form.shiftId = null
+      this.form.numMeetings = res.data.numMeetings
+      this.form.title = res.data.title
+      this.form.content = res.data.content
+      this.form.gu = res.data.gu
+      this.form.numMembers = res.data.numMembers
+      this.form.maxMembers = res.data.maxMembers
+      this.form.si = res.data.si
       this.form.studyId = this.$route.params.id
+      this.form.placeId = null
+      this.form.categoryId = null
+      this.form.startDate = res.data.startDate
+      
+      for (var a=0; a < this.period.length; a++) {
+        if (this.period[a].text === res.data.period)
+        this.form.periodId = this.period[a].value
+      }
+      for (var b=0; b < this.week.length; b++) {
+        if (this.week[b].text === res.data.week)
+        this.form.weekId = this.week[b].value
+      }
+      for (var c=0; c < this.shift.length; c++) {
+        if (this.shift[c].text === res.data.shift)
+        this.form.shiftId = this.shift[c].value
+      }
+      for (var i=0; i < this.category.length; i++) {
+        if (this.category[i].text === res.data.category) {
+          this.form.categoryId = this.category[i].value
+          break
+        }
+      }
+      for (var j=0; j < this.place.length; j++) {
+        if (this.place[j].text === res.data.place) {
+          this.form.placeId = this.place[j].value
+          break
+        }
+      }
+      for (var k=0; k < this.place.length; k++) {
+        if (this.place[k].text === res.data.place) {
+          this.form.placeId = this.place[k].value
+          break
+        }
+      }
+
+      this.changeGu()
+      console.log(this.form)
     })
     .catch(err => {
       console.log(err)
@@ -233,17 +274,22 @@ export default {
     ...mapActions(["createTeam"]),
     studyUpdate() {
       const params = {
+        categoryId: this.form.categoryId,
         content: this.form.content,
-        email: this.email,
         endDate: this.form.endDate,
         gu: this.form.gu,
         maxMembers: this.form.maxMembers,
+        numMeetings: this.form.numMeetings,
+        periodId: this.form.periodId,
+        placeId: this.form.placeId,
+        shiftId: this.form.shiftId,
         si: this.form.si,
         startDate: this.form.startDate,
         studyId: this.form.studyId,
         title: this.form.title,
+        weekId: this.form.weekId,
       };
-
+      console.log(params)
       const JsonParams = JSON.stringify(params);
       Axios({
         method: "PUT",
@@ -261,8 +307,21 @@ export default {
         router.push({ name: 'StudyDetail', params: {id:this.form.studyId}})
       })
       .catch((err) => {
-        console.log(err.response.data);
+        console.log('aa',err.response.data);
       });
+    },
+    
+    changeGu() {
+      Axios.get(`${API_URL}address/${this.form.si}`)
+      .then((res) => {
+        this.guAreas = res.data
+      })
+      .catch((err) => {
+        this.guAreas = [
+          { text: "구를 선택해주세요", }
+        ],
+        console.log(err);
+      })  
     },
   },
 };

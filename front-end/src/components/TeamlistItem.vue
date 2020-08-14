@@ -1,66 +1,41 @@
 <template>
-
-    <!-- <b-card
-      img-src=""
-      img-alt="Image"
-      img-top
-      tag="article"
-      style=" background-color: #87CEFA; "
-      class="mb-2 text-left cursor:pointer"
-      text-variant="white"
-      header="대분류"
-      header-text-variant="right"
-      @click="clickCard"
-      footer="팀장 @@@"
-    > 
-      <b-container class="p-0" style="cursor:pointer">
-        <b-row>
-          <b-col cols="8"><h5>{{ team.title }}</h5></b-col>
-          <b-col cols="4"><p>인원수</p></b-col>
+  <b-container class="rounded p-2" style="cursor:pointer;" @click="clickCard">
+    <div class="card">
+      <div v-if="team.category === '코딩 테스트'" class="mycard-header1 text-left pt-2">
+        <b-icon icon="person-circle" font-scale="1"></b-icon> {{ team.numMembers }}/{{ team.maxMembers }}
+      </div>
+      <div v-if="team.category === '인적성/NCS'" class="mycard-header2 text-left pt-2">
+        <b-icon icon="person-circle" font-scale="1"></b-icon> {{ team.numMembers }}/{{ team.maxMembers }}
+      </div>
+      <div v-if="team.category === '면접'" class="mycard-header3 text-left pt-2">
+        <b-icon icon="person-circle" font-scale="1"></b-icon> {{ team.numMembers }}/{{ team.maxMembers }}
+      </div>
+      <div v-if="team.category === '기타'" class="mycard-header4 text-left pt-2">
+        <b-icon icon="person-circle" font-scale="1"></b-icon> {{ team.numMembers }}/{{ team.maxMembers }}
+      </div>
+      <div class="card-body text-center">
+        <img :src="defaultImageUrl" style="width:140px;margin-top:-85px" alt="User" class="img-fluid img-thumbnail rounded-circle border-0 mb-2">
+        <b-row class="my-1">
+          <b-col><h5 class="font-weight-bold">{{ team.title }}</h5></b-col>
         </b-row>
-        <b-row class="p-1">
-          <b-col style="background-color: #FFFFF0" ><p class="m-1" style="color: black;">일정/시간</p></b-col>
+        <b-row class="my-1">
+          <b-col md="1" offset-md="1"><b-icon icon="building" font-scale="1"></b-icon></b-col>
+          <b-col md="8" offset-md="1" class="text-left"><b-badge pill variant="secondary" class="studyCard">{{ team.si }} {{ team.gu }}</b-badge></b-col>
         </b-row>
-        <b-row class="p-1">
-          <b-col style="background-color: #FFFFF0" ><p class="m-1" style="color: black">온/오프라인</p></b-col>
+        <b-row class="my-1">
+          <b-col md="1" offset-md="1"><b-icon icon="calendar2-check-fill" font-scale="1"></b-icon></b-col>
+          <b-col md="8" offset-md="1" class="text-left"> <b-badge pill variant="secondary" class="studyCard">{{ team.period }} / {{ team.numMeetings }}회</b-badge></b-col>
         </b-row>
-        <b-row class="p-1">
-          <b-col style="background-color: #FFFFF0" ><p class="m-1" style="color: black">콘텐트: {{ team.content }}</p></b-col>
+        <b-row class="my-1">
+          <b-col md="1" offset-md="1"><b-icon icon="tv-fill" font-scale="1"></b-icon></b-col>
+          <b-col md="8" offset-md="1" class="text-left"><b-badge pill variant="secondary"  class="studyCard">{{ team.place }}</b-badge></b-col>
         </b-row>
-      </b-container>
-      
-    </b-card> -->
-
-
-  <b-container class="border rounded p-0">
-
-    <!-- 주황색 rgb(243, 156, 18) -->
-    <!-- 핑크색 rgb(242, 142, 240) -->
-    <b-row class="mx-2 pl-0 text-left text-light" style="text-color: white">
-      <b-col cols="6" class="mt-4" style="background-color: rgb(46, 204, 113); ">
-        <b-icon icon="person-circle" font-scale="1"></b-icon> 4/6
-      </b-col>
-      <b-row>
-        <b-col style="" md="8" offset-md="4"><img :src="defaultImageUrl" width="200"  alt="" class="rounded-circle"></b-col>
-      </b-row>
-    </b-row>
-
-
-    <b-row class="my-1">
-      <b-col>{{ team.title }}</b-col>
-    </b-row>
-    <b-row class="my-1">
-      <b-col md="1" offset-md="2"><b-icon icon="building" font-scale="1"></b-icon></b-col>
-      <b-col md="9" offset-md="0" class="text-left"> <b-badge pill variant="secondary" class="studyCard">서울 / 강남</b-badge></b-col>
-    </b-row>
-    <b-row class="my-1">
-      <b-col md="1" offset-md="2"><b-icon icon="calendar2-check-fill" font-scale="1"></b-icon></b-col>
-      <b-col md="9" offset-md="0" class="text-left"> <b-badge pill variant="secondary" class="studyCard">추후 협의 / 2회</b-badge></b-col>
-    </b-row>
-    <b-row class="my-1">
-      <b-col md="1" offset-md="2"><b-icon icon="tv-fill" font-scale="1"></b-icon></b-col>
-      <b-col md="9" offset-md="0" class="text-left"><b-badge pill variant="secondary"  class="studyCard">오프라인</b-badge></b-col>
-    </b-row>
+      </div>
+      <!-- <div class="card-footer">
+        <button class="btn btn-light btn-sm bg-white has-icon btn-block" type="button"><i class="material-icons">add</i>Follow</button>
+        <button class="btn btn-light btn-sm bg-white has-icon ml-2" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-message-circle"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></button>
+      </div> -->
+    </div>
   </b-container>
 </template>
 
@@ -76,19 +51,52 @@ export default {
   props: {
     team: Object
   },
-  computed: {
-
+  created() {
+    console.log(this.team)
   },
+  computed: {},
   methods: {
     clickCard() {
-      router.push({ name: 'StudyDetail', params: {id:this.team.studyId}})
-    }
-  }
-}
+      router.push({ name: "StudyDetail", params: { id: this.team.studyId } });
+    },
+  },
+};
 </script>
 
 <style>
 .studyCard {
-  width:200px;
+  padding-right: 10px !important;
+  width: 150px;
 }
+
+.mycard-header1 {
+	background-color: rgb(46, 204, 113);
+	padding: 5px 10px;
+  height: 120px;
+  cursor:pointer;
+}
+.mycard-header2 {
+	background-color: rgb(242, 142, 240);
+	padding: 5px 10px;
+  height: 120px;
+  cursor:pointer;
+}
+.mycard-header3 {
+	background-color: rgb(243, 156, 18);
+	padding: 5px 10px;
+  height: 120px;
+  cursor:pointer;
+}
+.mycard-header4 {
+	background-color: #00BFFF;
+	padding: 5px 10px;
+  height: 120px;
+  cursor:pointer;
+}
+
+.card-body {
+  z-index: 1;
+}
+
+
 </style>

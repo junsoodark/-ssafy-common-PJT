@@ -106,16 +106,16 @@
       
       <b-card header-tag="header" footer-tag="footer">
         <template v-slot:header>
-          <b-icon icon="hand-thumbs-up" aria-hidden="true"></b-icon> 성실도
+          <b-icon icon="hand-thumbs-up" aria-hidden="true"></b-icon> 온/오프라인
         </template>
-        <b-card-text>88% 이상</b-card-text>
+        <b-card-text>{{ team.place }}</b-card-text>
       </b-card>
       
       <b-card header-tag="header" footer-tag="footer">
         <template v-slot:header>
           <b-icon icon="file-text" aria-hidden="true"></b-icon> 분야
         </template>
-        <b-card-text>개발 > Algorithm</b-card-text>
+        <b-card-text>{{ team.category }}</b-card-text>
       </b-card>
       <b-card header-tag="header" footer-tag="footer">
         <template v-slot:header>
@@ -136,13 +136,13 @@
         <template v-slot:header>
           <b-icon icon="list-check" aria-hidden="true"></b-icon> 일정
         </template>
-        <b-card-text>추후 협의 2회</b-card-text>
+        <b-card-text>{{ team.period }} / {{ team.numMeetings }}회</b-card-text>
       </b-card>
       <b-card header-tag="header" footer-tag="footer">
         <template v-slot:header>
-          <b-icon icon="alarm" aria-hidden="true"></b-icon> 시간
+          <b-icon icon="alarm" aria-hidden="true"></b-icon> 주중/시간
         </template>
-        <b-card-text>주말 시간 협의</b-card-text>
+        <b-card-text>{{ team.week }} / {{ team.shift }}</b-card-text>
       </b-card>
     </b-card-group>
     <br>
@@ -465,6 +465,7 @@ export default {
     }
   },
   created() {
+    // 스터디 디테일 정보 가져오기
     Axios({
       method: "GET",
       url: `${API_URL}study/${this.study_id}`,
@@ -481,7 +482,11 @@ export default {
       console.log(err)
       this.$router.push({ name: "NotFound" })
     })
+    if (!this.isLoggedIn) { 
+      return false 
+    }
 
+    // 해당 스터디의
     Axios({
       method: "GET",
       url: `${API_URL}study/${this.study_id}/list`,
@@ -513,8 +518,16 @@ export default {
     .catch(err => {
       alert(err.response.msg)
     })
-
-    Axios.get(`${API_URL}study/email?email=${this.email}`)
+    // 로그인 후 내가 스터디 멤버 또는 가입 신청한 멤버인가
+    Axios({
+      method: "GET",
+      url: `${API_URL}study/email?email=${this.email}`,
+      headers: { 
+        "Content-Type": "application/json; charset=utf-8", 
+        'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+        'user-email': sessionStorage.getItem('user-email')
+      }
+    })
     .then(res => {
       for (var i=0; i<res.data.length; i++) {
         if (res.data[i].studyId == this.study_id) {
