@@ -109,7 +109,7 @@ public class ReplyServiceImpl implements ReplyService {
         ret.put("writerEmail", reply.getUser().getEmail());
         ret.put("writerName", reply.getUser().getName());
         ret.put("content", reply.getContent());
-        ret.put("resumeId", reply.getResume());
+        ret.put("resumeId", reply.getResume().getId());
         return ret;
     }
 
