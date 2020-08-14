@@ -1,6 +1,7 @@
 <template>
   <div>
     <h1 class="my-3">자소서 게시판</h1>
+    <b-button :to="{name:'createLetter'}">글쓰기</b-button>
     <b-container class="my-3">
       <b-list-group>
         <b-row>
@@ -18,6 +19,8 @@
 </template>
 
 <script>
+import Axios from 'axios'
+const API_URL = process.env.VUE_APP_LOCAL_URL
 export default {
   data () {
     return {
@@ -28,6 +31,26 @@ export default {
         {title: '면접 어떤 질문 옴?',id:6,category:"면접 질문"}
       ]
     }
+  },
+  created () {
+    Axios({
+        method: "GET",
+        url: `${API_URL}resume/all`,
+        headers: { 
+          "Content-Type": "application/json; charset=utf-8", 
+          'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+          'user-email': sessionStorage.getItem('user-email')
+        },
+      })
+    .then(res => {
+      this.letters = res.data.reverse()
+    })
+    .catch(err => {
+      const msg = err.response.data.msg
+      if (msg == '토큰이 존재하지 않습니다.') {
+        alert('로그인을 해주셔야 이용이 가능합니다')
+      } else { alert(msg) }
+    })
   }
 }
 </script>

@@ -17,6 +17,7 @@ import CreateTeam from "../views/team/CreateTeam.vue"
 import UpdateTeam from "../views/team/UpdateTeam.vue"
 import StudyArticle from '../views/team/TeamArticleList.vue'
 import ArticleDetail from "../views/team/ArticleDetail.vue"
+import updateArticle from "../views/team/updateArticle.vue"
 //error
 import NotFound from '../views/error/NotFound.vue'
 //추가기능
@@ -27,6 +28,8 @@ import ApplyCalander from "../views/applyCalander.vue"
 import letterList from '../views/coverletter/letterList.vue'
 import letterDetail from '../views/coverletter/letterDetail.vue'
 import createLetter from '../views/coverletter/createLetter.vue'
+import UpdateCover from '../views/coverletter/updateCover.vue'
+import UpdateQuest from '../views/coverletter/updateLetter.vue'
 
 
 Vue.use(VueRouter);
@@ -92,6 +95,11 @@ const routes = [
     component: TeamDetail,
   },
   {
+    path: '/study/:studyid/article/update/:articleid',
+    name: 'updateArticle',
+    component: updateArticle,
+  },
+  {
     path: '/study/:id/article',
     name: 'StudyArticle',
     component: StudyArticle
@@ -132,6 +140,16 @@ const routes = [
     component: letterDetail
   },
   {
+    path: "/coverletter/update/:id",
+    name: "UpdateCover",
+    component: UpdateCover
+  },
+  {
+    path: "/coverletter/question/:articleId/:id",
+    name: "UpdateQuest",
+    component: UpdateQuest
+  },
+  {
     path: "/chat",
     name: "Chat",
     component: Chat
@@ -155,7 +173,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const publicPages = ['Login', 'Signup', 'Home', 'About', 'StudyList', 'StudyDetail', 'Mypage',  'UpdateUserInfo','NotFound', 'FindPassword']  // Login 안해도 됨
+  const publicPages = ['Login', 'Signup', 'Home', 'About', 'StudyList', 'StudyDetail', 'Mypage',  'UpdateUserInfo','NotFound', 'FindPassword', 'LetterList', 'Search', 'ApplyCalander']  // Login 안해도 됨
   const authPages = ['Login', 'Signup']  // Login 되어있으면 안됨
   const loginRequiredPages = ['CreateTeam']
   

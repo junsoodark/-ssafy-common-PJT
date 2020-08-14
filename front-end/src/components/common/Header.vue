@@ -12,7 +12,7 @@
           toggle-class="nav-link-custom text-decoration-none text-light"
           right
         >
-          <b-dropdown-item :to="{ name: 'StudyList' }">스터디 리스트</b-dropdown-item>
+          <b-dropdown-item :to="{ name: 'StudyList' }">스터디 목록</b-dropdown-item>
           <b-dropdown-item :to="{ name: 'CreateTeam'}">스터디 만들기</b-dropdown-item>
         </b-nav-item-dropdown>
         <b-nav-item-dropdown
@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations, mapActions } from "vuex";
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   data() {
@@ -59,8 +59,7 @@ export default {
     ...mapGetters(["isLoggedIn"]),
   },
   methods: {
-    ...mapMutations(["deleteUserInfo"]),
-    ...mapActions(["delete_email"]),
+    ...mapActions(['delete_email']),
     search() {
       this.$router.push({
         name: "Search",

@@ -24,6 +24,7 @@ public class JwtInterceptor implements HandlerInterceptor{
 		if(token==null || token.length()==0) throw new RuntimeException("토큰이 존재하지 않습니다.");
 		else if(token.equals("lotiple")) return true; // 개발 완료시 삭제바랍니다.
 		else if(email==null || email.length()==0) throw new RuntimeException("사용자 정보가 존재하지 않습니다.");
-		else return jwtService.isValidToken(token, email);
+		else if(jwtService.isValidToken(token, email)==false) throw new RuntimeException("유효하지 않은 토큰입니다. 다시 로그인해주세요.");
+		else return true;
 	}
 }
