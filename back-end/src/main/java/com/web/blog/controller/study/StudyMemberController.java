@@ -189,17 +189,16 @@ public class StudyMemberController {
 	@ApiOperation(value = ("스터디 id 를 입력받고, 해당 스터디에 가입된 스터디원 목록을 반환합니다."))
 	public ResponseEntity getStudyUserList(@RequestHeader(value = "jwt-auth-token") final String token,
 			@PathVariable int study_id) {
-		System.out.println(token);
-		final String mgrEmail = jwtService.parseEmail(token);
-		System.out.println(mgrEmail);
-		User mgr = userService.findUserByEmail(mgrEmail);
-		if (mgr == null)
-			return new ResponseEntity("존재하지 않는 관리자입니다.", HttpStatus.NOT_FOUND);
+		//final String mgrEmail = jwtService.parseEmail(token);
+		//System.out.println(mgrEmail);
+		//User mgr = userService.findUserByEmail(mgrEmail);
+	//	if (mgr == null)
+	//		return new ResponseEntity("존재하지 않는 관리자입니다.", HttpStatus.NOT_FOUND);
 		Study study = studyService.findStudyByStudyId(study_id);
 		if (study == null)
 			return new ResponseEntity("존재하지 않는 스터디입니다.", HttpStatus.NOT_FOUND);
-		if (studyService.isManager(study_id, mgr.getId()) == false)
-			return new ResponseEntity("스터디 조회 권한이 없습니다.", HttpStatus.UNAUTHORIZED);
+	//	if (studyService.isManager(study_id, mgr.getId()) == false)
+	//		return new ResponseEntity("스터디 조회 권한이 없습니다.", HttpStatus.UNAUTHORIZED);
 		List<Map<String, String>> res = studyMemberService.getStudyUserList(study);
 
 		return new ResponseEntity(res, HttpStatus.OK);
@@ -209,15 +208,15 @@ public class StudyMemberController {
 	@ApiOperation(value = ("스터디 id 를 입력받고, 해당 스터디에 가입된 스터디원 목록을 반환합니다."))
 	public ResponseEntity getStudyApprovalUserList(@PathVariable int study_id,
 			@RequestHeader(value = "jwt-auth-token") final String token) {
-		final String mgrEmail = jwtService.parseEmail(token);
-		User mgr = userService.findUserByEmail(mgrEmail);
-		if (mgr == null)
-			return new ResponseEntity("존재하지 않는 관리자입니다.", HttpStatus.NOT_FOUND);
+	//	final String mgrEmail = jwtService.parseEmail(token);
+	//	User mgr = userService.findUserByEmail(mgrEmail);
+		//if (mgr == null)
+	//		return new ResponseEntity("존재하지 않는 관리자입니다.", HttpStatus.NOT_FOUND);
 		Study study = studyService.findStudyByStudyId(study_id);
 		if (study == null)
 			return new ResponseEntity("존재하지 않는 스터디입니다.", HttpStatus.NOT_FOUND);
-		if (studyService.isManager(study_id, mgr.getId()) == false)
-			return new ResponseEntity("스터디 조회 권한이 없습니다.", HttpStatus.UNAUTHORIZED);
+		//if (studyService.isManager(study_id, mgr.getId()) == false)
+	//		return new ResponseEntity("스터디 조회 권한이 없습니다.", HttpStatus.UNAUTHORIZED);
 		List<Map<String, String>> res = studyMemberService.getStudyApprovalUserList(study);
 		// System.out.println(res.size());
 		return new ResponseEntity(res, HttpStatus.OK);
