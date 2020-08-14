@@ -74,6 +74,9 @@ export default {
       }
     }
   },
+  created () {
+    document.title = "Study Jobs"
+  }
 };
 </script>
 <style>
