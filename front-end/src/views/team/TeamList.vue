@@ -9,7 +9,7 @@
         <b-col md="7" offset-md="2">
           <b-input-group class="mt-3">
             <template v-slot:append>
-              <b-input-group-text @click="Search"><strong>확인</strong></b-input-group-text>
+              <b-input-group-text @click="Search" style="cursor: pointer;"><strong>확인</strong></b-input-group-text>
             </template>
             <b-form-input list="my-list-id" placeholder="분야를 검색하세요" @keyup.enter="Search" v-model="SearchText"></b-form-input>
 
@@ -24,10 +24,10 @@
       </b-row>
     </div>
     <div class="my-badges">
-      <b-badge pill class="my-badge1" @click="searchButton('코딩 테스트')">코딩테스트</b-badge>
-      <b-badge pill class="my-badge2" @click="searchButton('인적성/NCS')">NCS/인적성</b-badge>
-      <b-badge pill class="my-badge3" @click="searchButton('면접')">면접</b-badge>
-      <b-badge pill class="my-badge4" @click="searchButton('기타')">기타</b-badge>
+      <b-badge pill class="my-badge1" style="cursor: pointer;" @click="searchButton('코딩 테스트')">코딩테스트</b-badge>
+      <b-badge pill class="my-badge2" style="cursor: pointer;" @click="searchButton('인적성/NCS')">NCS/인적성</b-badge>
+      <b-badge pill class="my-badge3" style="cursor: pointer;" @click="searchButton('면접')">면접</b-badge>
+      <b-badge pill class="my-badge4" style="cursor: pointer;" @click="searchButton('기타')">기타</b-badge>
     </div>
 
     <br><br>
