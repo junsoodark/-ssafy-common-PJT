@@ -44,6 +44,12 @@
           ></b-form-input>
         </b-input-group>
       </b-form>
+      <!-- 로딩 모달 -->
+      <b-modal ref="my-modal" hide-footer hide-header centered no-close-on-backdrop>
+        <div class="text-center">
+          <b-spinner variant="primary" style="width: 5rem; height: 5rem;" label="Text Centered" class="m-auto"></b-spinner>
+        </div>
+      </b-modal>
       <!-- 이름 -->
       <b-form class="row">
         <b-input-group class="mb-4">
@@ -423,13 +429,15 @@ export default {
         alert("이메일 형식을 사용해야 합니다!");
         return false;
       }
-
+      this.$refs['my-modal'].show()
       Axios.post(`${API_URL}verify`, params)
         .then((res) => {
+          this.$refs['my-modal'].hide()
           alert(res.data);
         })
         .catch((err) => {
           if (err.response.status === 409) {
+            this.$refs['my-modal'].hide()
             alert("이미 사용중인 이메일 입니다.");
             return false;
           } else {
