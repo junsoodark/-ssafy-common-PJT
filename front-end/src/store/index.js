@@ -93,6 +93,7 @@ export default new Vuex.Store({
       })
     },
     signup(state, { code, age, email, nickname, password, sex }) {
+      console.log(code, age, email, nickname, password, sex)
       var params = new URLSearchParams();
       params.append("code", code);
       var form = {
