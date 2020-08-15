@@ -35,6 +35,8 @@ export default {
       alert('로그인이 만료되었습니다.')
       this.$router.push({ name: "Logout" })
     })
+    // 탭 타이틀 변경
+    document.title = "Study Jobs"
   },
   components: {
     Header,
@@ -92,9 +94,6 @@ export default {
       }
     }
   },
-  created () {
-    document.title = "Study Jobs"
-  }
 };
 </script>
 <style>
