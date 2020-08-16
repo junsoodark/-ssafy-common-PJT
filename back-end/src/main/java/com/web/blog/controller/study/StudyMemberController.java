@@ -64,7 +64,7 @@ public class StudyMemberController {
 		if (studyApprovalService.apply(study, user) == false)
 			return new ResponseEntity("스터디에 가입신청을할 수 없습니다. 관리자에게 문의바랍니다.", HttpStatus.FORBIDDEN);
 		
-		return new ResponseEntity("스터디 가입을 승인했습니다.", HttpStatus.OK);
+		return new ResponseEntity("스터디 가입 신청했습니다.", HttpStatus.OK);
 
 	}
 
@@ -189,9 +189,9 @@ public class StudyMemberController {
 	@ApiOperation(value = ("스터디 id 를 입력받고, 해당 스터디에 가입된 스터디원 목록을 반환합니다."))
 	public ResponseEntity getStudyUserList(@RequestHeader(value = "jwt-auth-token") final String token,
 			@PathVariable int study_id) {
-		System.out.println(token);
+		//System.out.println(token);
 		final String mgrEmail = jwtService.parseEmail(token);
-		System.out.println(mgrEmail);
+		//System.out.println(mgrEmail);
 		User mgr = userService.findUserByEmail(mgrEmail);
 		if (mgr == null)
 			return new ResponseEntity("존재하지 않는 관리자입니다.", HttpStatus.NOT_FOUND);
@@ -223,7 +223,7 @@ public class StudyMemberController {
 		return new ResponseEntity(res, HttpStatus.OK);
 	}
 
-	@GetMapping("/study/email")
+	@GetMapping("/study/mystudy/join")
 	@ApiOperation(value = "사용자의 이메일을 입력받아, 사용자가 가입한 모든 스터디의 목록을 반환합니다.")
 	public ResponseEntity findStudiesByEmail(@RequestParam final String email) {
 		User user = userService.findUserByEmail(email);
@@ -235,4 +235,18 @@ public class StudyMemberController {
 			res.add(studyService.Study2Map(study));
 		return new ResponseEntity(res, HttpStatus.OK);
 	}
+	
+	@GetMapping("/study/mystudy/applying")
+	@ApiOperation(value = "사용자가 가입신청한 모든 스터디의 목록을 반환합니다.")
+	public ResponseEntity findapplyingStudiesByEmail(@RequestHeader(value = "jwt-auth-token") final String token) {
+		final String email = jwtService.parseEmail(token);
+		System.out.println(email);
+		User user = userService.findUserByEmail(email);
+		if (user == null)
+			return new ResponseEntity("존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND);
+
+		List<Map<String, String>> res = (studyMemberService.getUserApplyingStudyList(user));
+		return new ResponseEntity(res, HttpStatus.OK);
+	}
+	
 }
