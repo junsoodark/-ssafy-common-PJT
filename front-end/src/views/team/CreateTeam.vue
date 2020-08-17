@@ -78,14 +78,21 @@
             <span class="input-group-text" style="width: 9rem;">일정</span>
           </div>
           <!-- <b-form-select v-model="form.periodId" :options="period" required></b-form-select> -->
-          <b-form-radio-group v-model="form.periodId" :options="period" required></b-form-radio-group>
-          <b-form-spinbutton
-            v-model="form.numMeetings"
-            min="1"
-            max="31"
-            required
-            placeholder="횟수를 입력해주세요"
-          ></b-form-spinbutton>
+          <b-col>
+            <b-form-radio-group class="radioInput" :state="state" v-model="form.periodId" :options="period" required>
+              <b-form-invalid-feedback :state="state">한 가지를 선택해주세요.</b-form-invalid-feedback>
+              <b-form-valid-feedback :state="state">감사합니다.</b-form-valid-feedback>
+            </b-form-radio-group>
+          </b-col>
+          <b-col>
+            <b-form-spinbutton
+              v-model="form.numMeetings"
+              min="1"
+              max="31"
+              required
+              placeholder="횟수를 입력해주세요"
+            ></b-form-spinbutton>
+          </b-col>
         </b-col>
       </b-row>
       <br>
@@ -197,6 +204,9 @@ export default {
     ...mapState({
       email: (state) => state.moduleName.email,
     }),
+    state() {
+      return Boolean(this.form.periodId)
+    }
   },
   methods: {
     ...mapActions(["createTeam"]),
@@ -264,4 +274,8 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+.radioInput {
+  vertical-align: middle !important;
+}
+</style>
