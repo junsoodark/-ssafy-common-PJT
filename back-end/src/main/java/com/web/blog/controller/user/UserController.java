@@ -1,5 +1,9 @@
 package com.web.blog.controller.user;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
 import javax.validation.Valid;
 
 import com.web.blog.model.user.User;
@@ -38,9 +42,16 @@ public class UserController {
 			return new ResponseEntity("인증 번호가 유효하지 않습니다.", HttpStatus.NOT_FOUND);
 		else if (userService.isValidPattern(user.getPassword()) == false)
 			return new ResponseEntity("비밀번호는 영문과 숫자가 적어도 1자 이상씩 포함된 8자이상으로 구성되어야 합니다.", HttpStatus.BAD_REQUEST);
-		else if (userService.create(user) == false)
-			return new ResponseEntity("이미 사용중인 이메일 입니다.", HttpStatus.CONFLICT); // Double Check
-		return new ResponseEntity("회원가입이 완료되었습니다.", HttpStatus.OK);
+		Optional<User> optUser = userService.create(user);
+		if(optUser.isPresent()) {
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("msg", "회원가입이 완료되었습니다.");
+			map.put("fbPassword",optUser.get().getFireBasePassword());
+			return new ResponseEntity(map,HttpStatus.OK);
+		}
+		else return new ResponseEntity("이미 사용중인 이메일 입니다.", HttpStatus.CONFLICT); // Double Ch
+		
+		
 	}
 
 	@GetMapping("/user/{email}")
