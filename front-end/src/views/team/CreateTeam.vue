@@ -77,15 +77,59 @@
           <div class="input-group-prepend">
             <span class="input-group-text" style="width: 9rem;">일정</span>
           </div>
-          <!-- <b-form-select v-model="form.periodId" :options="period" required></b-form-select> -->
-          <b-form-radio-group v-model="form.periodId" :options="period" required></b-form-radio-group>
-          <b-form-spinbutton
-            v-model="form.numMeetings"
-            min="1"
-            max="31"
-            required
-            placeholder="횟수를 입력해주세요"
-          ></b-form-spinbutton>
+          <b-col class="border">
+            <b-form-radio-group :state="periodState" v-model="form.periodId" :options="period" required>
+              <b-form-invalid-feedback :state="periodState">한 가지를 선택해주세요.</b-form-invalid-feedback>
+              <b-form-valid-feedback :state="periodState">감사합니다.</b-form-valid-feedback>
+            </b-form-radio-group>
+          </b-col>
+          <b-col class="border">
+            <b-form-spinbutton
+              v-if="form.periodId === 1"
+              class="myspinbutton"
+              v-model="form.numMeetings"
+              min="1"
+              max="1"
+              required
+              placeholder="횟수를 입력해주세요"
+            ></b-form-spinbutton>
+            <b-form-spinbutton
+              v-if="form.periodId === 2"
+              class="myspinbutton"
+              v-model="form.numMeetings"
+              min="1"
+              max="7"
+              required
+              placeholder="횟수를 입력해주세요"
+            ></b-form-spinbutton>
+            <b-form-spinbutton
+              v-if="form.periodId === 3"
+              class="myspinbutton"
+              v-model="form.numMeetings"
+              min="1"
+              max="31"
+              required
+              placeholder="횟수를 입력해주세요"
+            ></b-form-spinbutton>
+            <b-form-spinbutton
+              v-if="form.periodId === 4"
+              class="myspinbutton"
+              v-model="form.numMeetings"
+              min="0"
+              max="0"
+              required
+              placeholder="횟수를 입력해주세요"
+            ></b-form-spinbutton>
+            <b-form-spinbutton
+              v-if="form.periodId === null"
+              class="myspinbutton"
+              v-model="form.numMeetings"
+              min="0"
+              max="0"
+              required
+              placeholder="횟수를 입력해주세요"
+            ></b-form-spinbutton>
+          </b-col>
         </b-col>
       </b-row>
       <br>
@@ -95,12 +139,17 @@
           <div class="input-group-prepend m-0 p-0">
             <span class="input-group-text" style="width: 9rem;">주중/시간</span>
           </div>
-          <b-col cols="5">
-            <b-form-radio-group v-model="form.weekId" :options="week"></b-form-radio-group>
+          <b-col class="border">
+            <b-form-radio-group :state="weekState" v-model="form.weekId" :options="week">
+              <b-form-invalid-feedback :state="weekState">한 가지를 선택해주세요.</b-form-invalid-feedback>
+              <b-form-valid-feedback :state="weekState">감사합니다.</b-form-valid-feedback>
+            </b-form-radio-group>
           </b-col>
-          <b-col style="font-size: 30px;">|</b-col>
-          <b-col cols="5">
-            <b-form-radio-group v-model="form.shiftId" :options="shift"></b-form-radio-group>
+          <b-col class="border">
+            <b-form-radio-group :state="shiftState" v-model="form.shiftId" :options="shift">
+              <b-form-invalid-feedback :state="shiftState">한 가지를 선택해주세요.</b-form-invalid-feedback>
+              <b-form-valid-feedback :state="shiftState">감사합니다.</b-form-valid-feedback>
+            </b-form-radio-group>
           </b-col>
         </b-col>
       </b-row>
@@ -111,7 +160,7 @@
           <div class="input-group-prepend">
             <span class="input-group-text" style="width: 9rem;">소개글</span>
           </div>
-          <b-form-textarea v-model="form.content" placeholder="스터디에 관련된 소개글을 입력해주세요" rows="3" no-resize></b-form-textarea>
+          <b-form-textarea v-model="form.content" placeholder="스터디에 관련된 소개글을 입력해주세요" rows="5" no-resize></b-form-textarea>
         </b-col>
       </b-row>
       <br>
@@ -197,6 +246,15 @@ export default {
     ...mapState({
       email: (state) => state.moduleName.email,
     }),
+    periodState() {
+      return Boolean(this.form.periodId)
+    },
+    weekState() {
+      return Boolean(this.form.weekId)
+    },
+    shiftState() {
+      return Boolean(this.form.shiftId)
+    },
   },
   methods: {
     ...mapActions(["createTeam"]),
@@ -264,4 +322,10 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+.myspinbutton {
+  height: calc(2.5em + .75rem + 2px) !important;
+  border: 0px solid #ced4da !important;
+  padding: 0px !important;
+}
+</style>
