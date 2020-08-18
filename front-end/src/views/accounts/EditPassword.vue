@@ -1,69 +1,80 @@
 <script src="https://kit.fontawesome.com/958a5175c9.js" crossorigin="anonymous"></script>
 <template>
-  <b-container>
-    <h1>회원정보 수정 페이지</h1>
-    <div style="max-width:800px;" class="mx-auto middle"></div>
-    <!-- 현재 비밀번호 -->
-    <b-form class="row">
-      <b-input-group class="mb-4;">
-        <label class="col-2" style="text-align:right" for="password">현재 비밀번호</label>
-        <b-input-group-prepend variant is-text>
-          <b-icon icon="lock"></b-icon>
-        </b-input-group-prepend>
-        <b-form-input
-          v-model="nowPassword"
-          type="password"
-          class="form-control text-center"
-          aria-label="Sizing example input"
-          aria-describedby="inputGroup-sizing-default"
-        ></b-form-input>
-        <b-button @click="verifyPassword">확인</b-button>
-      </b-input-group>
-    </b-form>
-    <!-- 새 비밀번호 -->
-    <b-form @submit.stop.prevent="editPassword">
-      <b-row>
-        <b-col class="input-group input-group-lg">
-          <div class="input-group-prepend">
-            <span
-              class="input-group-text"
-              style="width: 10rem;"
-              id="inputGroup-sizing-default"
-            >새 비밀번호</span>
+  <div class="EditPasswordvue">
+    <h1 id="EditPasswordTitle">비밀번호 변경</h1>
+    <div>
+      <div id="EditPasswordGrid">
+        <!-- 현재 비밀번호 -->
+        <div class="PasswordEditControl">
+          <span class="PasswordEditText">현재 비밀번호 :</span>
+          <div>
+            <b-input-group>
+              <b-input-group-prepend>
+                <b-input-group-text style="background-color:white; border-right:none;">
+                  <b-icon icon="lock" />
+                </b-input-group-text>
+              </b-input-group-prepend>
+
+              <b-form-input
+                style="border-left:0"
+                v-model="nowPassword"
+                type="password"
+                class="form-control text-center"
+                aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-default"
+                placeholder="현재 비밀번호를 입력해 주세요"
+              ></b-form-input>
+
+              <b-input-group-append>
+                <b-button @click="verifyPassword" variant="outline-secondary">확인</b-button>
+              </b-input-group-append>
+            </b-input-group>
           </div>
-          <input
-            v-model="newPassword"
-            type="password"
-            class="form-control text-center"
-            aria-label="Sizing example input"
-            aria-describedby="inputGroup-sizing-default"
-          />
-        </b-col>
-      </b-row>
-      <br />
-      <!-- 새 비밀번호 확인 -->
-      <b-row>
-        <b-col class="input-group input-group-lg">
-          <div class="input-group-prepend">
-            <span
-              class="input-group-text"
-              style="width: 10rem;"
-              id="inputGroup-sizing-default"
-            >비밀번호 확인</span>
+        </div>
+        <!-- 새 비밀번호 -->
+        <div @submit.stop.prevent="editPassword" class="PasswordEditControl" id="newPassword">
+          <span class="PasswordEditText">새 비밀번호 :</span>
+          <div>
+            <b-input-group>
+              <b-form-input
+                v-model="newPasswordConfirm"
+                type="password"
+                class="form-control text-center"
+                aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-default"
+                placeholder="새로운 비밀번호를 입력해 주세요"
+              ></b-form-input>
+            </b-input-group>
           </div>
-          <input
-            v-model="newPasswordConfirm"
-            type="password"
-            class="form-control text-center"
-            aria-label="Sizing example input"
-            aria-describedby="inputGroup-sizing-default"
-          />
-        </b-col>
-      </b-row>
-      <br />
-      <b-button type="submit" block size="lg" variant="info">변경하기</b-button>
-    </b-form>
-  </b-container>
+        </div>
+        <!-- 새 비밀번호 확인 -->
+        <div class="PasswordEditControl" id="newConfirm">
+          <span class="PasswordEditText">새 비밀번호 확인 :</span>
+          <div>
+            <b-input-group>
+              <b-form-input
+                v-model="newPasswordConfirm"
+                type="password"
+                class="form-control text-center"
+                aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-default"
+                placeholder="새로운 비밀번호를 확인해 주세요"
+              ></b-form-input>
+            </b-input-group>
+          </div>
+        </div>
+        <div class="WarningText">
+          <span>
+            비밀번호는 영문과 숫자가 적어도 1자 이상씩 포함된
+            8자 이상으로 구성되어야 합니다.
+          </span>
+        </div>
+        <div id="buttonbox">
+          <b-button id="button" type="submit">변경하기</b-button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -188,4 +199,57 @@ export default {
 </script>
   
 <style>
+.EditPasswordvue {
+  text-align: center;
+}
+#EditPasswordTitle {
+  text-align: center;
+  margin-top: 50px;
+  margin-left: 200px;
+}
+#EditPasswordGrid {
+  max-width: 800px;
+  margin: auto;
+  display: block;
+  padding: 30px;
+}
+.PasswordEditControl {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  padding: 10px;
+  margin: auto;
+}
+.PasswordEditText {
+  text-align: right;
+  font-size: 18px;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-weight: 900;
+  margin-right: 25px;
+  margin-top: 4px;
+}
+#newPassword {
+  padding-top: 20px;
+  padding-bottom: 0;
+}
+#newConfirm {
+  padding-top: 0;
+  padding-bottom: 2px;
+}
+.WarningText {
+  margin-left: 210px;
+  margin-top: 5px;
+  max-width: 600px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 700;
+  color: red;
+}
+#buttonbox {
+  margin-top: 50px;
+  text-align: right;
+}
+#button {
+  background-color: rgb(25, 84, 241);
+  color: white;
+}
 </style>
