@@ -369,6 +369,7 @@ export default {
         }
       }
 
+      console.log('zzzzzzzzzzzzzzzzzzzzz')
       // firebase 회원가입
       firebase
         .auth()
@@ -382,7 +383,6 @@ export default {
           console.log(errorMessage);
           // ...
         });
-
       this.$store.dispatch("signup", {
         code,
         age,

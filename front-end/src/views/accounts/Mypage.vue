@@ -214,13 +214,17 @@ export default {
       this.$refs.fileInput.click()
     },
     onFilePicked(event) {
+      // 로그인 없이
       firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
+          console.log(user)
+          console.log(user.email)
           const uid = user.uid;
-          
+          console.log(uid)
           // 업로드
           var file = event.target.files[0];
-          var storageRef = firebase.storage().ref(`images/${uid}/${uid}`);
+          // var storageRef = firebase.storage().ref(`images/${uid}/${uid}`);
+          var storageRef = firebase.storage().ref(`images/${user.email}/${user.email}`);
           var task = storageRef.put(file);
     
           // var uploader = document.getElementById('uploader');      
@@ -374,9 +378,9 @@ export default {
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
         // User is signed in.
-        const uid = user.uid
+        // const uid = user.uid
         // 프로필 이미지 가져오기
-        firebase.storage().ref(`images/${uid}/${uid}`).getDownloadURL()
+        firebase.storage().ref(`images/${user.email}/${user.email}`).getDownloadURL()
         .then(function(url) {
           var xhr = new XMLHttpRequest();
           xhr.responseType = 'blob';
@@ -384,6 +388,7 @@ export default {
           xhr.open('GET', url);
           xhr.send();
           var img = document.getElementById('myimg');
+          console.log('img', img)
           img.src = url;
         })
         .catch(function(err) {
