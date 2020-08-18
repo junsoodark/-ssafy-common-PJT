@@ -70,7 +70,6 @@
 import { mapState } from "vuex";
 import Axios from "axios";
 import router from "@/router";
-import firebase from "firebase";
 const API_URL = process.env.VUE_APP_LOCAL_URL;
 
 export default {
@@ -162,26 +161,15 @@ export default {
           "user-email": sessionStorage.getItem("user-email"),
         },
       })
-        .then(() => {
-          var user = firebase.auth().currentUser;
-          var newPassword = this.newPassword;
+      .then(() => {
 
-          user
-            .updatePassword(newPassword)
-            .then(function () {
-              console.log("firebase password success");
-            })
-            .catch(function (error) {
-              console.log("firebase new password error", error);
-            });
+        alert("비밀번호 수정을 완료하였습니다.");
 
-          alert("비밀번호 수정을 완료하였습니다.");
-
-          router.push({ name: "Mypage" });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+        router.push({ name: "Mypage" });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     },
   },
 };

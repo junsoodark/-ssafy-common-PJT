@@ -371,7 +371,7 @@ export default {
       this.userInfo = res.data
     })
     .catch(err => {
-      console.log(err)
+      console.log('err', err)
     })
     // 프로필 이미지 가져오기
     // firebase 유저정보 가져오기
