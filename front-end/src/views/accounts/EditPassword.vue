@@ -2,42 +2,42 @@
 <template>
   <div class="EditPasswordvue">
     <h1 id="EditPasswordTitle">비밀번호 변경</h1>
-    <div>
-      <div id="EditPasswordGrid">
-        <!-- 현재 비밀번호 -->
-        <div class="PasswordEditControl">
-          <span class="PasswordEditText">현재 비밀번호 :</span>
-          <div>
-            <b-input-group>
-              <b-input-group-prepend>
-                <b-input-group-text style="background-color:white; border-right:none;">
-                  <b-icon icon="lock" />
-                </b-input-group-text>
-              </b-input-group-prepend>
+    <div id="EditPasswordGrid">
+      <!-- 현재 비밀번호 -->
+      <div class="PasswordEditControl">
+        <span class="PasswordEditText">현재 비밀번호 :</span>
+        <div>
+          <b-input-group>
+            <b-input-group-prepend>
+              <b-input-group-text style="background-color:white; border-right:none;">
+                <b-icon icon="lock" />
+              </b-input-group-text>
+            </b-input-group-prepend>
 
-              <b-form-input
-                style="border-left:0"
-                v-model="nowPassword"
-                type="password"
-                class="form-control text-center"
-                aria-label="Sizing example input"
-                aria-describedby="inputGroup-sizing-default"
-                placeholder="현재 비밀번호를 입력해 주세요"
-              ></b-form-input>
+            <b-form-input
+              style="border-left:0"
+              v-model="nowPassword"
+              type="password"
+              class="form-control text-center"
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-default"
+              placeholder="현재 비밀번호를 입력해 주세요"
+            ></b-form-input>
 
-              <b-input-group-append>
-                <b-button @click="verifyPassword" variant="outline-secondary">확인</b-button>
-              </b-input-group-append>
-            </b-input-group>
-          </div>
+            <b-input-group-append>
+              <b-button @click="verifyPassword" variant="outline-secondary">확인</b-button>
+            </b-input-group-append>
+          </b-input-group>
         </div>
-        <!-- 새 비밀번호 -->
-        <div @submit.stop.prevent="editPassword" class="PasswordEditControl" id="newPassword">
+      </div>
+      <!-- 새 비밀번호 -->
+      <div @submit.stop.prevent="editPassword">
+        <div class="PasswordEditControl" id="newPassword">
           <span class="PasswordEditText">새 비밀번호 :</span>
           <div>
             <b-input-group>
               <b-form-input
-                v-model="newPasswordConfirm"
+                v-model="newPassword"
                 type="password"
                 class="form-control text-center"
                 aria-label="Sizing example input"
@@ -70,7 +70,7 @@
           </span>
         </div>
         <div id="buttonbox">
-          <b-button id="button" type="submit">변경하기</b-button>
+          <b-button id="button" @click="editPassword">변경하기</b-button>
         </div>
       </div>
     </div>
@@ -174,18 +174,6 @@ export default {
         },
       })
         .then(() => {
-          var user = firebase.auth().currentUser;
-          var newPassword = this.newPassword;
-
-          user
-            .updatePassword(newPassword)
-            .then(function () {
-              console.log("firebase password success");
-            })
-            .catch(function (error) {
-              console.log("firebase new password error", error);
-            });
-
           alert("비밀번호 수정을 완료하였습니다.");
 
           router.push({ name: "Mypage" });
