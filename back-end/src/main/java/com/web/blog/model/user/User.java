@@ -3,6 +3,7 @@ package com.web.blog.model.user;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -43,6 +44,9 @@ public class User {
 	// @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d$@$!%*#?&]{8,}$",
 	// message = "비밀번호는 영문과 숫자가 적어도 1자 이상씩 포함된 8자이상으로 구성되어야 합니다.")
 	private String password;
+	
+	@Column(name = "fire_base_password")
+	private String fireBasePassword;
 
 	@NotNull(message = "이름은 필수 항목입니다.")
 	private String name;

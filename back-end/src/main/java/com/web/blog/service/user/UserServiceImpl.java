@@ -57,11 +57,13 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public boolean create(final User user) {
+	
 		if (userDao.findUserByEmail(user.getEmail()).isPresent())
 			return false;
 
 		final String encodedPassword = passwordEncoder.encode(user.getPassword());
 		user.setPassword(encodedPassword);
+		user.setFireBasePassword(encodedPassword.substring(0,24));
 		userDao.save(user);
 		return true;
 	}
