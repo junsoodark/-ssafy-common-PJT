@@ -56,16 +56,15 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean create(final User user) {
+	public Optional<User> create(final User user) {
 	
 		if (userDao.findUserByEmail(user.getEmail()).isPresent())
-			return false;
+			return Optional.empty();
 
 		final String encodedPassword = passwordEncoder.encode(user.getPassword());
 		user.setPassword(encodedPassword);
 		user.setFireBasePassword(encodedPassword.substring(0,24));
-		userDao.save(user);
-		return true;
+		return Optional.ofNullable(userDao.save(user));
 	}
 
 	@Override
