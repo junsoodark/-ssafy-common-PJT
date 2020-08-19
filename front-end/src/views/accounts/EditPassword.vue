@@ -175,11 +175,11 @@ export default {
         .then(() => {
           alert("비밀번호 수정을 완료하였습니다.");
 
-        router.push({ name: "Mypage" });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+          router.push({ name: "Mypage" });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
 };
@@ -192,7 +192,7 @@ export default {
 #EditPasswordTitle {
   text-align: center;
   margin-top: 50px;
-  margin-left: 200px;
+  margin-left: 100px;
 }
 #EditPasswordGrid {
   max-width: 800px;
@@ -233,7 +233,8 @@ export default {
 }
 #buttonbox {
   margin-top: 50px;
-  text-align: right;
+  margin-left: 100px;
+  /* text-align: right; */
 }
 #button {
   background-color: rgb(25, 84, 241);
