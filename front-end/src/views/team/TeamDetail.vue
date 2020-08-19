@@ -520,7 +520,7 @@ export default {
       Axios({
         method: "POST",
         url: `${API_URL}study/member/approve`,
-        params: {'email':approveEmail,'studyId':this.study_id},
+        params: {'tgtEmail':approveEmail,'studyId':this.study_id},
         headers: { 
           "Content-Type": "application/json; charset=utf-8", 
           'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
@@ -540,7 +540,7 @@ export default {
         alert("성공적으로 승인했습니다")
       })
       .catch(err => {
-        alert(err.response.data)
+        alert(err.response.data.msg)
       })
     },
 
