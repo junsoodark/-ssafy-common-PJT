@@ -166,8 +166,8 @@ export default {
       ],
       place: [
         { text: "온/오프라인을 선택해주세요", value: null},
-        { text: "오프라인", value: 1 },
-        { text: "온라인", value: 2 },
+        { text: "온라인", value: 1 },
+        { text: "오프라인", value: 2 },
         { text: "추후협의", value: 3 },
       ],
       period: [
@@ -233,16 +233,19 @@ export default {
       this.form.startDate = res.data.startDate
       
       for (var a=0; a < this.period.length; a++) {
-        if (this.period[a].text === res.data.period)
-        this.form.periodId = this.period[a].value
+        if (this.period[a].text === res.data.period) {
+          this.form.periodId = this.period[a].value
+        }
       }
       for (var b=0; b < this.week.length; b++) {
-        if (this.week[b].text === res.data.week)
-        this.form.weekId = this.week[b].value
+        if (this.week[b].text === res.data.week) {
+          this.form.weekId = this.week[b].value
+        }
       }
       for (var c=0; c < this.shift.length; c++) {
-        if (this.shift[c].text === res.data.shift)
-        this.form.shiftId = this.shift[c].value
+        if (this.shift[c].text === res.data.shift) {
+          this.form.shiftId = this.shift[c].value
+        }
       }
       for (var i=0; i < this.category.length; i++) {
         if (this.category[i].text === res.data.category) {
@@ -302,7 +305,8 @@ export default {
           'user-email': sessionStorage.getItem('user-email') 
         },
       })
-      .then(() => {
+      .then((res) => {
+        console.log('zzzz', res)
         alert("스터디 수정 성공")
         router.push({ name: 'StudyDetail', params: {id:this.form.studyId}})
       })

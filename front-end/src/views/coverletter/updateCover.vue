@@ -106,7 +106,7 @@ export default {
             this.updateQuestion(this.items[i])
           }
         }
-        this.$router.push({ name: "coverLetterDetail", params: {id: this.id}}),2000
+        this.$router.push({ name: "coverLetterDetail", params: {id: this.id}})
       })
       .catch(err => {
         console.log(err)
@@ -204,9 +204,13 @@ export default {
                   'user-email': sessionStorage.getItem('user-email')},
     })
     .then(res => {
+      console.log(res)
       for (var i=0; i<res.data.length; i++) {
-        const item = res.data[i]
+        const item = {}
+        item.title = res.data[i].title
+        item.answer = res.data[i].content
         item.num = this.question
+        item.id = res.data[i].id
         this.question += 1
         this.items.push(item)
       }

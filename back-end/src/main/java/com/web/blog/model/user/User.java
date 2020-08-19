@@ -3,6 +3,7 @@ package com.web.blog.model.user;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,7 +17,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.web.blog.model.reply.Reply;
 import com.web.blog.model.study.Study;
 
 import lombok.AllArgsConstructor;
@@ -43,6 +46,9 @@ public class User {
 	// @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d$@$!%*#?&]{8,}$",
 	// message = "비밀번호는 영문과 숫자가 적어도 1자 이상씩 포함된 8자이상으로 구성되어야 합니다.")
 	private String password;
+	
+	@Column(name = "fire_base_password")
+	private String fireBasePassword;
 
 	@NotNull(message = "이름은 필수 항목입니다.")
 	private String name;
@@ -57,8 +63,12 @@ public class User {
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH })
 	@JoinTable(name = "study_member", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "study_id"))
 	private Set<Study> studies;
-	
+
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH })
 	@JoinTable(name = "study_approval", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "study_id"))
 	private Set<Study> approvingStudies;
+
+	@JsonIgnore
+	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "user")
+	private Set<Reply> reply;
 }

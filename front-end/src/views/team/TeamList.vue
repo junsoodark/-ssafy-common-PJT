@@ -9,7 +9,7 @@
         <b-col md="7" offset-md="2">
           <b-input-group class="mt-3">
             <template v-slot:append>
-              <b-input-group-text @click="Search"><strong>확인</strong></b-input-group-text>
+              <b-input-group-text @click="Search" style="cursor: pointer;"><strong>확인</strong></b-input-group-text>
             </template>
             <b-form-input list="my-list-id" placeholder="분야를 검색하세요" @keyup.enter="Search" v-model="SearchText"></b-form-input>
 
@@ -24,15 +24,15 @@
       </b-row>
     </div>
     <div class="my-badges">
-      <b-badge pill class="my-badge1">코딩테스트</b-badge>
-      <b-badge pill class="my-badge2">인적성/NCS</b-badge>
-      <b-badge pill class="my-badge3">면접</b-badge>
-      <b-badge pill class="my-badge4">기타</b-badge>
+      <b-badge pill class="my-badge1" style="cursor: pointer;" @click="searchButton('코딩 테스트')">코딩테스트</b-badge>
+      <b-badge pill class="my-badge2" style="cursor: pointer;" @click="searchButton('인적성/NCS')">NCS/인적성</b-badge>
+      <b-badge pill class="my-badge3" style="cursor: pointer;" @click="searchButton('면접')">면접</b-badge>
+      <b-badge pill class="my-badge4" style="cursor: pointer;" @click="searchButton('기타')">기타</b-badge>
     </div>
 
     <br><br>
-    <div class="row row-cols-3">
-      <TeamListItem class="col mb-3" v-for="team in TeamList" :key="team.studyId" v-bind:team="team"></TeamListItem>
+    <div id="profileCard" class="row row-cols-3">
+      <TeamListItem class="col mb-3" v-for="team in TeamList" :key="team.studyId" v-bind:team="team" ></TeamListItem>
     </div>
   </b-container>
 </template>
@@ -48,6 +48,9 @@ export default {
   components: {
     TeamListItem
   },
+  props: {
+    // profileEmail : {type: String}
+  },
   data () {
     return {
       TeamList: [],
@@ -55,12 +58,14 @@ export default {
       SaveTeamList: [],
       SearchText: null,
       SearchData: [],
+      profileEmail: null,
     }
   },
   created () {
     Axios.get(`${API_URL}study/all`)
     .then(res => {
       this.TeamList = res.data.reverse()
+      console.log(this.TeamList)
     })
     .catch(err => {
       console.log(err)
@@ -78,6 +83,19 @@ export default {
       this.SearchData = []
       for (var i=0; i<this.TeamList.length; i++) {
         if (this.TeamList[i].content.indexOf(this.SearchText) != -1 || this.TeamList[i].title.indexOf(this.SearchText) != -1) {
+          this.SearchData.push(this.TeamList[i])
+        }
+      }
+      this.TeamList = this.SearchData
+    },
+    searchButton (data) {
+      if (this.SaveTeamList.length != 0) {
+        this.TeamList = this.SaveTeamList
+      }
+      this.SaveTeamList = this.TeamList
+      this.SearchData = []
+      for (var i=0; i<this.TeamList.length; i++) {
+        if (this.TeamList[i].category == data) {
           this.SearchData.push(this.TeamList[i])
         }
       }

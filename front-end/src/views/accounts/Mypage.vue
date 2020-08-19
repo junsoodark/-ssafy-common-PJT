@@ -8,7 +8,7 @@
         <b-col cols="4" id="mypageImage">
           <b-row>
             <b-col>
-              <b-img id="myimg" :src="defaultImageUrl" width="300" rounded="circle" alt="프로필 이미지"></b-img>
+              <b-img id="myimg" :src="defaultImageUrl" width="300" height="300" rounded="circle" alt="프로필 이미지"></b-img>
             </b-col>
           </b-row>
           <br>
@@ -57,7 +57,7 @@
             <hr>
             <b-row>
               <b-col md="3" offset-md="1" class="text-left font-weight-bold">개설한 스터디</b-col>
-              <b-col md="3" offset-md="3" class="text-right font-weight-bold">0</b-col>
+              <b-col md="3" offset-md="3" class="text-right font-weight-bold">{{ makingStudy }}</b-col>
             </b-row>
             <hr>
             <!-- <b-row align-h="start" class="text-left">
@@ -132,9 +132,9 @@
             </b-list-group-item>
           </b-col>
         </b-row>
-        <b-row v-for="item in items" :key="item.studyId">
-          <b-col cols="4" class="p-0"><b-list-group-item id="myStudyList" route :to="{ name: 'StudyDetail', params: {id:item.studyId} }">{{ item.title }}</b-list-group-item></b-col>
-          <b-col cols="8" class="p-0"><b-list-group-item route :to="{ name: 'StudyDetail', params: {id:item.studyId} }">{{ item.content }}</b-list-group-item></b-col>
+        <b-row v-for="applying in applyingList" :key="applying.title">
+          <b-col cols="4" class="p-0"><b-list-group-item id="myStudyList" route :to="{ name: 'StudyDetail', params: {id:applying.studyId} }">{{ applying.title }}</b-list-group-item></b-col>
+          <b-col cols="8" class="p-0"><b-list-group-item route :to="{ name: 'StudyDetail', params: {id:applying.studyId} }">{{ applying.content }}</b-list-group-item></b-col>
         </b-row>
       </b-list-group>
     </div>
@@ -198,6 +198,8 @@ export default {
       uploadTask: '',
       defaultImageUrl: 'https://previews.123rf.com/images/salamatik/salamatik1801/salamatik180100019/92979836-%ED%94%84%EB%A1%9C%ED%95%84-%EC%9D%B5%EB%AA%85%EC%9D%98-%EC%96%BC%EA%B5%B4-%EC%95%84%EC%9D%B4%EC%BD%98-%ED%9A%8C%EC%83%89-%EC%8B%A4%EB%A3%A8%EC%97%A3-%EC%82%AC%EB%9E%8C%EC%9E%85%EB%8B%88%EB%8B%A4-%EB%82%A8%EC%84%B1-%EA%B8%B0%EB%B3%B8-%EC%95%84%EB%B0%94%ED%83%80-%EC%82%AC%EC%A7%84-%EC%9E%90%EB%A6%AC-%ED%91%9C%EC%8B%9C-%EC%9E%90-%ED%9D%B0%EC%83%89-%EB%B0%B0%EA%B2%BD%EC%97%90-%EA%B3%A0%EB%A6%BD-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4-%EC%85%98.jpg',
       myStudy: [],
+      applyingList: [],
+      makingStudy: 0,
     }
   },
 
@@ -214,11 +216,13 @@ export default {
     onFilePicked(event) {
       firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
+          console.log(user)
+          console.log(user.email)
           const uid = user.uid;
-          
+          console.log(uid)
           // 업로드
           var file = event.target.files[0];
-          var storageRef = firebase.storage().ref(`images/${uid}/${uid}`);
+          var storageRef = firebase.storage().ref(`images/${user.email}/${user.email}`);
           var task = storageRef.put(file);
     
           // var uploader = document.getElementById('uploader');      
@@ -315,8 +319,8 @@ export default {
     }
   },
   created () {
-    // 해당 아이디에 대한 스터디 정보 가져오기
-    Axios.get(`${API_URL}study/email?email=${this.email}`, {
+    // 해당 아이디에 대한 가입 신청한 스터디 정보 가져오기
+    Axios.get(`${API_URL}study/mystudy/applying`,  {
       headers: {
         "Content-Type": "application/json; charset=utf-8",
         'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
@@ -324,9 +328,27 @@ export default {
       }
     })
     .then(res => {
+      this.applyingList = res.data
+    })
+    .catch(err => {
+      console.log(err)
+    })
+    // 해당 아이디에 대한 스터디 정보 가져오기
+    Axios.get(`${API_URL}study/mystudy/join?email=${this.email}`,  {
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+        'user-email': sessionStorage.getItem('user-email')
+      }
+    })
+    .then(res => {
+      console.log(res)
       var resItem = res.data
       for (var i=0; i<resItem.length; i++) {
         this.check(resItem,i)
+        if (resItem[i].mgrEmail === this.email) {
+          this.makingStudy += 1
+        }
       }
       this.items = resItem
       this.countStudy = resItem.length
@@ -334,6 +356,8 @@ export default {
     .catch(err => {
       console.log(err)
     })
+
+
     // 유저 정보 가져오기
     Axios.get(`${API_URL}user/${this.email}`, {
       headers: {
@@ -345,16 +369,16 @@ export default {
       this.userInfo = res.data
     })
     .catch(err => {
-      console.log(err)
+      console.log('err', err)
     })
     // 프로필 이미지 가져오기
     // firebase 유저정보 가져오기
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
         // User is signed in.
-        const uid = user.uid
+        // const uid = user.uid
         // 프로필 이미지 가져오기
-        firebase.storage().ref(`images/${uid}/${uid}`).getDownloadURL()
+        firebase.storage().ref(`images/${user.email}/${user.email}`).getDownloadURL()
         .then(function(url) {
           var xhr = new XMLHttpRequest();
           xhr.responseType = 'blob';
@@ -362,6 +386,7 @@ export default {
           xhr.open('GET', url);
           xhr.send();
           var img = document.getElementById('myimg');
+          console.log('img', img)
           img.src = url;
         })
         .catch(function(err) {

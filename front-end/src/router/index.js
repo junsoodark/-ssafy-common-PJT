@@ -30,6 +30,7 @@ import letterDetail from '../views/coverletter/letterDetail.vue'
 import createLetter from '../views/coverletter/createLetter.vue'
 import UpdateCover from '../views/coverletter/updateCover.vue'
 import UpdateQuest from '../views/coverletter/updateLetter.vue'
+import UpdateReply from '../views/coverletter/UpdateReply.vue'
 
 
 Vue.use(VueRouter);
@@ -148,6 +149,11 @@ const routes = [
     path: "/coverletter/question/:articleId/:id",
     name: "UpdateQuest",
     component: UpdateQuest
+  },
+  {
+    path: "/coverletter/reply/:articleId/:replyId",
+    name: "UpdateReply",
+    component: UpdateReply
   },
   {
     path: "/chat",

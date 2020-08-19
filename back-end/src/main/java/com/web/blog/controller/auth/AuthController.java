@@ -1,5 +1,8 @@
 package com.web.blog.controller.auth;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.web.blog.service.auth.JwtService;
 import com.web.blog.service.auth.MailService;
 import com.web.blog.service.auth.VerifyService;
+import com.web.blog.service.user.UserService;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -24,6 +28,9 @@ public class AuthController {
 	
 	@Autowired
 	private JwtService jwtService;
+	
+	@Autowired
+	private UserService userService;
 	
 	@PostMapping("/verify")
 	@ApiOperation(value="이메일을 입력받아 사용중인 이메일인지 확인하고, 사용중이지 않다면 인증 메일을 전송합니다.")
@@ -54,7 +61,13 @@ public class AuthController {
 	@ApiOperation(value="이메일과 비밀번호를 입력받아 사용자 정보를 검증하고, 유효하다면 토큰을 반환합니다.")
 	public ResponseEntity login(@RequestParam final String email, @RequestParam final String password) {
 		if(verifyService.isValidUser(email, password)==false) return new ResponseEntity("일치하는 사용자가 없습니다. 이메일 또는 비밀번호를 확인해주세요.", HttpStatus.NOT_FOUND);
-		return new ResponseEntity(jwtService.generateToken(email), HttpStatus.OK);
+		String fbPassword = userService.findUserByEmail(email).getFireBasePassword();
+		if(fbPassword==null) return new ResponseEntity("에러가 발생했습니다. 관리자에게 문의하세요.", HttpStatus.INTERNAL_SERVER_ERROR);
+		Map <String,String> ret = new HashMap<String,String>();
+		ret.put("fbpassword", fbPassword);
+		ret.put("token", jwtService.generateToken(email));
+				
+		return new ResponseEntity(ret, HttpStatus.OK);
 	}
 	
 //	@PostMapping("/login/valid")
