@@ -1,14 +1,28 @@
 <template>
   <div class="my-3">
-    <h1>자소서 작성</h1>
     <b-container>
-      <hr>
-      <b-row>
-        <b-form-select v-model="category" :options="options" class="col-4 my-1"></b-form-select>
-        <b-form-input v-model="title" placeholder="글 제목을 입력해주세요" class="col-8 my-1"></b-form-input>
-        <b-form-input v-model="company" placeholder="회사를 입력해주세요" class="col-4"></b-form-input>
-        <b-form-input v-model="job" placeholder="직무를 입력해주세요" class="col-8"></b-form-input>
+      <br>
+      <h1>자소서 작성</h1>
+      <br>
+      <b-row class="my-2">
+        <b-col md="4" class="text-left">
+          <b-form-select v-model="category" :options="options"></b-form-select>
+        </b-col>
       </b-row>
+      <b-row class="my-2">
+        <b-col class="pr-0">
+          <b-form-input v-model="company" placeholder="회사를 입력해주세요"></b-form-input>
+        </b-col>
+        <b-col class="pr-0">
+          <b-form-input v-model="job" placeholder="직무를 입력해주세요"></b-form-input>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <b-form-input v-model="title" placeholder="글 제목을 입력해주세요"></b-form-input>
+        </b-col>
+      </b-row>
+
       <b-button class="m-3" @click="addQuestion" variant="primary">자소서 항목 추가</b-button><b-button class="m-3" @click="delQuestion" variant="danger">자소서 항목 삭제</b-button>
       <div v-for="item in items" :key="item.num" class="my-3">
         <b-button v-b-toggle="'my-'+item.num">
