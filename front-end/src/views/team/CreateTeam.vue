@@ -166,7 +166,7 @@
       <br>
 
 
-    <b-button type="submit" v-b-modal.modal-prevent-closing block size="lg" variant="info">생성하기</b-button>
+    <b-button type="submit" v-b-modal.modal-prevent-closing block size="lg" variant="primary">생성하기</b-button>
     <br>
     </b-form>
   </b-container>

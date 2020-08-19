@@ -2,21 +2,22 @@
   <b-container>
     <br>
     <b-row align-h="start" class="mb-3">
-      <b-col md="2" offset-md="1" class="text-left">게시글</b-col>
+      <b-col md="2" offset-md="1" class="text-left"><h2>게시글</h2></b-col>
     </b-row>
     <b-row >
       <b-col md="10" offset-md="1" >
-        <h2 class="text-left">{{article.title}}</h2>
+        <h2 class="text-left"><h1>{{article.title}}</h1></h2>
       </b-col>
     </b-row>
     <b-row class="my-3">
-      <b-col md="2" offset-md="1" class="text-left">작성일</b-col>
-      <b-col md="2" offset-md="6" class="text-left">작성자: {{writer.name}}</b-col>
+      <b-col md="3" offset-md="1" class="text-left"><h5>작성일: {{ article.date }}</h5></b-col>
+      <b-col md="2" offset-md="5" class="text-right"><h5>작성자: {{ article.writer }}</h5> </b-col>
       <b-col offset-md="1"></b-col>
     </b-row>
     <br>
     <b-row>
-      <b-col md="10" offset-md="1" class="text-left border p-3">
+      <b-col md="1" class="mx-1"></b-col>
+      <b-col md="10" class="text-left border py-3">
         <div id="content"></div>
       </b-col>
     </b-row>
@@ -59,7 +60,6 @@ export default {
                 'user-email': sessionStorage.getItem('user-email')},
     })
     .then(res => {
-      console.log(res)
       if (this.email==res.data.email) {
         this.isWriter = true
       }
@@ -74,8 +74,8 @@ export default {
                 'user-email': sessionStorage.getItem('user-email')},
     })
     .then(res => {
-      console.log(res)
       this.article = res.data
+      this.findWriterName(this.article.writer)
       const articleContent = document.getElementById('content')
       articleContent.innerHTML = this.article.content
     })
@@ -100,7 +100,22 @@ export default {
       })
     },
     updatePost () {
-      this.$router.push({ name: "updateArticle" , params: {id:this.articleId,}})
+      this.$router.push({ name: "updateArticle" , params: { id:this.articleId }})
+    },
+    
+    // 작성자 id로 name 찾기
+    findWriterName(userId) {
+      Axios({
+        method: "GET",
+        url: `${API_URL}user/id/${userId}`,
+        headers: { "Content-Type": "application/json; charset=utf-8",
+                  'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+                  'user-email': sessionStorage.getItem('user-email')},
+      })
+      .then(res => {
+        this.article.writer = res.data.name
+      })
+      .catch(() => {alert('스터디팀 정보를 불러올 수 없습니다')})
     }
   }
 }

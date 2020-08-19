@@ -52,8 +52,7 @@ export default {
     };
   },
   props: {
-    studyId: Number,
-    writer: Number
+    propsData: Object,
   },
   mounted() {
     document.getElementById('paragraph').setAttribute('contenteditable', 'true');
@@ -111,10 +110,11 @@ export default {
       const articleData = document.querySelector('#paragraph')
       const params = {
         'content': articleData.innerHTML,
-        'studyId': this.studyId,
+        'studyId': this.propsData.studyId,
         'title': this.title,
-        "writer": this.writer
+        "writer": this.propsData.writerId
       }
+      console.log(params)
       Axios({
         method: "POST",
         url: `${API_URL}post`,
@@ -128,7 +128,7 @@ export default {
         this.$emit('endSubmit')
       })
       .catch(err => {
-        console.log(err)
+        console.log('err', err)
         alert(err.response.data)
       })
     }

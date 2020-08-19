@@ -216,10 +216,6 @@ export default {
     onFilePicked(event) {
       firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
-          console.log(user)
-          console.log(user.email)
-          const uid = user.uid;
-          console.log(uid)
           // 업로드
           var file = event.target.files[0];
           var storageRef = firebase.storage().ref(`images/${user.email}/${user.email}`);
