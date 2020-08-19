@@ -28,6 +28,7 @@
       <b-badge pill class="my-badge2" style="cursor: pointer;" @click="searchButton('인적성/NCS')">NCS/인적성</b-badge>
       <b-badge pill class="my-badge3" style="cursor: pointer;" @click="searchButton('면접')">면접</b-badge>
       <b-badge pill class="my-badge4" style="cursor: pointer;" @click="searchButton('기타')">기타</b-badge>
+      <b-badge pill variant="dark" style="cursor: pointer;" @click="showAllCase">전체</b-badge>
     </div>
 
     <br><br>
@@ -97,6 +98,11 @@ export default {
         }
       }
       this.TeamList = this.SearchData
+    },
+    showAllCase () {
+      if (this.SaveTeamList.length != 0) {
+        this.TeamList = this.SaveTeamList
+      }
     }
   }
 }
