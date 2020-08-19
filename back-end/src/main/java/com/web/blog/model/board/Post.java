@@ -1,5 +1,6 @@
 package com.web.blog.model.board;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -57,6 +58,8 @@ public class Post {
 
 	@NotNull(message = "내용은 필수 항목입니다.")
 	private String content;
+
+	private LocalDate date;
 
 	// @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE,
 	// CascadeType.DETACH })
