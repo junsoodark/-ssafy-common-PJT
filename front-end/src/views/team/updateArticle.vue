@@ -2,7 +2,7 @@
   <b-container>
     <br>
     <h1>게시글 수정 페이지</h1>
-    <h1>{{ articleIdd }}aa</h1>
+    <h1>{{ articleIdd }}</h1>
     <b-row align-h="start" class="mb-3">
       <b-col md="2" offset-md="1" class="text-left">게시글</b-col>
     </b-row>

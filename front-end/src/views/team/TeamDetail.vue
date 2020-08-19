@@ -502,8 +502,7 @@ export default {
           'user-email': sessionStorage.getItem('user-email')
         }
       })
-      .then(res => {
-        console.log(res)
+      .then(() => {
         var newMember = []
         for (var i=0; i<this.memberList.length; i++) {
           if (this.memberList[i].email != banEmail) {
@@ -529,8 +528,7 @@ export default {
           'user-email': sessionStorage.getItem('user-email')
         }
       })
-      .then(res => {
-        console.log(res)
+      .then(() => {
         var newMember = []
         for (var i=0; i<this.applyList.length; i++) {
           if (this.applyList[i].email != approveEmail) {
@@ -557,8 +555,7 @@ export default {
           'user-email': sessionStorage.getItem('user-email')
         }
       })
-      .then(res => {
-        console.log(res)
+      .then(() => {
         var newMember = []
         for (var i=0; i<this.applyList.length; i++) {
           if (this.applyList[i].email != disEmail) {
@@ -586,7 +583,6 @@ export default {
     })
     .then(res => {
       this.team = res.data
-      console.log('스터디 디테일', this.team)
     })
     .catch(err => {
       console.log(err)
@@ -610,7 +606,6 @@ export default {
     })
     .then(res => {
       this.memberList = res.data
-      console.log('현재 스터디원', this.memberList)
       for (var i=0; i < this.memberList.length; i++) {
         if (this.email === this.memberList[i].email) {
           this.isMember  = true
@@ -633,7 +628,6 @@ export default {
     })
     .then(res => {
       this.applyList = res.data
-      console.log('가입 요청한 사람', this.applyList)
       for (var i=0; i < this.applyList.length; i++) {
         if (this.email === this.applyList[i].email) {
           this.isReady = true

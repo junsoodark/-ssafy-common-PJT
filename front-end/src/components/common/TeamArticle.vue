@@ -68,7 +68,6 @@ export default {
     )
     .then(res => {
       this.articles = res.data
-      console.log(this.articles)
       for (var i=0; i < res.data.length; i++) {
         this.findWriterName(this.articles[i].writer, i)
       }
@@ -86,7 +85,6 @@ export default {
       }
     )
     .then(res => {
-      console.log(res)
       this.writerId = res.data.id
     })
     .catch(() => {
@@ -109,7 +107,6 @@ export default {
                   'user-email': sessionStorage.getItem('user-email')},
       })
       .then(res => {
-        // console.log('modal', res)
         this.articles = res.data
         for (var i=0; i < res.data.length; i++) {
           this.findWriterName(this.articles[i].writer, i)

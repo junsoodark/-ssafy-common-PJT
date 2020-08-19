@@ -42,7 +42,8 @@ export default {
       articleId: this.$route.params.articleid,
       article: {},
       writer: {},
-      isWriter: false
+      isWriter: false,
+      writerId: null,
     }
   },
   computed: {
@@ -86,14 +87,14 @@ export default {
       Axios({
         method: 'DELETE',
         url: `${API_URL}post`,
-        params: {'id':this.article.writer},
+        params: {'id':this.articleId},
         headers: { "Content-Type": "application/json; charset=utf-8",
                 'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
                 'user-email': sessionStorage.getItem('user-email')},
       })
       .then( () => {
         alert('삭제되었습니다')
-        this.$router.push({ name: "StudyArticle" , params:{id:this.studyId}})
+        this.$router.push({ name: "StudyDetail" , params:{id:this.studyId}})
       })
       .catch( err => {
         alert(err.response.data)
