@@ -48,9 +48,6 @@ export default {
   components: {
     TeamListItem
   },
-  props: {
-    // profileEmail : {type: String}
-  },
   data () {
     return {
       TeamList: [],
