@@ -24,11 +24,11 @@
       </b-row>
     </div>
     <div class="my-badges">
-      <b-badge pill class="my-badge1" style="cursor: pointer;" @click="searchButton('코딩 테스트')">코딩테스트</b-badge>
-      <b-badge pill class="my-badge2" style="cursor: pointer;" @click="searchButton('인적성/NCS')">NCS/인적성</b-badge>
-      <b-badge pill class="my-badge3" style="cursor: pointer;" @click="searchButton('면접')">면접</b-badge>
-      <b-badge pill class="my-badge4" style="cursor: pointer;" @click="searchButton('기타')">기타</b-badge>
-      <b-badge pill variant="dark" style="cursor: pointer;" @click="showAllCase">전체</b-badge>
+      <b-badge pill class="my-badge1" style="cursor: pointer;" @click="searchButton('코딩 테스트')" href="#">코딩테스트</b-badge>
+      <b-badge pill class="my-badge2" style="cursor: pointer;" @click="searchButton('인적성/NCS')" href="#">NCS/인적성</b-badge>
+      <b-badge pill class="my-badge3" style="cursor: pointer;" @click="searchButton('면접')" href="#">면접</b-badge>
+      <b-badge pill class="my-badge4" style="cursor: pointer;" @click="searchButton('기타')" href="#">기타</b-badge>
+      <b-badge pill variant="dark" style="cursor: pointer;" @click="showAllCase" href="#">전체</b-badge>
     </div>
 
     <br><br>
