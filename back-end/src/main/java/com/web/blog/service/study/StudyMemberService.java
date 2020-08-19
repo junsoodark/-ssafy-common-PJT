@@ -15,4 +15,5 @@ public interface StudyMemberService {
 	public boolean isExistMember(final Study study, final User user);
 	public List<Map<String, String>> getStudyApprovalUserList(Study study);
 	public List<Map<String, String>> getStudyUserList(Study study);
+	List<Map<String, String>> getUserApplyingStudyList(User user);
 }

@@ -31,8 +31,8 @@
     </div>
 
     <br><br>
-    <div class="row row-cols-3">
-      <TeamListItem class="col mb-3" v-for="team in TeamList" :key="team.studyId" v-bind:team="team"></TeamListItem>
+    <div id="profileCard" class="row row-cols-3">
+      <TeamListItem class="col mb-3" v-for="team in TeamList" :key="team.studyId" v-bind:team="team" ></TeamListItem>
     </div>
   </b-container>
 </template>
@@ -48,6 +48,9 @@ export default {
   components: {
     TeamListItem
   },
+  props: {
+    // profileEmail : {type: String}
+  },
   data () {
     return {
       TeamList: [],
@@ -55,12 +58,14 @@ export default {
       SaveTeamList: [],
       SearchText: null,
       SearchData: [],
+      profileEmail: null,
     }
   },
   created () {
     Axios.get(`${API_URL}study/all`)
     .then(res => {
       this.TeamList = res.data.reverse()
+      console.log(this.TeamList)
     })
     .catch(err => {
       console.log(err)

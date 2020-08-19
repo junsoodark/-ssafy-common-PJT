@@ -29,7 +29,7 @@
         </b-input-group>-->
       </b-form>
       <!-- 인증 코드 -->
-      <b-form class="row" @submit.prevent="signup">
+      <b-form class="row">
         <b-input-group class="mb-4">
           <label class="signup-control-text col-2" style="text-align:right" for="code">인증코드 :</label>
           <b-input-group-prepend is-text>
@@ -146,7 +146,7 @@
         </b-input-group>
       </b-form>
       <!-- 동의 -->
-      <b-form>
+      <b-form @submit.prevent="signup">
         <div>
           <b-form-checkbox
             id="checkbox-1"
@@ -328,6 +328,7 @@ export default {
   },
   methods: {
     signup() {
+      console.log('사인업')
       const code = this.code;
       const age = this.age;
       const nickname = this.nickname;
@@ -368,20 +369,6 @@ export default {
           return false;
         }
       }
-
-      // firebase 회원가입
-      firebase
-        .auth()
-        .createUserWithEmailAndPassword(email, password)
-        .catch(function (error) {
-          // Handle Errors here.
-          var errorCode = error.code;
-          var errorMessage = error.message;
-          console.log("firebase 인증 에러", email, password);
-          console.log(errorCode);
-          console.log(errorMessage);
-          // ...
-        });
 
       this.$store.dispatch("signup", {
         code,

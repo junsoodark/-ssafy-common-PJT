@@ -46,10 +46,10 @@ export default new Vuex.Store({
       var JsonForm = JSON.stringify(params)
       Axios({method:'POST',url:`${API_URL}login`,params:params,data:JsonForm,headers:{'Content-Type': 'application/json; charset=utf-8'}})
       .then(res => {
-        commit('SET_TOKEN', res.data)
+        commit('SET_TOKEN', res.data.token)
         commit('UPDATE_EMAIL', loginData.email)
 
-        sessionStorage.setItem('jwt-auth-token', res.data);
+        sessionStorage.setItem('jwt-auth-token', res.data.token);
         sessionStorage.setItem('user-email', loginData.email);
 
         // 로그인 시간 저장
@@ -71,8 +71,10 @@ export default new Vuex.Store({
         const loginTime = loginH + ":" + loginM + ":" + loginS
         commit('UPDATE_LOGIN_TIME', loginTime)
 
+        var fbpassword = res.data.fbpassword
         // firebase 사용자 로그인
-        firebase.auth().signInWithEmailAndPassword(loginData.email, loginData.password).catch(function(error) {
+        firebase.auth().signInWithEmailAndPassword(loginData.email, fbpassword)
+        .catch(function(error) {
           // Handle Errors here.
           var errorCode = error.code;
           var errorMessage = error.message;
@@ -88,7 +90,6 @@ export default new Vuex.Store({
         router.push({ name: 'Home' })
       })
       .catch(err => {
-        console.log(err)
         alert(err.response.data)
       })
     },
@@ -104,21 +105,35 @@ export default new Vuex.Store({
         sex: sex,
       };
       var JsonForm = JSON.stringify(form);
+    
       Axios({
         method: "POST",
         url: `${API_URL}user/signUp`,
         params: params,
         data: JsonForm,
         headers: { "Content-Type": "application/json; charset=utf-8" },
-      })
-        .then((res) => {
-          alert(res.data);
-          router.push({ name: "Login" });
         })
-        .catch((err) => {
-          alert(err.response.data);
-          console.log(err);
+        .then((res) => {
+          console.log(res)
+          var fbPassword = res.data.fbPassword
+        // firebase 회원가입
+        firebase.auth().createUserWithEmailAndPassword(email, fbPassword)
+        .catch(function (error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          console.log("firebase 인증 에러", email, fbPassword);
+          console.log(errorCode);
+          console.log(errorMessage);
+          // ...
         });
+        alert(res.data.msg);
+        router.push({ name: "Login" });
+      })
+      .catch((err) => {
+        alert(err.response.data);
+        console.log(err);
+      });
     },
 
     logout({ commit }) {
