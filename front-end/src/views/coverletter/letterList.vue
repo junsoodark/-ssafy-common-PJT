@@ -5,13 +5,17 @@
     <b-container class="my-3">
       <b-list-group>
         <b-row>
-          <b-col cols="4" class="p-0"><b-list-group-item >분류</b-list-group-item></b-col>
-          <b-col cols="8" class="p-0"><b-list-group-item >제목</b-list-group-item></b-col>
+          <b-col cols="2" class="p-0"><b-list-group-item >분류</b-list-group-item></b-col>
+          <b-col cols="2" class="p-0"><b-list-group-item >회사</b-list-group-item></b-col>
+          <b-col cols="2" class="p-0"><b-list-group-item >직무</b-list-group-item></b-col>
+          <b-col cols="6" class="p-0"><b-list-group-item >제목</b-list-group-item></b-col>
         </b-row>
         <hr>
         <b-row v-for="item in letters" :key="item.studyId">
-          <b-col cols="4" class="p-0"><b-list-group-item route :to="{ name: 'coverLetterDetail', params: {id:item.id} }" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; height:50px;">{{ item.category }}</b-list-group-item></b-col>
-          <b-col cols="8" class="p-0"><b-list-group-item route :to="{ name: 'coverLetterDetail', params: {id:item.id} }" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; height:50px;">{{ item.title }}</b-list-group-item></b-col>
+          <b-col cols="2" class="p-0"><b-list-group-item route :to="{ name: 'coverLetterDetail', params: {id:item.id} }" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; height:50px;">{{ item.category }}</b-list-group-item></b-col>
+          <b-col cols="2" class="p-0"><b-list-group-item route :to="{ name: 'coverLetterDetail', params: {id:item.id} }" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; height:50px;">{{ item.company }}</b-list-group-item></b-col>
+          <b-col cols="2" class="p-0"><b-list-group-item route :to="{ name: 'coverLetterDetail', params: {id:item.id} }" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; height:50px;">{{ item.job }}</b-list-group-item></b-col>
+          <b-col cols="6" class="p-0"><b-list-group-item route :to="{ name: 'coverLetterDetail', params: {id:item.id} }" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; height:50px;">{{ item.title }}</b-list-group-item></b-col>
         </b-row>
       </b-list-group>
     </b-container>
