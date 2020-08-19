@@ -5,9 +5,9 @@
       <h3>글 분류: {{category}}</h3>
       <h3>글 작성자: {{writer}}</h3>
     </div>
-    <div v-if="isWriter" class="d-flex justify-content-end">
-      <b-button @click="updateCover" variant="warning">글 수정</b-button> | 
-      <b-button @click="deleteCover" variant="danger">글 삭제</b-button>
+    <div class="d-flex justify-content-between">
+      <h4>회사: {{company}}</h4>
+      <h4>직무: {{job}}</h4>
     </div>
     <hr class="">
     <span v-for="(item,index) in items" :key="item.id">
@@ -15,13 +15,17 @@
     </span>
     <hr>
     <div>
-      질문: {{letterTitle}}
+      {{letterTitle}}
       <hr>
-      대답: {{letterContent}} <br>
+      <div v-html="letterContent"></div><br>
       <div class="d-flex justify-content-end" v-if="isWriter">
-        <b-button @click="updateQuest(letterId)">항목 수정</b-button> | <b-button @click="deleteQuestion(letterId)">항목 삭제</b-button>
+        <b-button variant="outline-warning" @click="updateQuest(letterId)" class="mx-2">항목 수정</b-button><b-button variant="outline-danger" @click="deleteQuestion(letterId)" class="mx-2">항목 삭제</b-button>
       </div>
       <hr>
+      <div v-if="isWriter" class="d-flex justify-content-end my-3">
+        <b-button @click="updateCover" variant="warning" class="mx-2">글 수정</b-button>
+        <b-button @click="deleteCover" variant="danger" class="mx-2">글 삭제</b-button>
+      </div>
       <b-form-textarea
         id="textarea"
         v-model="text"
@@ -29,14 +33,21 @@
         rows="3"
         max-rows="6"
       ></b-form-textarea>
-      <b-button variant="success" class="my-2" @click="createReply">댓글 제출</b-button>
-      <b-row v-for="reply in replies" :key="reply.id" style="border-top-width : 3px; border-top-style : dotted; border-top-color : red;">
-        <a class="my-2 col-9 d-flex justify-content-between"><p>{{reply.content}}</p><p>작성자: {{reply.writerName}}</p></a>
-        <div class="my-2 col-3" v-show="reply.writerId == userId">
-          <b-button class="my-2" @click="putReply(reply.id)">댓글 수정</b-button> | 
-          <b-button class="my-2" @click="deleteReply(reply.id)">댓글 삭제</b-button>
-        </div>
-      </b-row>
+      <div class="my-2 d-flex justify-content-end">
+        <b-button variant="success" class="my-2" @click="createReply">댓글 제출</b-button>
+      </div>
+      <div v-for="reply in replies" :key="reply.id" style="border-top-width : 3px; border-top-style : dotted; border-top-color : red;">
+        <b-row v-if="reply.writerId == userId">
+          <a class="my-2 col-9 row"><div v-html="printContent(reply.content)" class="col-10"></div><p class="col-2">작성자: {{reply.writerName}}</p></a>
+          <div class="my-2 col-3">
+            <b-button class="m-2" @click="putReply(reply.id)" variant="outline-secondary">댓글 수정</b-button>
+            <b-button class="m-2" @click="deleteReply(reply.id)" variant="outline-dark">댓글 삭제</b-button>
+          </div>
+        </b-row>
+        <b-row v-else>
+          <a class="my-2 col-12 row"><div v-html="printContent(reply.content)" class="col-10">{{reply.content}}</div><p class="col-2">작성자: {{reply.writerName}}</p></a>
+        </b-row>
+      </div>
     </div>
   </b-container>
 </template>
@@ -86,6 +97,7 @@ export default {
       this.title = res.data.title
       this.company = res.data.company
       this.category = res.data.category
+      this.job = res.data.job
       if (this.email == res.data.email) {
         this.isWriter = true
       }
@@ -103,7 +115,7 @@ export default {
       this.items = res.data
       this.letterTitle = res.data[0].title
       this.letterId = res.data[0].id
-      this.letterContent = res.data[0].content
+      this.letterContent = res.data[0].content.split('\n').join('<br />')
     })
     .catch(err => {
       alert(err.response.data.msg)
@@ -178,7 +190,7 @@ export default {
     changeLetter (index) {
       const item = this.items[index]
       this.letterTitle = item.title
-      this.letterContent = item.content
+      this.letterContent = item.content.split('\n').join('<br />')
       this.letterId = item.id
       this.isSelected = index
     },
@@ -251,6 +263,9 @@ export default {
     putReply (replyId) {
       this.isChanged = true
       this.$router.push({ name: "UpdateReply", params: {articleId:this.id,replyId:replyId}})
+    },
+    printContent (content) {
+      return content.split('\n').join('<br />')
     }
   },
   beforeUpdate () {
