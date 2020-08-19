@@ -1,5 +1,5 @@
 <template>
-  <div class="CreateTeamvue">
+  <div @submit.prevent="studyCreate" class="CreateTeamvue">
     <h1 id="CreateTeamTitle">스터디 생성</h1>
     <div id="CreateTeamGrid">
       <!-- 스터디 이름 -->
@@ -62,12 +62,12 @@
         </div>
       </div>
       <!-- 일정 -->
-      <div class="CreateTeamControl">
+      <div class="CreateTeamControl" id="CreateTeamControl-Period">
         <span class="CreateTeamText">일정:</span>
         <div>
-          <!-- <b-form-select :state="periodState" v-model="form.periodId" :options="period" required></b-form-select> -->
+          <b-form-select :state="periodState" v-model="form.periodId" :options="period" required></b-form-select>
 
-          <b-form-radio-group
+          <!-- <b-form-radio-group
             :state="periodState"
             v-model="form.periodId"
             :options="period"
@@ -75,7 +75,54 @@
           >
             <b-form-invalid-feedback :state="periodState">한 가지를 선택해주세요.</b-form-invalid-feedback>
             <b-form-valid-feedback :state="periodState">감사합니다.</b-form-valid-feedback>
-          </b-form-radio-group>
+          </b-form-radio-group>-->
+        </div>
+        <div>
+          <b-form-spinbutton
+            v-if="form.periodId === 1"
+            class="myspinbutton"
+            v-model="form.numMeetings"
+            min="1"
+            max="1"
+            required
+            placeholder="횟수를 입력해주세요"
+          ></b-form-spinbutton>
+          <b-form-spinbutton
+            v-if="form.periodId === 2"
+            class="myspinbutton"
+            v-model="form.numMeetings"
+            min="1"
+            max="7"
+            required
+            placeholder="횟수를 입력해주세요"
+          ></b-form-spinbutton>
+          <b-form-spinbutton
+            v-if="form.periodId === 3"
+            class="myspinbutton"
+            v-model="form.numMeetings"
+            min="1"
+            max="31"
+            required
+            placeholder="횟수를 입력해주세요"
+          ></b-form-spinbutton>
+          <b-form-spinbutton
+            v-if="form.periodId === 4"
+            class="myspinbutton"
+            v-model="form.numMeetings"
+            min="0"
+            max="0"
+            required
+            placeholder="횟수를 입력해주세요"
+          ></b-form-spinbutton>
+          <b-form-spinbutton
+            v-if="form.periodId === null"
+            class="myspinbutton"
+            v-model="form.numMeetings"
+            min="0"
+            max="0"
+            required
+            placeholder="횟수를 입력해주세요"
+          ></b-form-spinbutton>
         </div>
       </div>
       <!-- 주중/주말 -->
@@ -123,6 +170,7 @@
           block
           size="lg"
           variant="info"
+          @click="studyCreate"
         >생성하기</b-button>
       </div>
     </div>
@@ -296,6 +344,9 @@ export default {
   grid-template-columns: 200px 0.5fr 0.5fr;
 }
 #CreateTeamControl-Date {
+  grid-template-columns: 200px 0.5fr 0.5fr;
+}
+#CreateTeamControl-Period {
   grid-template-columns: 200px 0.5fr 0.5fr;
 }
 .CreateTeamText {
