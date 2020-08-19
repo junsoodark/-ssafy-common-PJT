@@ -43,25 +43,25 @@ export default {
     })
   },
   created () {
-    Axios({
-      method: "GET",
-      url: `${API_URL}study/email?email=${this.email}`,
-      headers: { 'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
-                 'user-email': sessionStorage.getItem('user-email')},
-      }
-    )
-    .then(res => {
-      for (var i=0; i<res.data.length; i++) {
-        if (res.data[i].studyId == this.studyId) {
-          this.isMember = true
-          this.teamTitle = res.data[i].title
-        }
-      }
-      if (!this.isMember) {
-        console.log(this.isMember)
-        this.$router.push({name: 'Home'})
-      }
-    })
+    // Axios({
+    //   method: "GET",
+    //   url: `${API_URL}study/email?email=${this.email}`,
+    //   headers: { 'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+    //              'user-email': sessionStorage.getItem('user-email')},
+    //   }
+    // )
+    // .then(res => {
+    //   for (var i=0; i<res.data.length; i++) {
+    //     if (res.data[i].studyId == this.studyId) {
+    //       this.isMember = true
+    //       this.teamTitle = res.data[i].title
+    //     }
+    //   }
+    //   if (!this.isMember) {
+    //     console.log(this.isMember)
+    //     this.$router.push({name: 'Home'})
+    //   }
+    // })
     Axios({
       method: "GET",
       url: `${API_URL}post/study/${this.studyId}`,

@@ -24,17 +24,19 @@ export default {
     }),
   },
   created () {
-    // 유저 정보 가져오기
-    Axios.get(`${API_URL}user/${this.email}`, {
-      headers: {
-        'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
-        'user-email': sessionStorage.getItem('user-email')
-      }
-    })
-    .catch(() => {
-      alert('로그인이 만료되었습니다.')
-      this.$router.push({ name: "Logout" })
-    })
+    if (this.isLoggedIn) {
+      // 유저 정보 가져오기
+      Axios.get(`${API_URL}user/${this.email}`, {
+        headers: {
+          'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+          'user-email': sessionStorage.getItem('user-email')
+        }
+      })
+      .catch(() => {
+        alert('로그인이 만료되었습니다.')
+        this.$router.push({ name: "Logout" })
+      })
+    }
     // 탭 타이틀 변경
     document.title = "Study Jobs"
   },
@@ -74,7 +76,7 @@ export default {
         var limitSecond = (this.loginTime[6] + this.loginTime[7]) * 1
 
         // 토큰 유지 시간 조정
-        limitMinute += 15
+        limitMinute += 59
 
         if (limitMinute >= 60 ) {
           limitMinute -= 60
