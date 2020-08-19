@@ -1,24 +1,29 @@
 <template>
   <b-container>
-    <b-form-input v-model="title" placeholder="제목을 입력해주세요"></b-form-input>
-    <hr>
-    <div class="sample-toolbar">
-		<a href="javascript:void(0)" id="Bold" @click="format('bold')" class="text-decoration-none text-dark"><span class="fa fa-bold fa-fw"></span></a>
-		<a href="javascript:void(0)" id="Italic" @click="format('italic')" class="text-decoration-none text-dark"><span class="fa fa-italic fa-fw"></span></a>
-		<a href="javascript:void(0)" id="Underline" @click="format('underline')" class="mr-3 text-decoration-none text-dark"><span class="fas fa-underline fa-fw"></span></a>
-    <select name="job" id='test' v-model="size" @click="changeSize" class="mr-3">
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5">5</option>
-      <option value="6">6</option>
-      <option value="7">7</option>
-    </select>
-    글자색: <input name="Color Picker" type="color" v-model="fontColor" @change="changeColor" class="mr-3"/>
-    배경색: <input name="Color Picker" type="color" v-model="backColor" @change="changeBackColor" class="mr-3"/>
+    <br>
+    <h1>게시글 수정 페이지</h1>
+    <br>
+    <b-row>
+      <b-col><b-form-input  v-model="title" placeholder="제목을 입력해주세요"></b-form-input></b-col>
+    </b-row>
+    <br>
+    <div class="sample-toolbar border p-2">
+      <a href="javascript:void(0)" id="Bold" @click="format('bold')" class="text-decoration-none text-dark"><span class="fa fa-bold fa-fw"></span></a>
+      <a href="javascript:void(0)" id="Italic" @click="format('italic')" class="text-decoration-none text-dark"><span class="fa fa-italic fa-fw"></span></a>
+      <a href="javascript:void(0)" id="Underline" @click="format('underline')" class="mr-3 text-decoration-none text-dark"><span class="fas fa-underline fa-fw"></span></a>
+      <select name="job" id='test' v-model="size" @click="changeSize" class="mr-3">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+      </select>
+      글자색: <input name="Color Picker" type="color" v-model="fontColor" @change="changeColor" class="mr-3"/>
+      배경색: <input name="Color Picker" type="color" v-model="backColor" @change="changeBackColor" class="mr-3"/>
     </div>
-    <hr>
+    <br>
     <p
       v-for="(value, index) in content"
       id="paragraph"
@@ -26,10 +31,13 @@
       contenteditable
       @input="event => onInput(event, index)"
       @keyup.delete="onRemove(index)"
-      class="editor"
+      class="editor p-3 text-left border"
     />
-    <hr>
-    <button class='btn btn-success' @click.prevent='Submit'>제출</button>
+    <b-row align-h="end">
+      <b-col cols="2">
+        <b-button variant="primary" @click.prevent='Submit'>수정하기</b-button>
+      </b-col>
+    </b-row>
   </b-container>
 </template>
 

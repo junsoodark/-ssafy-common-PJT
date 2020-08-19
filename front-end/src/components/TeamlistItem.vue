@@ -52,7 +52,6 @@ export default {
   },
   props: {
     team: Object,
-    // profileEmail: profileEmail
   },
   created() {
 

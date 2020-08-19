@@ -1,14 +1,32 @@
 <template>
   <b-container>
-    <h1 class="text-center">{{article.title}}</h1>
-    <h3 class="d-flex justify-content-end">글 작성자: {{writer.name}}</h3>
-    <hr class="">
-    <div id="content" class="d-flex justify-content-center"></div>
-    <hr>
-    <div class="d-flex justify-content-end">
-      <b-button @click="updatePost">글 수정</b-button> | 
-      <b-button @click="deletePost">글 삭제</b-button>
-    </div>
+    <br>
+    <b-row align-h="start" class="mb-3">
+      <b-col md="2" offset-md="1" class="text-left">게시글</b-col>
+    </b-row>
+    <b-row >
+      <b-col md="10" offset-md="1" >
+        <h2 class="text-left">{{article.title}}</h2>
+      </b-col>
+    </b-row>
+    <b-row class="my-3">
+      <b-col md="2" offset-md="1" class="text-left">작성일</b-col>
+      <b-col md="2" offset-md="6" class="text-left">작성자: {{writer.name}}</b-col>
+      <b-col offset-md="1"></b-col>
+    </b-row>
+    <br>
+    <b-row>
+      <b-col md="10" offset-md="1" class="text-left border p-3">
+        <div id="content"></div>
+      </b-col>
+    </b-row>
+    <br>
+    <b-row align-h="end" >
+      <b-col md="4">
+        <b-button variant="info" class="mx-2" @click="updatePost">글 수정</b-button>
+        <b-button variant="danger" class="mx-2" @click="deletePost">글 삭제</b-button>
+      </b-col>
+    </b-row>
   </b-container>
 </template>
 
@@ -32,6 +50,7 @@ export default {
     })
   },
   created () {
+    // 유저 정보
     Axios({
       method: "GET",
       url: `${API_URL}user/${this.email}`,
@@ -46,7 +65,7 @@ export default {
       }
     })
     .catch(() => {alert('사용자 정보를 불러올 수 없습니다')})
-
+    // article 정보
     Axios({
       method: "GET",
       url: `${API_URL}post/${this.articleId}`,
@@ -88,5 +107,7 @@ export default {
 </script>
 
 <style>
-
+#content {
+  background-color:white;
+}
 </style>

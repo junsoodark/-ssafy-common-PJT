@@ -9,11 +9,15 @@
               <br>
               <b-row>
                 <b-col class="totheleft text-center" cols="12"><h1>{{ team.title }}</h1></b-col>
-                <b-col v-if="isLoggedIn" class="totheright my-3 text-center" offset="8" cols="4">
-                  <b-button v-if="isMember" @click="toAricle" class="mr-1">게시판 보기</b-button>
+              </b-row>
+              <b-row  align-h="end">
+                <b-col v-if="isLoggedIn" class="totheright my-3 text-center" offset="9" cols="3">
+                  <!-- <b-button v-if="isMember" @click="toAricle" class="mr-1">게시판 보기</b-button> -->
                   <!-- 탈퇴 -->
                   <b-button v-if="isMember" v-b-modal.modal-secession variant="info">탈퇴신청</b-button>
-
+                </b-col>
+                <b-col>
+                  
                   <b-modal
                     id="modal-secession"
                     ref="modal"
@@ -267,7 +271,7 @@
           </b-tab>
           <b-tab title="게시판" v-if="isMember">
             <b-card-text>
-              <TeamArticle :key="this.study_id"></TeamArticle>
+              <TeamArticle :key="this.study_id" v-bind:team="team"></TeamArticle>
             </b-card-text>
           </b-tab>
           <b-tab title="탈퇴하기" v-if="isMember" v-b-modal.modal-secession>
@@ -350,7 +354,7 @@ export default {
     return {
       joinMsg: '',
       study_id: this.$route.params.id,
-      team: [],
+      team: {},
       checkDelete: '',
       checkDeleteForm: '해당 스터디를 삭제하겠습니다.',
       checkSecessionForm: '해당 스터디를 탈퇴하겠습니다.',
