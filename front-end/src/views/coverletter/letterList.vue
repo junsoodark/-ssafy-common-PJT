@@ -110,6 +110,7 @@ export default {
       .then( res => {
         this.letters = res.data
         this.mineCase = true
+        this.nowCase = 0
       })
       .catch( err => {alert(err.response.data.msg)})
     },
@@ -130,6 +131,7 @@ export default {
         }
       }
       this.nowCase = value
+      this.mineCase = true
     }
   }
 }
