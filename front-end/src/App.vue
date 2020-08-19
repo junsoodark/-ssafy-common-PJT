@@ -76,7 +76,7 @@ export default {
         var limitSecond = (this.loginTime[6] + this.loginTime[7]) * 1
 
         // 토큰 유지 시간 조정
-        limitMinute += 15
+        limitMinute += 59
 
         if (limitMinute >= 60 ) {
           limitMinute -= 60

@@ -590,9 +590,6 @@ export default {
       console.log(err)
       this.$router.push({ name: "NotFound" })
     })
-    
-    
-
 
 
     if (!this.isLoggedIn) { 

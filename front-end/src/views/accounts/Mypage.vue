@@ -214,7 +214,6 @@ export default {
       this.$refs.fileInput.click()
     },
     onFilePicked(event) {
-      // 로그인 없이
       firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
           console.log(user)
@@ -223,7 +222,6 @@ export default {
           console.log(uid)
           // 업로드
           var file = event.target.files[0];
-          // var storageRef = firebase.storage().ref(`images/${uid}/${uid}`);
           var storageRef = firebase.storage().ref(`images/${user.email}/${user.email}`);
           var task = storageRef.put(file);
     

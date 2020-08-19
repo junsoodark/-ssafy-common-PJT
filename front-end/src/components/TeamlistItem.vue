@@ -55,6 +55,9 @@ export default {
     // profileEmail: profileEmail
   },
   created() {
+
+
+
     const profileEmail = this.team.mgrEmail
     const studyId = this.team.studyId
     firebase.storage().ref(`images/${profileEmail}/${profileEmail}`).getDownloadURL()
@@ -67,8 +70,8 @@ export default {
       var img = document.getElementById(studyId);
       img.src = url;
     })
-    .catch(function() {
-      // console.log(err)
+    .catch(function(err) {
+      console.log(err)
     })
   },
   computed: {},
