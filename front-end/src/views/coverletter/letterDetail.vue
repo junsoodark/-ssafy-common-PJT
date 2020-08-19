@@ -38,14 +38,14 @@
       </div>
       <div v-for="reply in replies" :key="reply.id" style="border-top-width : 3px; border-top-style : dotted; border-top-color : red;">
         <b-row v-if="reply.writerId == userId">
-          <a class="my-2 col-9 row"><div v-html="printContent(reply.content)" class="col-10"></div><p class="col-2">작성자: {{reply.writerName}}</p></a>
+          <a class="my-2 col-9 row"><p class="col-2">작성자: {{reply.writerName}}</p><div v-html="printContent(reply.content)" class="col-10"></div></a>
           <div class="my-2 col-3">
             <b-button class="m-2" @click="putReply(reply.id)" variant="outline-secondary">댓글 수정</b-button>
             <b-button class="m-2" @click="deleteReply(reply.id)" variant="outline-dark">댓글 삭제</b-button>
           </div>
         </b-row>
         <b-row v-else>
-          <a class="my-2 col-12 row"><div v-html="printContent(reply.content)" class="col-10">{{reply.content}}</div><p class="col-2">작성자: {{reply.writerName}}</p></a>
+          <a class="my-2 col-12 row"><p class="col-2">작성자: {{reply.writerName}}</p><div v-html="printContent(reply.content)" class="col-10">{{reply.content}}</div></a>
         </b-row>
       </div>
     </div>
