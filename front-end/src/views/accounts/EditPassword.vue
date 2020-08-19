@@ -221,6 +221,7 @@ export default {
 #newConfirm {
   padding-top: 0;
   padding-bottom: 2px;
+  margin-top: 2px;
 }
 .WarningText {
   margin-left: 210px;
