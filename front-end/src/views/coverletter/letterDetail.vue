@@ -1,27 +1,54 @@
 <template>
-  <b-container class="my-3">
-    <h1 class="text-center">{{title}}</h1>
-    <div class="d-flex justify-content-between">
-      <h3>글 분류: {{category}}</h3>
-      <h3>글 작성자: {{writer}}</h3>
+  <b-container class="my-3" style="width: 900px;">
+    <br>
+    <b-row>
+      <b-col md="3">
+        <h4 class="border p-2">{{ category }}</h4>
+      </b-col>
+    </b-row>
+    <br>
+
+    <b-row >
+      <b-col class="ml-1">
+        <h2 class="text-left"># {{ title }}</h2>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col class="ml-1 mt-4">
+        <h5 class="text-left">[{{ company }}]  |  {{ job }}</h5>
+      </b-col>
+      <b-col class="text-right mt-5 mr-2">작성자: {{ writer }}</b-col>
+    </b-row>
+    
+    <br>
+    <div class="resumeTabs">
+      <b-card no-body>
+        <b-tabs pills card vertical>
+          <b-tab v-for="(item, index) in items" :key="item.id" :title="String(index+1)">
+            <b-card-text>
+              <b-row class="cardHeader">
+                <b-col class="text-left">{{ item.title }}</b-col>
+              </b-row>
+              <hr>
+              <b-row>
+                <b-col class="text-left" style="height: 600px;" v-html="item.content"></b-col>
+              </b-row>
+            </b-card-text>
+          </b-tab>
+        </b-tabs>
+      </b-card>
     </div>
-    <div v-if="isWriter" class="d-flex justify-content-end">
-      <b-button @click="updateCover" variant="warning">글 수정</b-button> | 
-      <b-button @click="deleteCover" variant="danger">글 삭제</b-button>
-    </div>
-    <hr class="">
-    <span v-for="(item,index) in items" :key="item.id">
-      <b-button @click="changeLetter(index)" variant="info" v-if="index != isSelected">{{index+1}} 번</b-button><b-button @click="changeLetter(index)" variant="primary" v-else>{{index+1}} 번</b-button><span v-if="index != items.length-1"> | </span>
-    </span>
-    <hr>
+    <br>
+
     <div>
-      질문: {{letterTitle}}
-      <hr>
-      대답: {{letterContent}} <br>
       <div class="d-flex justify-content-end" v-if="isWriter">
-        <b-button @click="updateQuest(letterId)">항목 수정</b-button> | <b-button @click="deleteQuestion(letterId)">항목 삭제</b-button>
+        <b-button variant="outline-warning" @click="updateQuest(letterId)" class="mx-2">항목 수정</b-button><b-button variant="outline-danger" @click="deleteQuestion(letterId)" class="mx-2">항목 삭제</b-button>
       </div>
-      <hr>
+      <br>
+      <div v-if="isWriter" class="d-flex justify-content-end my-3">
+        <b-button @click="updateCover" variant="warning" class="mx-2">글 수정</b-button>
+        <b-button @click="deleteCover" variant="danger" class="mx-2">글 삭제</b-button>
+      </div>
       <b-form-textarea
         id="textarea"
         v-model="text"
@@ -29,14 +56,22 @@
         rows="3"
         max-rows="6"
       ></b-form-textarea>
-      <b-button variant="success" class="my-2" @click="createReply">댓글 제출</b-button>
-      <b-row v-for="reply in replies" :key="reply.id" style="border-top-width : 3px; border-top-style : dotted; border-top-color : red;">
-        <a class="my-2 col-9 d-flex justify-content-between"><p>{{reply.content}}</p><p>작성자: {{reply.writerName}}</p></a>
-        <div class="my-2 col-3" v-show="reply.writerId == userId">
-          <b-button class="my-2" @click="putReply(reply.id)">댓글 수정</b-button> | 
-          <b-button class="my-2" @click="deleteReply(reply.id)">댓글 삭제</b-button>
-        </div>
-      </b-row>
+      <div class="my-2 d-flex justify-content-end">
+        <b-button variant="success" class="my-2" @click="createReply">댓글 제출</b-button>
+      </div>
+      <div v-for="reply in replies" :key="reply.id" style="border-top-width : 1px; border-top-style : dashed; border-top-color : black;">
+        <b-row class="mt-3 mr-1">
+          <b-col md="2" align-self="center">{{reply.writerName}}</b-col>
+          <b-col md="10" class="text-left" v-html="printContent(reply.content)"></b-col>
+        </b-row>
+        <b-row v-if="reply.writerId == userId">
+          <b-col class="text-right">
+            <b-button class="m-2" @click="putReply(reply.id)" variant="outline-info">수정</b-button>
+            <b-button class="m-2" @click="deleteReply(reply.id)" variant="outline-danger">삭제</b-button>
+          </b-col>
+        </b-row>
+        <br>
+      </div>
     </div>
   </b-container>
 </template>
@@ -69,9 +104,10 @@ export default {
   computed: {
     ...mapState({
       email: (state) => state.moduleName.email,
-    })
+    }),
   },
   created () {
+    // 자소서 정보
     Axios({
       method: "GET",
       url: `${API_URL}resume/${this.id}`,
@@ -82,14 +118,17 @@ export default {
       },
     })
     .then(res => {
+      console.log('')
       this.writer = res.data.name
       this.title = res.data.title
       this.company = res.data.company
       this.category = res.data.category
+      this.job = res.data.job
       if (this.email == res.data.email) {
         this.isWriter = true
       }
     })
+    // 해당 자소서의 세부 항목 가져오기
     Axios({
       method: "GET",
       url: `${API_URL}resumeitem/resume/${this.id}`,
@@ -100,10 +139,17 @@ export default {
       }
     })
     .then(res => {
+      console.log('자소서 세부사항', res)
       this.items = res.data
+      console.log(this.items)
+
       this.letterTitle = res.data[0].title
       this.letterId = res.data[0].id
-      this.letterContent = res.data[0].content
+      this.letterContent = res.data[0].content.split('\n').join('<br />')
+      this.isChanged = true
+      for (var i=0; i<this.items.length; i++) {
+        this.items[i].content = this.items[i].content.split('\n').join('<br />')
+      }
     })
     .catch(err => {
       alert(err.response.data.msg)
@@ -178,7 +224,7 @@ export default {
     changeLetter (index) {
       const item = this.items[index]
       this.letterTitle = item.title
-      this.letterContent = item.content
+      this.letterContent = item.content.split('\n').join('<br />')
       this.letterId = item.id
       this.isSelected = index
     },
@@ -251,6 +297,9 @@ export default {
     putReply (replyId) {
       this.isChanged = true
       this.$router.push({ name: "UpdateReply", params: {articleId:this.id,replyId:replyId}})
+    },
+    printContent (content) {
+      return content.split('\n').join('<br />')
     }
   },
   beforeUpdate () {
@@ -286,6 +335,9 @@ export default {
     })
     .then(res => {
       this.items = res.data
+      for (var i=0; i<this.items.length; i++) {
+        this.items[i].content = this.items[i].content.split('\n').join('<br />')
+      }
     })
     .catch(err => {
       alert(err.response.data.msg)
@@ -297,5 +349,7 @@ export default {
 </script>
 
 <style>
-
+.cardHeader {
+  height: 78px;
+}
 </style>

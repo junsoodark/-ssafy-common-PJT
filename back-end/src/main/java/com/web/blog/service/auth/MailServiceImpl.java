@@ -5,6 +5,7 @@ import java.util.Properties;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.web.blog.model.auth.Mail;
@@ -25,7 +26,8 @@ public class MailServiceImpl implements MailService{
 	
 	@Value("${spring.mail.password}")
 	private String password;
-
+	
+	@Async
 	@Override
 	public void sendMail(Mail mail) {
 		SimpleMailMessage message = new SimpleMailMessage();

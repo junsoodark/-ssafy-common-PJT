@@ -60,10 +60,6 @@
               <b-col md="3" offset-md="3" class="text-right font-weight-bold">{{ makingStudy }}</b-col>
             </b-row>
             <hr>
-            <!-- <b-row align-h="start" class="text-left">
-              <b-col cols="4">한마디</b-col>
-              <b-col cols="8">올해안에 취업한다!!!</b-col>
-            </b-row> -->
           </div>
           <div id="mypageBtn">
             <b-row align-h="end" class="text-right">
@@ -133,8 +129,8 @@
           </b-col>
         </b-row>
         <b-row v-for="applying in applyingList" :key="applying.title">
-          <b-col cols="4" class="p-0"><b-list-group-item id="myStudyList" route :to="{ name: 'StudyDetail', params: {id:applying.studyId} }">{{ applying.title }}</b-list-group-item></b-col>
-          <b-col cols="8" class="p-0"><b-list-group-item route :to="{ name: 'StudyDetail', params: {id:applying.studyId} }">{{ applying.content }}</b-list-group-item></b-col>
+          <b-col cols="4" class="p-0"><b-list-group-item id="myStudyList" route :to="{ name: 'StudyDetail', params: {id:applying.id} }">{{ applying.title }}</b-list-group-item></b-col>
+          <b-col cols="8" class="p-0"><b-list-group-item route :to="{ name: 'StudyDetail', params: {id:applying.id} }">{{ applying.content }}</b-list-group-item></b-col>
         </b-row>
       </b-list-group>
     </div>
@@ -216,10 +212,6 @@ export default {
     onFilePicked(event) {
       firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
-          console.log(user)
-          console.log(user.email)
-          const uid = user.uid;
-          console.log(uid)
           // 업로드
           var file = event.target.files[0];
           var storageRef = firebase.storage().ref(`images/${user.email}/${user.email}`);
