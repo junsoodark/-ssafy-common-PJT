@@ -3,7 +3,6 @@
     <div>
       <b-card no-body>
         <b-tabs v-model="tabIndex" pills card vertical>
-          <h3>현재 탭 {{ tabIndex }}</h3>
           <b-tab title="상세보기">
             <b-card-text>
               <b-container>

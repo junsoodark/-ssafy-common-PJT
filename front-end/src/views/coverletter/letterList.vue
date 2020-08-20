@@ -65,6 +65,7 @@ export default {
         },
       })
     .then(res => {
+      console.log(res)
       this.letters = res.data
       this.saveLetters = res.data
     })
