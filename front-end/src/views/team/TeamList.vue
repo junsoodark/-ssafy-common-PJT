@@ -28,7 +28,7 @@
       <b-badge pill class="my-badge2" style="cursor: pointer;" @click="searchButton('인적성/NCS')" href="#">NCS/인적성</b-badge>
       <b-badge pill class="my-badge3" style="cursor: pointer;" @click="searchButton('면접')" href="#">면접</b-badge>
       <b-badge pill class="my-badge4" style="cursor: pointer;" @click="searchButton('기타')" href="#">기타</b-badge>
-      <b-badge pill variant="dark" style="cursor: pointer;" @click="showAllCase" href="#">전체</b-badge>
+      <b-badge pill class="my-badge5" variant="dark" style="cursor: pointer;" @click="showAllCase" href="#">전체</b-badge>
     </div>
 
     <br><br>
@@ -135,6 +135,11 @@ export default {
 }
 .my-badge4 {
   background-color:#00BFFF !important;
+  padding: 5px !important;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+.my-badge5 {
   padding: 5px !important;
   margin-right: 5px;
   margin-left: 5px;
