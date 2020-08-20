@@ -19,6 +19,7 @@
       </b-row>
       <hr>
       <b-row v-for="article in articles" :key="article.studyId" class="my-3">
+        <!-- <b-col cols="2">{{ article.id }}</b-col> -->
         <b-col cols="2">{{ article.id }}</b-col>
         <b-col cols="5" class="text-left"><b-link route :to="{ name: 'ArticleDetail', params: {studyid:studyId, articleid:article.id} }">{{ article.title }}</b-link></b-col>
         <b-col cols="2">{{ article.writer }}</b-col>
@@ -68,6 +69,10 @@ export default {
     )
     .then(res => {
       this.articles = res.data
+      console.log('artifcles', this.articles)
+      this.articles.sort(function (a, b){
+        return b.id - a.id
+      })
       for (var i=0; i < res.data.length; i++) {
         this.findWriterName(this.articles[i].writer, i)
       }

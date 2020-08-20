@@ -57,6 +57,7 @@ export default {
     })
   },
   created () {
+    // 자소서 전부 가져오기
     Axios({
         method: "GET",
         url: `${API_URL}resume/all`,
@@ -67,6 +68,7 @@ export default {
         },
       })
     .then(res => {
+      console.log('자소서 전부', res)
       this.letters = res.data.reverse()
       this.saveLetters = res.data.reverse()
     })
