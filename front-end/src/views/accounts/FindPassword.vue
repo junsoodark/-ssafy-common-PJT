@@ -149,28 +149,6 @@ export default {
           // 로그인
           alert(res.data)
           this.$store.dispatch('login', loginData)
-
-          // // 억지 firebase 비밀번호 찾기
-          // // firebase 사용자 로그인
-          // console.log(this.email, password)
-          // firebase.auth().signInWithEmailAndPassword(this.email, password).catch(function(error) {
-          //   // Handle Errors here.
-          //   var errorCode = error.code;
-          //   var errorMessage = error.message;
-          //   console.log('파이어베이스 로그인 에러')
-          //   console.log(errorCode)
-          //   console.log(errorMessage)
-          //   // ...
-          // })
-          // // 비밀번호 업데이트
-          // var user = firebase.auth().currentUser;
-          // var newPassword = password
-          // console.log(newPassword, password)
-          // user.updatePassword(newPassword).then(function() {
-          //   console.log('firebase password success')
-          // }).catch(function(error) {
-          //   console.log('firebase new password error',error)
-          // })
           
         })
         .catch((err) => {

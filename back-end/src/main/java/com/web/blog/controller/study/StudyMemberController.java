@@ -190,8 +190,8 @@ public class StudyMemberController {
 	public ResponseEntity getStudyUserList(@RequestHeader(value = "jwt-auth-token") final String token,
 			@PathVariable int study_id) {
 
-
 	Study study = studyService.findStudyByStudyId(study_id);
+
 		if (study == null)
 			return new ResponseEntity("존재하지 않는 스터디입니다.", HttpStatus.NOT_FOUND);
 	//	if (studyService.isManager(study_id, mgr.getId()) == false)

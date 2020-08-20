@@ -73,4 +73,17 @@ public class StudyMemberServiceImpl implements StudyMemberService {
             return map;
         }).collect(Collectors.toList());
 	}
+	
+	@Override
+	public List <Map<String, String>> getUserApplyingStudyList(User user) {
+		return user.getApprovingStudies().stream().map(study->{
+            Map<String,String> map=new HashMap<>();
+            map.put("title",study.getTitle());
+            map.put("content",study.getContent());
+            map.put("category",study.getCategory().getName());
+            return map;
+        }).collect(Collectors.toList());
+	}
+	
+	
 }

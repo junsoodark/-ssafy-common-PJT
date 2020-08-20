@@ -1,5 +1,6 @@
 package com.web.blog.controller.board;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -70,7 +71,11 @@ public class postController {
     @ApiOperation(value = "")
     public ResponseEntity<Object> readAllByStudyId(@PathVariable int studyId) {
         List<Post> list = postService.findPostByStudy(studyId);
-        return new ResponseEntity<Object>(list, HttpStatus.OK);
+        List<Map<String, Object>> res = new ArrayList<>();
+        for (Post tmp : list) {
+            res.add(postService.Post2DetailInfo(tmp));
+        }
+        return new ResponseEntity<Object>(res, HttpStatus.OK);
     }
 
     @GetMapping("/post/all")

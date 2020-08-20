@@ -29,7 +29,7 @@
         </b-input-group>-->
       </b-form>
       <!-- 인증 코드 -->
-      <b-form class="row" @submit.prevent="signup">
+      <b-form class="row">
         <b-input-group class="mb-4">
           <label class="signup-control-text col-2" style="text-align:right" for="code">인증코드 :</label>
           <b-input-group-prepend is-text>
@@ -44,6 +44,12 @@
           ></b-form-input>
         </b-input-group>
       </b-form>
+      <!-- 로딩 모달 -->
+      <b-modal ref="my-modal" hide-footer hide-header centered no-close-on-backdrop>
+        <div class="text-center">
+          <b-spinner variant="primary" style="width: 5rem; height: 5rem;" label="Text Centered" class="m-auto"></b-spinner>
+        </div>
+      </b-modal>
       <!-- 이름 -->
       <b-form class="row">
         <b-input-group class="mb-4">
@@ -140,7 +146,7 @@
         </b-input-group>
       </b-form>
       <!-- 동의 -->
-      <b-form>
+      <b-form @submit.prevent="signup">
         <div>
           <b-form-checkbox
             id="checkbox-1"
@@ -322,6 +328,7 @@ export default {
   },
   methods: {
     signup() {
+      console.log('사인업')
       const code = this.code;
       const age = this.age;
       const nickname = this.nickname;
@@ -362,20 +369,6 @@ export default {
           return false;
         }
       }
-
-      // firebase 회원가입
-      firebase
-        .auth()
-        .createUserWithEmailAndPassword(email, password)
-        .catch(function (error) {
-          // Handle Errors here.
-          var errorCode = error.code;
-          var errorMessage = error.message;
-          console.log("firebase 인증 에러", email, password);
-          console.log(errorCode);
-          console.log(errorMessage);
-          // ...
-        });
 
       this.$store.dispatch("signup", {
         code,
@@ -423,13 +416,15 @@ export default {
         alert("이메일 형식을 사용해야 합니다!");
         return false;
       }
-
+      this.$refs['my-modal'].show()
       Axios.post(`${API_URL}verify`, params)
         .then((res) => {
+          this.$refs['my-modal'].hide()
           alert(res.data);
         })
         .catch((err) => {
           if (err.response.status === 409) {
+            this.$refs['my-modal'].hide()
             alert("이미 사용중인 이메일 입니다.");
             return false;
           } else {

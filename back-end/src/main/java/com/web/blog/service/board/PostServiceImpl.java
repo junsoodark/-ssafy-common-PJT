@@ -92,6 +92,7 @@ public class PostServiceImpl implements PostService {
         ret.put("study_id", post.getStudy().getStudyId());
         ret.put("title", post.getTitle());
         ret.put("writer", post.getUser().getId());
+        ret.put("date", post.getDate());
         return ret;
     }
 

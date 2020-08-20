@@ -14,7 +14,7 @@
         <b-icon icon="person-circle" font-scale="1"></b-icon> {{ team.numMembers }}/{{ team.maxMembers }}
       </div>
       <div class="card-body text-center">
-        <img :src="defaultImageUrl" style="width:140px;margin-top:-85px" alt="User" class="img-fluid img-thumbnail rounded-circle border-0 mb-2">
+        <img :id="team.studyId" :src="defaultImageUrl" style="width:140px; height:140px; margin-top:-85px" alt="User" class="studyimg img-fluid img-thumbnail rounded-circle border-0 mb-2">
         <b-row class="my-1">
           <b-col><h5 class="font-weight-bold">{{ team.title }}</h5></b-col>
         </b-row>
@@ -41,18 +41,37 @@
 
 <script>
 import router from "@/router";
+import firebase from 'firebase'
 
 export default {
   data () {
     return {
       defaultImageUrl: 'https://previews.123rf.com/images/salamatik/salamatik1801/salamatik180100019/92979836-%ED%94%84%EB%A1%9C%ED%95%84-%EC%9D%B5%EB%AA%85%EC%9D%98-%EC%96%BC%EA%B5%B4-%EC%95%84%EC%9D%B4%EC%BD%98-%ED%9A%8C%EC%83%89-%EC%8B%A4%EB%A3%A8%EC%97%A3-%EC%82%AC%EB%9E%8C%EC%9E%85%EB%8B%88%EB%8B%A4-%EB%82%A8%EC%84%B1-%EA%B8%B0%EB%B3%B8-%EC%95%84%EB%B0%94%ED%83%80-%EC%82%AC%EC%A7%84-%EC%9E%90%EB%A6%AC-%ED%91%9C%EC%8B%9C-%EC%9E%90-%ED%9D%B0%EC%83%89-%EB%B0%B0%EA%B2%BD%EC%97%90-%EA%B3%A0%EB%A6%BD-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4-%EC%85%98.jpg',
+      profileEmail: null,
     }
   },
   props: {
-    team: Object
+    team: Object,
   },
   created() {
-    console.log(this.team)
+
+
+
+    const profileEmail = this.team.mgrEmail
+    const studyId = this.team.studyId
+    firebase.storage().ref(`images/${profileEmail}/${profileEmail}`).getDownloadURL()
+    .then(function(url) {
+      var xhr = new XMLHttpRequest();
+      xhr.responseType = 'blob';
+      xhr.onload = function() {};
+      xhr.open('GET', url);
+      xhr.send();
+      var img = document.getElementById(studyId);
+      img.src = url;
+    })
+    .catch(function(err) {
+      console.log(err)
+    })
   },
   computed: {},
   methods: {
