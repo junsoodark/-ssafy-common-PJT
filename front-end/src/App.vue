@@ -93,7 +93,7 @@ export default {
         // console.log('리미트 시간', limitHour, limitMinute, limitSecond)
         const limit = limitHour * 3600 + limitMinute * 60 + limitSecond
         const now = H * 3600 + M * 60 + S
-        console.log(now, limit)
+        // console.log(now, limit)
         if (now >= limit) {
           alert('로그인 기간이 만료되었습니다.')
           this.$router.push({ name: "Logout" })
