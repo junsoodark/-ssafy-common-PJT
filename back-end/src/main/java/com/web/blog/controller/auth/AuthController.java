@@ -35,9 +35,11 @@ public class AuthController {
 	@PostMapping("/verify")
 	@ApiOperation(value="이메일을 입력받아 사용중인 이메일인지 확인하고, 사용중이지 않다면 인증 메일을 전송합니다.")
 	public ResponseEntity sendVerifyMailForSignUP(@RequestParam final String email) {
+		
 		if(verifyService.isDuplicated(email)) return new ResponseEntity("이미 사용중인 이메일 입니다.", HttpStatus.CONFLICT);
 		
 		mailService.sendMail(verifyService.generateVerifyMail(email));
+		
 		return new ResponseEntity("인증 메일을 전송했습니다.", HttpStatus.OK);
 	}
 	
