@@ -60,10 +60,6 @@
               <b-col md="3" offset-md="3" class="text-right font-weight-bold">{{ makingStudy }}</b-col>
             </b-row>
             <hr>
-            <!-- <b-row align-h="start" class="text-left">
-              <b-col cols="4">한마디</b-col>
-              <b-col cols="8">올해안에 취업한다!!!</b-col>
-            </b-row> -->
           </div>
           <div id="mypageBtn">
             <b-row align-h="end" class="text-right">
