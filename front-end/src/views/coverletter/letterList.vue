@@ -39,11 +39,8 @@ export default {
   data () {
     return {
       letters: [
-        {title: '자소서 컨펌좀',id:3,category:"자소서 컨펌"},
-        {title: '이런 자소서엔 어떤 질문이 들어올까?',id:4,category:"면접 질문"},
-        {title: '자소서 하나 쓰는데 이거 좀 걸린다',id:5,category:"자소서 컨펌"},
-        {title: '면접 어떤 질문 옴?',id:6,category:"면접 질문"}
       ],
+      test: [],
       mineCase: false,
       saveLetters: [],
       userId: null,
@@ -68,9 +65,8 @@ export default {
         },
       })
     .then(res => {
-      console.log('자소서 전부', res)
-      this.letters = res.data.reverse()
-      this.saveLetters = res.data.reverse()
+      this.letters = res.data
+      this.saveLetters = res.data
     })
     .catch(err => {
       const msg = err.response.data.msg
