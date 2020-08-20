@@ -176,7 +176,7 @@
                       <b-icon icon="info-square-fill" aria-hidden="true"></b-icon> 스터디 소개
                     </div>
                   </template>
-                  <b-card-text>{{ team.content }}</b-card-text>
+                  <b-card-text v-html="team.content"></b-card-text>
                 </b-card>
               </b-card-group>
               <br>
@@ -588,6 +588,7 @@ export default {
     })
     .then(res => {
       this.team = res.data
+      this.team.content = this.team.content.split('\n').join('<br />')
     })
     .catch(err => {
       console.log(err)
