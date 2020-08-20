@@ -176,8 +176,7 @@ export default {
         'resumeId': resumeId,
         'title': quest.title
       }
-      console.log('submitQ', quest)
-      console.log('quest', quest)
+      console.log('submitQ',resumeId, quest)
       Axios({
         method: "POST",
         url: `${API_URL}resumeitem`,
@@ -188,6 +187,7 @@ export default {
       })
       .then(res => {
         console.log(res)
+        console.dir(res)
       })
       .catch(err => {
         alert(err.response.data.msg)

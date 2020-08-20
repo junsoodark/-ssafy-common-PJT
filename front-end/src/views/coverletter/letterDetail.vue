@@ -142,7 +142,6 @@ export default {
       console.log('자소서 세부사항', res)
       this.items = res.data
       console.log(this.items)
-
       this.letterTitle = res.data[0].title
       this.letterId = res.data[0].id
       this.letterContent = res.data[0].content.split('\n').join('<br />')

@@ -54,24 +54,52 @@ export default {
     team: Object,
   },
   created() {
+    
+      var storageRef = firebase.storage().ref();
+      //
+      var listRef = storageRef.child(`images/${this.team.mgrEmail}`);
+      
+      const studyId = this.team.studyId
+      // Find all the prefixes and items.
+      listRef.listAll().then(function(res) {
+        res.items.forEach(function(itemRef) {
+          const fullPath = itemRef.fullPath
+          firebase.storage().ref(`${fullPath}`).getDownloadURL()
+          .then(function(url) {
+            var xhr = new XMLHttpRequest();
+            xhr.responseType = 'blob';
+            xhr.onload = function() {};
+            xhr.open('GET', url);
+            xhr.send();
+            var img = document.getElementById(studyId);
+            img.src = url;
+          })
+          .catch(function(err) {
+            console.log(err)
+          })
+          // All the items under listRef.
+        });
+      }).catch(function(error) {
+        // Uh-oh, an error occurred!
+        console.log('eer', error)
+      });
 
 
-
-    const profileEmail = this.team.mgrEmail
-    const studyId = this.team.studyId
-    firebase.storage().ref(`images/${profileEmail}/${profileEmail}`).getDownloadURL()
-    .then(function(url) {
-      var xhr = new XMLHttpRequest();
-      xhr.responseType = 'blob';
-      xhr.onload = function() {};
-      xhr.open('GET', url);
-      xhr.send();
-      var img = document.getElementById(studyId);
-      img.src = url;
-    })
-    .catch(function(err) {
-      console.log(err)
-    })
+    // const profileEmail = this.team.mgrEmail
+    // const studyId = this.team.studyId
+    // firebase.storage().ref(`images/${profileEmail}/${profileEmail}`).getDownloadURL()
+    // .then(function(url) {
+    //   var xhr = new XMLHttpRequest();
+    //   xhr.responseType = 'blob';
+    //   xhr.onload = function() {};
+    //   xhr.open('GET', url);
+    //   xhr.send();
+    //   var img = document.getElementById(studyId);
+    //   img.src = url;
+    // })
+    // .catch(function(err) {
+    //   console.log(err)
+    // })
   },
   computed: {},
   methods: {
