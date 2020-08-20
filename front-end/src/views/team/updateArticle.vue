@@ -65,7 +65,6 @@
 <script>
 import { mapState } from "vuex";
 import Axios from 'axios';
-import { mapState } from "vuex"
 const API_URL = process.env.VUE_APP_LOCAL_URL;
 export default {
   data() {
@@ -111,11 +110,6 @@ export default {
   mounted() {
     document.getElementById('paragraph').setAttribute('contenteditable', 'true');
     this.updateAllContent();
-  },
-  computed: {
-    ...mapState({
-      email: (state) => state.moduleName.email,
-    }),
   },
   methods: {
     onInput(event, index) {
