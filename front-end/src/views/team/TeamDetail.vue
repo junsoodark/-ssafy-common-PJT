@@ -3,6 +3,7 @@
     <div>
       <b-card no-body>
         <b-tabs v-model="tabIndex" pills card vertical>
+          <!-- <h3>현재탭 {{ tabIndex }}</h3> -->
           <b-tab title="상세보기">
             <b-card-text>
               <b-container>
@@ -360,8 +361,8 @@ export default {
       applyList: [],
       isMember: false,
       isReady: false,
-      newTabIndex: 1,
       tabIndex: 1,
+      prevTabIndex: 0,
     }
   },
   computed: {
