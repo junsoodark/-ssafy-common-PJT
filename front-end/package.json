@@ -29,6 +29,8 @@
     "vue-blu": "^0.1.9",
     "vue-cookies": "^1.7.2",
     "vue-daterangepicker-component": "^1.0.0",
+    "vue-infinite-loading": "^2.4.5",
+    "vue-infinite-scroll": "^2.0.2",
     "vue-moment": "^4.1.0",
     "vue-momentjs": "^1.0.0",
     "vue-router": "^3.2.0",
