@@ -62,6 +62,7 @@
 
 <script>
 import Axios from 'axios';
+import { mapState } from "vuex"
 const API_URL = process.env.VUE_APP_LOCAL_URL;
 export default {
   data() {
@@ -81,9 +82,10 @@ export default {
       studyId : null,
     };
   },
-  props: {
-    writer: Number,
-    articleIdd: Number,
+  computed: {
+    ...mapState({
+      email: state => state.moduleName.email,
+    })
   },
   created () {
     // article 정보 가져오긴
