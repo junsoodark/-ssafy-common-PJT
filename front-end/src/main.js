@@ -49,6 +49,8 @@ firebase.initializeApp(firebaseConfig)
 firebase.analytics()
 
 Vue.config.productionTip = false
+
+
  
 new Vue({
   router,

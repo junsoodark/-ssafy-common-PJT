@@ -35,17 +35,18 @@
 import Axios from 'axios'
 import {mapGetters,mapState} from "vuex"
 const API_URL = process.env.VUE_APP_LOCAL_URL
+
 export default {
   data () {
     return {
-      letters: [
-      ],
-      test: [],
+      letters: [],
       mineCase: false,
       saveLetters: [],
       userId: null,
-      nowCase: 0
+      nowCase: 0,
     }
+  },
+  components: {
   },
   computed: {
     ...mapGetters(["isLoggedIn"]),
@@ -65,8 +66,7 @@ export default {
         },
       })
     .then(res => {
-      console.log(res)
-      this.letters = res.data
+      this.letters = res.data.reverse()
       this.saveLetters = res.data
     })
     .catch(err => {
@@ -131,7 +131,8 @@ export default {
       }
       this.nowCase = value
       this.mineCase = true
-    }
+    },
+
   }
 }
 </script>
