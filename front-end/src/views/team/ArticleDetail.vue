@@ -4,6 +4,9 @@
     <b-row align-h="start" class="mb-3">
       <b-col md="2" offset-md="1" class="text-left"><h2>게시글</h2></b-col>
     </b-row>
+    <b-row>
+      <b-col md="11" class="text-right"><b-button variant="success" route :to="{ name: 'StudyDetail', params: {id: this.studyId} }" :key="studyId">게시판 목록</b-button></b-col>
+    </b-row>
     <b-row >
       <b-col md="10" offset-md="1" >
         <h2 class="text-left"><h1>{{article.title}}</h1></h2>
