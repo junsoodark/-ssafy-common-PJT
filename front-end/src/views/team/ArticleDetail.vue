@@ -11,7 +11,7 @@
     </b-row>
     <b-row class="my-3">
       <b-col md="3" offset-md="1" class="text-left"><h5>작성일: {{ article.date }}</h5></b-col>
-      <b-col md="2" offset-md="5" class="text-right"><h5>작성자: {{ article.writerName }}</h5> </b-col>
+      <b-col md="2" offset-md="5" class="text-right"><h5>작성자: {{ writerName }}</h5> </b-col>
       <b-col offset-md="1"></b-col>
     </b-row>
     <br>
@@ -43,7 +43,8 @@ export default {
       article: {},
       writer: {},
       isWriter: false,
-      writerId: null,
+      writerName: null,
+      isCheck: false
     }
   },
   computed: {
@@ -77,7 +78,7 @@ export default {
     //             'user-email': sessionStorage.getItem('user-email')},
     // })
     // .then(res => {
-    //   this.writer = res.data
+    //   this.writerName = res.data
     //   if (this.writer.email == this.email) {this.isWriter = true}
     // })
     // .catch(() => {alert('사용자 정보를 불러올 수 없습니다')})
@@ -114,7 +115,7 @@ export default {
                   'user-email': sessionStorage.getItem('user-email')},
       })
       .then(res => {
-        this.article.writerName = res.data.name
+        this.writerName = res.data.name
         if (res.data.email == this.email) {
           this.isWriter = true
         }
@@ -122,7 +123,6 @@ export default {
       .catch(() => {alert('스터디팀 정보를 불러올 수 없습니다')})
     }
   },
-  
 }
 </script>
 
