@@ -1,5 +1,5 @@
 <template>
-  <b-container class="rounded p-2" style="cursor:pointer;" @click="clickCard">
+  <b-container class="rounded p-2 grow" style="cursor:pointer;" @click="clickCard">
     <div class="card">
       <div v-if="team.category === '코딩 테스트'" class="mycard-header1 text-left pt-2">
         <b-icon icon="person-circle" font-scale="1"></b-icon> {{ team.numMembers }}/{{ team.maxMembers }}
@@ -117,5 +117,11 @@ export default {
   z-index: 1;
 }
 
+.grow { 
+transition: all .2s ease-in-out; 
+}
 
+.grow:hover { 
+transform: scale(1.05); 
+}
 </style>

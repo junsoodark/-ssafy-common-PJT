@@ -2,41 +2,66 @@
   <b-container>
     <br>
     <h1>게시글 수정 페이지</h1>
-    <br>
-    <b-row>
-      <b-col><b-form-input  v-model="title" placeholder="제목을 입력해주세요"></b-form-input></b-col>
+    <h1>{{ articleIdd }}</h1>
+    <b-row align-h="start" class="mb-3">
+      <b-col md="2" offset-md="1" class="text-left">게시글</b-col>
+    </b-row>
+    <b-row >
+      <b-col md="10" offset-md="1">
+        <b-form-input class="text-left" v-model="title" placeholder="제목을 입력해주세요"></b-form-input>
+      </b-col>
     </b-row>
     <br>
-    <div class="sample-toolbar border p-2">
-      <a href="javascript:void(0)" id="Bold" @click="format('bold')" class="text-decoration-none text-dark"><span class="fa fa-bold fa-fw"></span></a>
-      <a href="javascript:void(0)" id="Italic" @click="format('italic')" class="text-decoration-none text-dark"><span class="fa fa-italic fa-fw"></span></a>
-      <a href="javascript:void(0)" id="Underline" @click="format('underline')" class="mr-3 text-decoration-none text-dark"><span class="fas fa-underline fa-fw"></span></a>
-      <select name="job" id='test' v-model="size" @click="changeSize" class="mr-3">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-      </select>
-      글자색: <input name="Color Picker" type="color" v-model="fontColor" @change="changeColor" class="mr-3"/>
-      배경색: <input name="Color Picker" type="color" v-model="backColor" @change="changeBackColor" class="mr-3"/>
-    </div>
+
+
+
+
+
+
     <br>
-    <p
-      v-for="(value, index) in content"
-      id="paragraph"
-      :key="index"
-      contenteditable
-      @input="event => onInput(event, index)"
-      @keyup.delete="onRemove(index)"
-      class="editor p-3 text-left border"
-    />
+    <b-row>
+      <b-col md="10" offset-md="1" class="border py-3">
+        <b-row>
+          <b-col md="10" offset-md="1" class="sample-toolbar border py-2">
+            <a href="javascript:void(0)" id="Bold" @click="format('bold')" class="text-decoration-none text-dark"><span class="fa fa-bold fa-fw"></span></a>
+            <a href="javascript:void(0)" id="Italic" @click="format('italic')" class="text-decoration-none text-dark"><span class="fa fa-italic fa-fw"></span></a>
+            <a href="javascript:void(0)" id="Underline" @click="format('underline')" class="mr-3 text-decoration-none text-dark"><span class="fas fa-underline fa-fw"></span></a>
+            <select name="job" id='test' v-model="size" @click="changeSize" class="mr-3">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+            </select>
+            글자색: <input name="Color Picker" type="color" v-model="fontColor" @change="changeColor" class="mr-3"/>
+            배경색: <input name="Color Picker" type="color" v-model="backColor" @change="changeBackColor" class="mr-3"/>
+          </b-col>
+        </b-row>
+        <br>
+        <b-row>
+          {{ this.content }}
+          <b-col md="10" offset-md="1">
+            <p
+              v-for="(value, index) in contents"
+              id="paragraph"
+              :key="index"
+              contenteditable
+              @input="event => onInput(event, index)"
+              @keyup.delete="onRemove(index)"
+              class="editor p-3 text-left border"
+            />
+          </b-col>
+        </b-row>
+      </b-col>
+    </b-row>
+    <br>
     <b-row align-h="end">
-      <b-col cols="2">
+      <b-col md="3" offset-md="1" class="text-right">
         <b-button variant="primary" @click.prevent='Submit'>수정하기</b-button>
       </b-col>
+      <b-col md="1"></b-col>
     </b-row>
   </b-container>
 </template>
@@ -50,6 +75,9 @@ export default {
       content: [
         { value: '여기에 글을 쓰세요' },
       ],
+      contents: [
+        { value: '여기에 ㅁㄴㅇㅁㄴㅇ글을 쓰세요' },
+      ],
       size: 3,
       title: null,
       BV: false,
@@ -58,13 +86,16 @@ export default {
       fontColor: '#000000',
       backColor: '#ffffff',
       id: this.$route.params.id,
-      studyId : null
+      articleId: null,
+      studyId : null,
     };
   },
   props: {
-    writer: Number
+    writer: Number,
+    articleIdd: Number,
   },
   created () {
+    // article 정보 가져오긴
     Axios({
       method: "GET",
       url: `${API_URL}post/${this.id}`,
@@ -73,6 +104,10 @@ export default {
                 'user-email': sessionStorage.getItem('user-email')},
     })
     .then(res => {
+      console.log('aaa', res)
+      this.content[0] = { value: `${res.data.content}`}
+      console.log(this.content)
+      this.articleId = res.data.id
       this.title = res.data.title
       this.studyId = res.data.study_id
     })
@@ -133,9 +168,10 @@ export default {
       const articleData = document.querySelector('#paragraph')
       const params = {
         'content': articleData.innerHTML,
-        'id': this.id,
+        'id': this.articleId,
         'title': this.title,
       }
+      console.log('parms', params)
       Axios({
         method: "PUT",
         url: `${API_URL}post`,
@@ -145,11 +181,13 @@ export default {
                   'user-email': sessionStorage.getItem('user-email')},
       })
       .then(res => {
-        console.log(res)
-        this.$router.push({ name: "StudyArticle" ,params:{id:this.studyId}})
+        console.log('qq', res)
+        alert(res.data)
+        console.log(this.studyId)
+        this.$router.push({ name: "ArticleDetail" ,params:{ studyid:this.studyId, articleid:this.articleId }})
       })
       .catch(err => {
-        console.log(err)
+        console.log('zxvzxcvzx', err)
         alert(err.response.data)
       })
     }
