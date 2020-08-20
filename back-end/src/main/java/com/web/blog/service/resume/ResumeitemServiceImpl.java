@@ -102,4 +102,9 @@ public class ResumeitemServiceImpl implements ResumeitemService {
         return resumeitemDao.findUserEmailByResumeitemId(resumeitemId);
     }
 
+    @Override
+    public void create(List<Resumeitem> list) {
+        resumeitemDao.saveAll(list);
+    }
+
 }
