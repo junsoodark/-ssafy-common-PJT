@@ -11,7 +11,7 @@
             <template v-slot:append>
               <b-input-group-text @click="Search" style="cursor: pointer;"><strong>확인</strong></b-input-group-text>
             </template>
-            <b-form-input list="my-list-id" placeholder="분야를 검색하세요" @keyup.enter="Search" v-model="SearchText"></b-form-input>
+            <b-form-input list="my-list-id" placeholder="스터디를 검색하세요" @keyup.enter="Search" v-model="SearchText"></b-form-input>
 
             <!-- <datalist id="my-list-id">
               <option v-for="size in sizes" :key="size">{{ size }}</option>
