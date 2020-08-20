@@ -6,6 +6,7 @@
       src="../assets/second.jpg"
       alt="image slot"
     />
+    <br>
     <div id="bot-div">
       <b-container class="bv-example-row">
         <b-row>

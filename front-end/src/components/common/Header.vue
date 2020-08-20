@@ -27,8 +27,8 @@
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
           <b-nav-form @submit.prevent="search">
-            <b-form-input size="sm" class="mr-sm-2" placeholder="Search" v-model="searchData"></b-form-input>
-            <b-button size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
+            <b-form-input size="sm" style="width: 300px" class="mr-sm-2" placeholder="제목을 검색해보세요" v-model="searchData"></b-form-input>
+            <b-button size="sm" class="my-2 my-sm-0" type="submit">검색</b-button>
           </b-nav-form>
 
           <!-- Using 'button-content' slot -->
