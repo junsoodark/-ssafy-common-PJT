@@ -20,15 +20,15 @@
       </b-row> -->
       <b-row class="my-3">
         <b-col class="pr-0">
-          <b-form-input v-model="company" placeholder="회사를 입력해주세요"></b-form-input>
+          <b-form-input v-model="company" placeholder="회사를 입력해주세요" required></b-form-input>
         </b-col>
         <b-col>
-          <b-form-input v-model="job" placeholder="직무를 입력해주세요"></b-form-input>
+          <b-form-input v-model="job" placeholder="직무를 입력해주세요" required></b-form-input>
         </b-col>
       </b-row>
       <b-row class="my-3">
         <b-col>
-          <b-form-input v-model="title" placeholder="글 제목을 입력해주세요"></b-form-input>
+          <b-form-input v-model="title" placeholder="글 제목을 입력해주세요" required></b-form-input>
         </b-col>
       </b-row>
       <!-- 제목까지 -->
@@ -41,6 +41,7 @@
               <div :id="'my-'+item.num" class="my-3">
                 <b-form-textarea 
                   v-model="item.title" 
+                  required
                   placeholder="질문을 입력하세요" 
                   rows="5"
                   max-rows="9"
@@ -48,6 +49,7 @@
                 ></b-form-textarea>
                 <b-form-textarea
                   v-model="item.answer"
+                  required
                   placeholder="답변을 입력하세요"
                   rows="19"
                   max-rows="30"
@@ -137,63 +139,58 @@ export default {
         alert('카테고리를 선택해주세요')
         return false
       }
-      const params = {
-        'category': this.category,
+      var items = []
+      for (var i=0;i<this.items.length; i++) {
+        items.push({'title':this.items[i].title,'content':this.items[i].answer})
+      }
+      const body = {
+        'title':this.title,
         'company': this.company,
-        'email': this.email,
         'job':this.job,
-        'title':this.title
+        'category': this.category,
+        'resumeItems': items
       }
       Axios({
         method: "POST",
-        url: `${API_URL}resume`,
-        params: params,
-        headers: { "Content-Type": "application/json; charset=utf-8",
-                  'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
-                  'user-email': sessionStorage.getItem('user-email')},
-      })
-      .then(res => {
-        const resumeId = res.data
-        var trigger = false
-        if (resumeId == -1) {
-          alert('글 작성이 알 수 없는 이유로 실패했습니다')
-          return false
-        }
-        for (var i=0; i<this.items.length; i++) {
-          this.submitQuestion(resumeId,this.items[i])
-          if (i==this.items.length-1) {
-            trigger = true
-          }
-        }
-        alert('작성이 완료되었습니다')
-        if (trigger) {this.$router.push({ name: "coverLetterDetail", params: {id:resumeId}})}
-      })
-      .catch(err => {
-        console.log(err)
-      })
-    },
-    submitQuestion (resumeId,quest) {
-      const params = {
-        'content': quest.answer,
-        'resumeId': resumeId,
-        'title': quest.title
-      }
-      console.log('submitQ', quest)
-      console.log('quest', quest)
-      Axios({
-        method: "POST",
-        url: `${API_URL}resumeitem`,
-        params: params,
+        url: `${API_URL}resume/resumeandresumeitem`,
+        data: body,
         headers: { "Content-Type": "application/json; charset=utf-8",
                   'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
                   'user-email': sessionStorage.getItem('user-email')},
       })
       .then(res => {
         console.log(res)
+        alert('작성이 완료되었습니다')
+        this.$router.push({ name: "LetterList"})
       })
       .catch(err => {
-        alert(err.response.data.msg)
+        console.log(err)
       })
+    },
+    submitQuestion (resumeId,quest) {
+      var params = []
+      var trigger = false
+      for (var i=0; i<quest.length; i++) {
+        params.push({'resume':resumeId,'title':quest[i].title,'content':quest[i].answer})
+        if (i==quest.length-1) {trigger = true}
+      }
+      console.log(params)
+      if (trigger) {
+        Axios({
+          method: "POST",
+          url: `${API_URL}resumeitem?list=${params}`,
+          headers: { "Content-Type": "application/json; charset=utf-8",
+                    'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+                    'user-email': sessionStorage.getItem('user-email')},
+        })
+        .then(res => {
+          console.log(res)
+        })
+        .catch(err => {
+          alert(err.response.data.msg)
+        })
+        trigger = false
+      }
     }
   }
 }

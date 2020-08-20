@@ -2,7 +2,7 @@
 <script src="https://kit.fontawesome.com/958a5175c9.js" crossorigin="anonymous"></script>
 <template>
   <b-container class="bv-example-row my-5">
-    <h1 class="mb-3">비밀번호 변경</h1>
+    <h1 class="mb-3">비밀번호 찾기</h1>
     <div
       style="max-width:700px;"
       class="mx-auto middle"

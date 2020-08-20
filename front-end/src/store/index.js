@@ -93,7 +93,66 @@ export default new Vuex.Store({
         alert(err.response.data)
       })
     },
-    signup(state, { code, age, email, nickname, password, sex }) {
+    
+    initSignUp({ commit }, loginData) {
+      const params = {
+        'email' : loginData.email,
+        'password' : loginData.password
+      }
+      var JsonForm = JSON.stringify(params)
+      Axios({method:'POST',url:`${API_URL}login`,params:params,data:JsonForm,headers:{'Content-Type': 'application/json; charset=utf-8'}})
+      .then(res => {
+        commit('SET_TOKEN', res.data.token)
+        commit('UPDATE_EMAIL', loginData.email)
+
+        sessionStorage.setItem('jwt-auth-token', res.data.token);
+        sessionStorage.setItem('user-email', loginData.email);
+
+        // 로그인 시간 저장
+        let date = new Date()
+        var loginH = date.getHours()
+        var loginM = date.getMinutes()
+        var loginS = date.getSeconds()
+
+        if (loginH < 10) {
+          loginH = '0' + loginH
+        }
+        if (loginM < 10) {
+          loginM = '0' + loginM
+        }
+        if (loginS < 10) {
+          loginS = '0' + loginS
+        }
+
+        const loginTime = loginH + ":" + loginM + ":" + loginS
+        commit('UPDATE_LOGIN_TIME', loginTime)
+        
+        var fbpassword = res.data.fbpassword
+        // firebase 사용자 로그인
+        firebase.auth().signInWithEmailAndPassword(loginData.email, fbpassword)
+        .then(() => {
+        
+        })
+        .catch(function(error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          console.log('파이어베이스 로그인 에러')
+          console.log(errorCode)
+          console.log(errorMessage)
+          // ...
+        })
+
+        alert("로그인")
+
+        router.push({ name: 'Home' })
+      })
+      .catch(err => {
+        alert(err.response.data)
+      })
+    },
+
+    signup({ dispatch }, { code, age, email, nickname, password, sex }) {
       console.log(code, age, email, nickname, password, sex)
       var params = new URLSearchParams();
       params.append("code", code);
@@ -105,38 +164,39 @@ export default new Vuex.Store({
         sex: sex,
       };
       var JsonForm = JSON.stringify(form);
-    
+      console.log('aa', form)
       Axios({
         method: "POST",
         url: `${API_URL}user/signUp`,
         params: params,
         data: JsonForm,
         headers: { "Content-Type": "application/json; charset=utf-8" },
+      })
+      .then((res) => {
+        var fbPassword = res.data.fbPassword
+        // firebase 회원가입
+        firebase.auth().createUserWithEmailAndPassword(email, fbPassword)
+        .catch(function (error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          console.log("firebase 인증 에러", email, fbPassword);
+          console.log(errorCode);
+          console.log(errorMessage);
+          // ...
         })
-        .then((res) => {
-          var fbPassword = res.data.fbPassword
-          // firebase 회원가입
-          firebase.auth().createUserWithEmailAndPassword(email, fbPassword)
-          .catch(function (error) {
-            // Handle Errors here.
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            console.log("firebase 인증 에러", email, fbPassword);
-            console.log(errorCode);
-            console.log(errorMessage);
-            // ...
-          })
-          
-          // var message = 'https://previews.123rf.com/images/salamatik/salamatik1801/salamatik180100019/92979836-%ED%94%84%EB%A1%9C%ED%95%84-%EC%9D%B5%EB%AA%85%EC%9D%98-%EC%96%BC%EA%B5%B4-%EC%95%84%EC%9D%B4%EC%BD%98-%ED%9A%8C%EC%83%89-%EC%8B%A4%EB%A3%A8%EC%97%A3-%EC%82%AC%EB%9E%8C%EC%9E%85%EB%8B%88%EB%8B%A4-%EB%82%A8%EC%84%B1-%EA%B8%B0%EB%B3%B8-%EC%95%84%EB%B0%94%ED%83%80-%EC%82%AC%EC%A7%84-%EC%9E%90%EB%A6%AC-%ED%91%9C%EC%8B%9C-%EC%9E%90-%ED%9D%B0%EC%83%89-%EB%B0%B0%EA%B2%BD%EC%97%90-%EA%B3%A0%EB%A6%BD-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4-%EC%85%98.jpg';
-          // var storageRef = firebase.storage().ref(`images/${email}/${email}`);
-          // console.log('##########################################')
-          // console.log('storage', storageRef)
-          // storageRef.putString(message)
-          // .then(function(snapshot) {
-          //   console.log(snapshot, 'upload')
-          // })
+        //
+        const loginData = {
+          'email': email,
+          'password': password,
+        }
+        console.log('zz', loginData)
+        
+        dispatch("initSignUp", loginData)
+
+        //
         alert(res.data.msg);
-        router.push({ name: "Login" });
+        // router.push({ name: "Login" });
       })
       .catch((err) => {
         alert(err.response.data);
