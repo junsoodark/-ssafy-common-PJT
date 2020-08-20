@@ -1,11 +1,19 @@
 package com.web.blog.controller.resume;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.transaction.Transactional;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.web.blog.model.resume.Resume;
+import com.web.blog.model.resume.Resumeitem;
 import com.web.blog.model.user.User;
+import com.web.blog.service.auth.JwtService;
 import com.web.blog.service.resume.ResumeService;
+import com.web.blog.service.resume.ResumeitemService;
 import com.web.blog.service.user.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,18 +24,27 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
 
 @RestController
+@Transactional
 public class ResumeController {
     @Autowired
     ResumeService resumeService;
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    JwtService jwtService;
+
+    @Autowired
+    ResumeitemService resumeitemService;
 
     @GetMapping("/resume/all")
     @ApiOperation(value = "")
@@ -66,6 +83,48 @@ public class ResumeController {
             return new ResponseEntity<Object>("자소서를 생성할 수 없습니다.", HttpStatus.FORBIDDEN);
         }
         return new ResponseEntity<Object>(resume.getId(), HttpStatus.OK);
+    }
+
+    @PostMapping("/resume/resumeandresumeitem")
+    @ApiOperation(value = "")
+    public ResponseEntity<Object> createResumeAndResumeitem(@RequestBody Map<String, Object> resume,
+            @RequestHeader(value = "jwt-auth-token") final String token) {
+        final String email = jwtService.parseEmail(token);
+        User user = userService.findUserByEmail(email);
+        if (user == null) {
+            return new ResponseEntity<Object>("존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND);
+        }
+        Resume res = resumeService.create(user, (String) resume.get("title"), (String) resume.get("company"),
+                (String) resume.get("job"), (String) resume.get("category"));
+        if (res == null) {
+            return new ResponseEntity<Object>("자소서를 생성할 수 없습니다.", HttpStatus.FORBIDDEN);
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        List<Resumeitem> arr = mapper.convertValue(resume.get("resumeItems"), new TypeReference<List<Resumeitem>>() {
+        });
+        for(Resumeitem r : arr) {
+            r.setResume(res);
+            System.out.println(r.getTitle());
+            System.out.println(r.getContent());
+         }
+        resumeitemService.create(arr);
+        return new ResponseEntity<Object>("자소서와 항목을 생성하였습니다.", HttpStatus.OK);
+    }
+
+    @PostMapping("/test")
+    @ApiOperation(value = "테스트용도")
+    public ResponseEntity<Object> test(@RequestBody Map<String, Object> resume) {
+        System.out.println(resume);
+        ObjectMapper mapper = new ObjectMapper();
+        List<Resumeitem> arr = mapper.convertValue(resume.get("resumeItems"), new TypeReference<List<Resumeitem>>() {
+        });
+
+        System.out.println(arr.size());
+        for (Resumeitem r : arr) {
+            System.out.println(r.getTitle());
+            System.out.println(r.getContent());
+        }
+        return new ResponseEntity<Object>(arr, HttpStatus.OK);
     }
 
     @DeleteMapping("/resume")

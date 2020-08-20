@@ -179,7 +179,7 @@ export default {
   data() {
     return {
       mainProps: { blank: true, blankColor: '#777', width: 75, height: 75, class: 'm1' },
-      value: 90,
+      value: 0,
       max: 100,
       items: [],
       countStudy: 0,
@@ -198,6 +198,7 @@ export default {
       makingStudy: 0,
     }
   },
+  
 
   computed: {
     ...mapState({
@@ -213,18 +214,21 @@ export default {
       firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
           // 업로드
+  
           var file = event.target.files[0];
           var storageRef = firebase.storage().ref(`images/${user.email}/${user.email}`);
           var task = storageRef.put(file);
-    
           // var uploader = document.getElementById('uploader');      
     
           task.on('state_changed',
             //progress Bar
-            function progess(snapshot){
-              var pct = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-              // uploader.value = pct;
-              console.log(pct)
+            function progess(){
+              // this.value = (snapshot.bytesTransferred / snapshot.totalBytes) * 10;
+              // // uploader.value = pct;
+              // var uploading = document.getElementById('myPro')
+              // console.log(uploading)
+              // uploading.value = this.value
+              // console.log('aa', this.value)
             },
             // error
             function error(err){
@@ -235,13 +239,12 @@ export default {
               task.snapshot.ref.getDownloadURL().then(function(downloadURL) {
                 var img = document.getElementById('myimg');
                 img.src = downloadURL;
-                console.log('url', downloadURL)
               })
             }
           )
         } else {
           // User is signed out.
-          console.log('failed firebase')
+          // console.log('failed firebase')
           // ...
         }
       })
@@ -258,7 +261,7 @@ export default {
         email: this.email,
         password: data,
       }
-      console.log(params)
+      
       Axios({method:'DELETE', url:`${API_URL}user`,params:params,headers:{'Content-Type': 'application/json; charset=utf-8',
                                                                           'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
                                                                           'user-email': sessionStorage.getItem('user-email')}})
@@ -334,7 +337,6 @@ export default {
       }
     })
     .then(res => {
-      console.log(res)
       var resItem = res.data
       for (var i=0; i<resItem.length; i++) {
         this.check(resItem,i)
@@ -363,35 +365,47 @@ export default {
     .catch(err => {
       console.log('err', err)
     })
-    // 프로필 이미지 가져오기
+    
     // firebase 유저정보 가져오기
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
-        // User is signed in.
-        // const uid = user.uid
-        // 프로필 이미지 가져오기
-        firebase.storage().ref(`images/${user.email}/${user.email}`).getDownloadURL()
-        .then(function(url) {
-          var xhr = new XMLHttpRequest();
-          xhr.responseType = 'blob';
-          xhr.onload = function() {};
-          xhr.open('GET', url);
-          xhr.send();
-          var img = document.getElementById('myimg');
-          console.log('img', img)
-          img.src = url;
-        })
-        .catch(function(err) {
-          console.log(err)    
-        })
+        var storageRef = firebase.storage().ref();
+        //
+        var listRef = storageRef.child(`images/${user.email}`);
+        
+        // Find all the prefixes and items.
+        listRef.listAll().then(function(res) {
+          res.items.forEach(function(itemRef) {
+            const fullPath = itemRef.fullPath
+            // 프로필 이미지 가져오기
+            firebase.storage().ref(`${fullPath}`).getDownloadURL()
+            .then(function(url) {
+              var xhr = new XMLHttpRequest();
+              xhr.responseType = 'blob';
+              xhr.onload = function() {};
+              xhr.open('GET', url);
+              xhr.send();
+              var img = document.getElementById('myimg');
+              img.src = url;
+            })
+            .catch(function(err) {
+              console.log(err)
+            })
+            // All the items under listRef.
+          });
+        }).catch(function(error) {
+          // Uh-oh, an error occurred!
+          console.log('eer', error)
+        });
+
+
+        
       } else {
         // User is signed out.
-        console.log('failed firebase')
+        // console.log('failed firebase')
         // ...
       }
     })
-  },
-  mounted() {
   },
 }
 </script>

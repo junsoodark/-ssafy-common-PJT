@@ -2,8 +2,8 @@
   <div>
     <div>
       <b-card no-body>
-        <b-tabs pills card vertical>
-          <b-tab title="상세보기" active>
+        <b-tabs v-model="tabIndex" pills card vertical>
+          <b-tab title="상세보기">
             <b-card-text>
               <b-container>
               <br>
@@ -253,7 +253,7 @@
                   <!-- 스터디원 -->
                   <b-row v-for="item in memberList" :key="item.name">
                     <b-col cols="4" class="p-0">
-                      <b-list-group-item v-if="item.email != team.mgrEmail" style="height:50px;" class="d-flex justify-content-center py-1" @click="banMember(item.email)">
+                      <b-list-group-item v-if="item.email != team.mgrEmail" style="height:50px;" class="d-flex justify-content-center py-1">
                         <b-button variant="success" >멤버</b-button>
                       </b-list-group-item>
                     </b-col>
@@ -272,7 +272,7 @@
               <TeamArticle :key="this.study_id" v-bind:team="team"></TeamArticle>
             </b-card-text>
           </b-tab>
-          <b-tab title="탈퇴하기" v-if="isMember" v-b-modal.modal-secession>
+          <b-tab title="탈퇴하기" v-if="isMember && email !== team.mgrEmail" v-b-modal.modal-secession>
             <b-card-text>
               <b-button v-if="isMember" v-b-modal.modal-secession variant="info">탈퇴신청</b-button>
             </b-card-text>
@@ -359,7 +359,9 @@ export default {
       memberList: [],
       applyList: [],
       isMember: false,
-      isReady: false
+      isReady: false,
+      newTabIndex: 1,
+      tabIndex: 1,
     }
   },
   computed: {
@@ -439,10 +441,7 @@ export default {
     },
     secessionSubmit () {
       if (this.checkDelete === this.checkSecessionForm) {
-        var params = new URLSearchParams()
-        params.append('email',this.email)
-        params.append('studyId',this.study_id)
-        Axios({method:'DELETE',url:`${API_URL}study/member`,params:params,headers:{'Content-Type': 'application/json; charset=utf-8','jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),'user-email': sessionStorage.getItem('user-email')}})
+        Axios({method:'DELETE',url:`${API_URL}study/${this.study_id}/`,headers:{'Content-Type': 'application/json; charset=utf-8','jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),'user-email': sessionStorage.getItem('user-email')}})
         .then(() => {
           alert('탈퇴가 성공적으로 진행되었습니다.')
           this.checkDelete = ''
@@ -568,9 +567,12 @@ export default {
       .catch(err => {
         alert(err.response.data)
       })
-    }
+    },
+
+
   },
   created() {
+    console.log('tab', this.tabIndex)
     // 스터디 디테일 정보 가져오기
     Axios({
       method: "GET",

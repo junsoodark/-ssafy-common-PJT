@@ -215,8 +215,8 @@ export default {
       guAreas: [{ text: "구를 선택해주세요" }],
       place: [
         { text: "온/오프라인을 선택해주세요", value: null },
-        { text: "오프라인", value: 1 },
-        { text: "온라인", value: 2 },
+        { text: "온라인", value: 1 },
+        { text: "오프라인", value: 2 },
         { text: "추후협의", value: 3 },
       ],
       period: [

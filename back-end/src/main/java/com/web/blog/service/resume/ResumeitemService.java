@@ -26,4 +26,6 @@ public interface ResumeitemService {
 
     public Map<String, Object> Resumeitem2Map(Resumeitem resumeitem);
 
+    public void create(List<Resumeitem> list);
+
 }

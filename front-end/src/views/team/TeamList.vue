@@ -13,9 +13,9 @@
             </template>
             <b-form-input list="my-list-id" placeholder="분야를 검색하세요" @keyup.enter="Search" v-model="SearchText"></b-form-input>
 
-            <datalist id="my-list-id">
+            <!-- <datalist id="my-list-id">
               <option v-for="size in sizes" :key="size">{{ size }}</option>
-            </datalist>
+            </datalist> -->
           </b-input-group>
         </b-col>
         <b-col md="3">

@@ -5,6 +5,7 @@
       <b-col md="3">
         <h4 class="border p-2">{{ category }}</h4>
       </b-col>
+      <b-col  class="text-right mr-4 mt-4"><b-button router :to="{ name: 'LetterList'}" variant="success">목록</b-button></b-col>
     </b-row>
     <br>
 
@@ -34,6 +35,9 @@
                 <b-col class="text-left" style="height: 600px;" v-html="item.content"></b-col>
               </b-row>
             </b-card-text>
+            <div class="d-flex justify-content-end" v-if="isWriter">
+              <b-button variant="outline-warning" @click="updateQuest(item.id)" class="mx-2">항목 수정</b-button><b-button variant="outline-danger" @click="deleteQuestion(item.id)" class="mx-2">항목 삭제</b-button>
+            </div>
           </b-tab>
         </b-tabs>
       </b-card>
@@ -41,9 +45,6 @@
     <br>
 
     <div>
-      <div class="d-flex justify-content-end" v-if="isWriter">
-        <b-button variant="outline-warning" @click="updateQuest(letterId)" class="mx-2">항목 수정</b-button><b-button variant="outline-danger" @click="deleteQuestion(letterId)" class="mx-2">항목 삭제</b-button>
-      </div>
       <br>
       <div v-if="isWriter" class="d-flex justify-content-end my-3">
         <b-button @click="updateCover" variant="warning" class="mx-2">글 수정</b-button>
@@ -57,7 +58,7 @@
         max-rows="6"
       ></b-form-textarea>
       <div class="my-2 d-flex justify-content-end">
-        <b-button variant="success" class="my-2" @click="createReply">댓글 제출</b-button>
+        <b-button variant="primary" class="my-2" @click="createReply">댓글 제출</b-button>
       </div>
       <div v-for="reply in replies" :key="reply.id" style="border-top-width : 1px; border-top-style : dashed; border-top-color : black;">
         <b-row class="mt-3 mr-1">
@@ -73,6 +74,9 @@
         <br>
       </div>
     </div>
+    <b-row>
+      <b-col  class="text-right mr-4 mt-4"><b-button router :to="{ name: 'LetterList'}" variant="success">목록</b-button></b-col>
+    </b-row>
   </b-container>
 </template>
 
@@ -194,6 +198,7 @@ export default {
     },
     updateCover () {
       this.$router.push({ name: "UpdateCover", params: {id:this.id}})
+      this.isChanged = true
     },
     deleteQuestion (id) {
       Axios({
@@ -215,6 +220,10 @@ export default {
           }
         }
         this.items = newQuest
+        this.letterTitle = this.items[0].title
+        this.letterId = this.items[0].id
+        this.letterContent = this.items[0].content.split('\n').join('<br />')
+        this.isChanged = true
       })
     },
     updateQuest (id) {
