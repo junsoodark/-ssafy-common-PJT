@@ -121,14 +121,16 @@ export default {
       this.items.push(cover)
     },
     delQuestion(x) {
+      var changeItems = []
       for (let i = 0; i < this.items.length; i++) {
-        console.log(i, this.items[i], x)
-        if (this.items[i].num === x){
-          console.log('x', x)
-          this.items.splice(i, 1)
-          console.log(this.items)
+        if (this.items[i].num < x){
+          changeItems.push({num:i+1,title:this.items[i].title,answer:this.items[i].answer})
+        } else if (this.items[i].num > x) {
+          changeItems.push({num:i,title:this.items[i].title,answer:this.items[i].answer})
         }
       }
+      this.question -= 1
+      this.items = changeItems
     },
     submitCoverLetter () {
       if (this.category == null) {
