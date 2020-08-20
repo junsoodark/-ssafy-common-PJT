@@ -194,6 +194,7 @@ export default {
     },
     updateCover () {
       this.$router.push({ name: "UpdateCover", params: {id:this.id}})
+      this.isChanged = true
     },
     deleteQuestion (id) {
       Axios({
