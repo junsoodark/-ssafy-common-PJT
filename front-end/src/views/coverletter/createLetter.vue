@@ -20,15 +20,15 @@
       </b-row> -->
       <b-row class="my-3">
         <b-col class="pr-0">
-          <b-form-input v-model="company" placeholder="회사를 입력해주세요"></b-form-input>
+          <b-form-input v-model="company" placeholder="회사를 입력해주세요" required></b-form-input>
         </b-col>
         <b-col>
-          <b-form-input v-model="job" placeholder="직무를 입력해주세요"></b-form-input>
+          <b-form-input v-model="job" placeholder="직무를 입력해주세요" required></b-form-input>
         </b-col>
       </b-row>
       <b-row class="my-3">
         <b-col>
-          <b-form-input v-model="title" placeholder="글 제목을 입력해주세요"></b-form-input>
+          <b-form-input v-model="title" placeholder="글 제목을 입력해주세요" required></b-form-input>
         </b-col>
       </b-row>
       <!-- 제목까지 -->
@@ -41,6 +41,7 @@
               <div :id="'my-'+item.num" class="my-3">
                 <b-form-textarea 
                   v-model="item.title" 
+                  required
                   placeholder="질문을 입력하세요" 
                   rows="5"
                   max-rows="9"
@@ -48,6 +49,7 @@
                 ></b-form-textarea>
                 <b-form-textarea
                   v-model="item.answer"
+                  required
                   placeholder="답변을 입력하세요"
                   rows="19"
                   max-rows="30"

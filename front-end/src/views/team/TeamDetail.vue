@@ -2,8 +2,8 @@
   <div>
     <div>
       <b-card no-body>
-        <b-tabs pills card vertical>
-          <b-tab title="상세보기" active>
+        <b-tabs v-model="tabIndex" pills card vertical>
+          <b-tab title="상세보기">
             <b-card-text>
               <b-container>
               <br>
@@ -253,7 +253,7 @@
                   <!-- 스터디원 -->
                   <b-row v-for="item in memberList" :key="item.name">
                     <b-col cols="4" class="p-0">
-                      <b-list-group-item v-if="item.email != team.mgrEmail" style="height:50px;" class="d-flex justify-content-center py-1" @click="banMember(item.email)">
+                      <b-list-group-item v-if="item.email != team.mgrEmail" style="height:50px;" class="d-flex justify-content-center py-1">
                         <b-button variant="success" >멤버</b-button>
                       </b-list-group-item>
                     </b-col>
@@ -359,7 +359,9 @@ export default {
       memberList: [],
       applyList: [],
       isMember: false,
-      isReady: false
+      isReady: false,
+      newTabIndex: 1,
+      tabIndex: 1,
     }
   },
   computed: {
@@ -565,9 +567,12 @@ export default {
       .catch(err => {
         alert(err.response.data)
       })
-    }
+    },
+
+
   },
   created() {
+    console.log('tab', this.tabIndex)
     // 스터디 디테일 정보 가져오기
     Axios({
       method: "GET",

@@ -35,6 +35,7 @@
         </b-row>
         <br>
         <b-row>
+          <!-- {{ this.content }} -->
           <b-col md="10" offset-md="1">
             <p
               v-for="(value, index) in content"

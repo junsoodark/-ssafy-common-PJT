@@ -5,6 +5,7 @@
       <b-col md="3">
         <h4 class="border p-2">{{ category }}</h4>
       </b-col>
+      <b-col  class="text-right mr-4 mt-4"><b-button router :to="{ name: 'LetterList'}" variant="success">목록</b-button></b-col>
     </b-row>
     <br>
 
@@ -57,7 +58,7 @@
         max-rows="6"
       ></b-form-textarea>
       <div class="my-2 d-flex justify-content-end">
-        <b-button variant="success" class="my-2" @click="createReply">댓글 제출</b-button>
+        <b-button variant="primary" class="my-2" @click="createReply">댓글 제출</b-button>
       </div>
       <div v-for="reply in replies" :key="reply.id" style="border-top-width : 1px; border-top-style : dashed; border-top-color : black;">
         <b-row class="mt-3 mr-1">
@@ -73,6 +74,9 @@
         <br>
       </div>
     </div>
+    <b-row>
+      <b-col  class="text-right mr-4 mt-4"><b-button router :to="{ name: 'LetterList'}" variant="success">목록</b-button></b-col>
+    </b-row>
   </b-container>
 </template>
 
