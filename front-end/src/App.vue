@@ -44,8 +44,12 @@ export default {
     Header,
   },
   methods: {
+    t() {
+
+    },
     timeCheck() {
       if (this.isLoggedIn) {
+        
         var date = new Date()
         var H = date.getHours() * 1
         var M = date.getMinutes() * 1
@@ -69,6 +73,9 @@ export default {
           S = '0' + S
           S *= 1
         }
+        if (H >=24) {
+          H = 0
+        }
         // console.log('현재시간 보정', H,M,S)
         // console.log('로그인 시간', this.loginTime)
         var limitHour = (this.loginTime[0] + this.loginTime[1]) * 1
@@ -86,7 +93,7 @@ export default {
         // console.log('리미트 시간', limitHour, limitMinute, limitSecond)
         const limit = limitHour * 3600 + limitMinute * 60 + limitSecond
         const now = H * 3600 + M * 60 + S
-        // console.log(now, limit)
+        console.log(now, limit)
         if (now >= limit) {
           alert('로그인 기간이 만료되었습니다.')
           this.$router.push({ name: "Logout" })
