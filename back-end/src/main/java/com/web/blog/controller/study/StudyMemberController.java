@@ -257,7 +257,7 @@ public class StudyMemberController {
 	@ApiOperation(value = "사용자가 가입신청한 모든 스터디의 목록을 반환합니다.")
 	public ResponseEntity findapplyingStudiesByEmail(@RequestHeader(value = "jwt-auth-token") final String token) {
 		final String email = jwtService.parseEmail(token);
-		System.out.println(email);
+		//System.out.println(email);
 		User user = userService.findUserByEmail(email);
 		if (user == null)
 			return new ResponseEntity("존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND);
