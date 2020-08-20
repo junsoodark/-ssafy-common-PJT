@@ -122,7 +122,6 @@ export default {
       },
     })
     .then(res => {
-      console.log('')
       this.writer = res.data.name
       this.title = res.data.title
       this.company = res.data.company
@@ -143,9 +142,7 @@ export default {
       }
     })
     .then(res => {
-      console.log('자소서 세부사항', res)
       this.items = res.data
-      console.log(this.items)
 
       this.letterTitle = res.data[0].title
       this.letterId = res.data[0].id
@@ -188,8 +185,7 @@ export default {
         'user-email': sessionStorage.getItem('user-email')
       },
     })
-    .then( res => {
-      console.log(res)
+    .then(() => {
       this.$router.push({ name: "LetterList"})
     })
     .catch( err => {
@@ -211,8 +207,7 @@ export default {
           'user-email': sessionStorage.getItem('user-email')
         }
       })
-      .then(res => {
-        console.log(res)
+      .then(() => {
         var newQuest = []
         for (var i=0; i<this.items.length; i++) {
           if (this.items[i].id != id) {
@@ -253,8 +248,7 @@ export default {
           'user-email': sessionStorage.getItem('user-email')
         }
       })
-      .then(res => {
-        console.log(res)
+      .then(() => {
         alert('댓글이 성공적으로 작성되었습니다')
         this.text = null
         this.getReplies()
@@ -294,8 +288,7 @@ export default {
           'user-email': sessionStorage.getItem('user-email')
         }
       })
-      .then(res => {
-        console.log(res)
+      .then(() => {
         alert("성공적으로 삭제했습니다")
         this.getReplies()
       })
@@ -313,7 +306,6 @@ export default {
   },
   beforeUpdate () {
     if (this.isChanged) {
-    console.log(this.isChanged)
     this.isChanged = false
     Axios({
       method: "GET",

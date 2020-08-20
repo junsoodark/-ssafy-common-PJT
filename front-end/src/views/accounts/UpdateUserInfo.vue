@@ -30,7 +30,7 @@
       </div>
       <!-- 나이 -->
       <div class="UserUpdateInfoControl">
-        <span class="UserUpdateInfoText">이름 :</span>
+        <span class="UserUpdateInfoText">나이 :</span>
         <div>
           <input
             :value="form.age"
@@ -67,7 +67,7 @@
         </div>
       </div>
       <div id="buttonbox">
-        <b-button v-b-modal.modal-prevent-closing id="button" @click="update_user_info">수정하기</b-button>
+        <b-button v-b-modal.modal-prevent-closing id="button" >수정하기</b-button>
         <b-modal
           id="modal-prevent-closing"
           ref="modal"
@@ -76,7 +76,7 @@
           @hidden="resetModal"
           @ok="handleOk"
         >
-          <form ref="form" @submit.stop.prevent="update_user_info">
+          <form ref="form" >
             <b-form-group
               :state="passwordState"
               label="비밀번호"
@@ -127,7 +127,6 @@ export default {
       this.form.name = e.target.value;
     },
     updateSex(e) {
-      console.log("ee", e);
       this.form.sex = e;
     },
     updateAge(e) {
@@ -171,7 +170,6 @@ export default {
       if (this.form.sex === "") params.sex = this.newSex;
       if (this.form.age === "") params.age = this.newAge;
 
-      console.log(params);
       Axios.put(`${API_URL}user`, params, {
         headers: {
           "jwt-auth-token": sessionStorage.getItem("jwt-auth-token"),
