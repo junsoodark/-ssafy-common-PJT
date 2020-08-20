@@ -3,8 +3,6 @@ package com.web.blog.controller.resume;
 import java.util.List;
 import java.util.Map;
 
-import javax.transaction.Transactional;
-
 import com.web.blog.model.resume.Resume;
 import com.web.blog.model.resume.Resumeitem;
 import com.web.blog.service.resume.ResumeService;
@@ -25,7 +23,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.models.Response;
 
 @RestController
-@Transactional
 public class ResumeitemController {
     @Autowired
     ResumeitemService resumeitemService;
@@ -59,13 +56,16 @@ public class ResumeitemController {
 
     @PostMapping("/resumeitem")
     @ApiOperation(value = "")
-    public ResponseEntity<Object> create(List<Resumeitem> list) {
-        Resumeitem resumeItem = list.get(0);
-        Resume resume = resumeService.findResumeById(resumeItem.getResume().getId());
+    public ResponseEntity<Object> create(@RequestParam String title, @RequestParam String content,
+            @RequestParam int resumeId) {
+        Resume resume = resumeService.findResumeById(resumeId);
         if (resume == null) {
             return new ResponseEntity<Object>("존재하지 않는 자소서입니다.", HttpStatus.NOT_FOUND);
         }
-        resumeitemService.create(list);
+        Resumeitem resumeitem = resumeitemService.create(resume, title, content);
+        if (resumeitem == null) {
+            return new ResponseEntity<Object>("항목을 생성할 수 없습니다.", HttpStatus.FORBIDDEN);
+        }
         return new ResponseEntity<Object>("생성에 성공했습니다.", HttpStatus.OK);
 
     }

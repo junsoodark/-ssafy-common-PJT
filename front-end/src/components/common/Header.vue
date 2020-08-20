@@ -65,6 +65,7 @@ export default {
         name: "Search",
         params: { search: this.searchData },
       });
+      this.searchData = null
     },
   },
 };

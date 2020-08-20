@@ -38,7 +38,7 @@
         <b-card no-body>
           <b-tabs card>
             <!-- Render Tabs, supply a unique `key` to each tab -->
-            <b-tab v-for="item in items" :key="item.num" :title="`${item.num+1} 번`">
+            <b-tab v-for="item in items" :key="item.num" :title="`${item.num} 번`">
               <div :id="'my-'+item.num" class="my-3">
                 <b-form-textarea 
                   v-model="item.title" 
@@ -126,12 +126,21 @@ export default {
       this.question += 1
       this.items.push(cover)
     },
-    delQuestion () {
+    delQuestion (num) {
       this.question -= 1
-      const delItem = this.items.pop()
-      if (delItem.id != null) {
-        this.delItems.push(delItem.id)
+      var afterItem = []
+      for (var i=0; i<this.items.length; i++) {
+        if (this.items[i].num < num) {
+          afterItem.push(this.items[i])
+        } else if (this.items[i].num > num) {
+          afterItem.push({'num':this.items[i].num-1,'title':this.items[i].title,'answer':this.items[i].answer})
+        } else {
+          if (this.items[i].id != null ) {
+            this.delItems.push(this.items[i].id)
+          }
+        }
       }
+      this.items = afterItem
     },
     submitCoverLetter () {
       if (this.category == null) {

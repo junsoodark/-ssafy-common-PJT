@@ -35,6 +35,9 @@
                 <b-col class="text-left" style="height: 600px;" v-html="item.content"></b-col>
               </b-row>
             </b-card-text>
+            <div class="d-flex justify-content-end" v-if="isWriter">
+              <b-button variant="outline-warning" @click="updateQuest(item.id)" class="mx-2">항목 수정</b-button><b-button variant="outline-danger" @click="deleteQuestion(item.id)" class="mx-2">항목 삭제</b-button>
+            </div>
           </b-tab>
         </b-tabs>
       </b-card>
@@ -42,9 +45,6 @@
     <br>
 
     <div>
-      <div class="d-flex justify-content-end" v-if="isWriter">
-        <b-button variant="outline-warning" @click="updateQuest(letterId)" class="mx-2">항목 수정</b-button><b-button variant="outline-danger" @click="deleteQuestion(letterId)" class="mx-2">항목 삭제</b-button>
-      </div>
       <br>
       <div v-if="isWriter" class="d-flex justify-content-end my-3">
         <b-button @click="updateCover" variant="warning" class="mx-2">글 수정</b-button>
@@ -146,6 +146,7 @@ export default {
       console.log('자소서 세부사항', res)
       this.items = res.data
       console.log(this.items)
+
       this.letterTitle = res.data[0].title
       this.letterId = res.data[0].id
       this.letterContent = res.data[0].content.split('\n').join('<br />')
@@ -197,6 +198,7 @@ export default {
     },
     updateCover () {
       this.$router.push({ name: "UpdateCover", params: {id:this.id}})
+      this.isChanged = true
     },
     deleteQuestion (id) {
       Axios({
@@ -218,6 +220,10 @@ export default {
           }
         }
         this.items = newQuest
+        this.letterTitle = this.items[0].title
+        this.letterId = this.items[0].id
+        this.letterContent = this.items[0].content.split('\n').join('<br />')
+        this.isChanged = true
       })
     },
     updateQuest (id) {
