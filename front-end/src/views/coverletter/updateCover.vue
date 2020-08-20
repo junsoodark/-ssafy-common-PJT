@@ -1,5 +1,100 @@
 <template>
   <div class="my-3">
+    
+    <b-container>
+      <br>
+      <h1>자소서 작성</h1>
+      <br>
+      <b-row class="my-3">
+        <b-col md="4" class="text-left">
+          <b-form-select v-model="category" :options="options" required></b-form-select>
+        </b-col>
+        <b-col class="text-right">
+          <b-button variant="primary" @click="submitCoverLetter">제출하기</b-button>
+        </b-col>
+      </b-row>
+      <!-- <b-row>
+        <b-col class="text-left"><p>[자소서 컨펌] 피드백 받고 싶은 자기소개서를 등록하세요</p></b-col>
+      </b-row>
+      <b-row>
+        <b-col class="text-left"><p>[자소서 면접] 자기소개서 기반 면접 질문이 궁금하면 등록하세요</p></b-col>
+      </b-row> -->
+      <b-row class="my-3">
+        <b-col class="pr-0">
+          <b-form-input v-model="company" placeholder="회사를 입력해주세요"></b-form-input>
+        </b-col>
+        <b-col>
+          <b-form-input v-model="job" placeholder="직무를 입력해주세요"></b-form-input>
+        </b-col>
+      </b-row>
+      <b-row class="my-3">
+        <b-col>
+          <b-form-input v-model="title" placeholder="글 제목을 입력해주세요"></b-form-input>
+        </b-col>
+      </b-row>
+      <!-- 제목까지 -->
+
+      <div>
+        <b-card no-body>
+          <b-tabs card>
+            <!-- Render Tabs, supply a unique `key` to each tab -->
+            <b-tab v-for="item in items" :key="item.num" :title="`${item.num} 번`">
+              <div :id="'my-'+item.num" class="my-3">
+                <b-form-textarea 
+                  v-model="item.title" 
+                  placeholder="질문을 입력하세요" 
+                  rows="5"
+                  max-rows="9"
+                  class="pt-3"
+                ></b-form-textarea>
+                <b-form-textarea
+                  v-model="item.answer"
+                  placeholder="답변을 입력하세요"
+                  rows="19"
+                  max-rows="30"
+                  class="pt-3"
+                ></b-form-textarea>
+              </div>
+
+
+
+              <b-button size="sm" variant="danger" class="float-right" @click="delQuestion(item.num)">
+                Close tab
+              </b-button>
+              <br>
+            </b-tab>
+
+            <!-- New Tab Button (Using tabs-end slot) -->
+            <template v-slot:tabs-end>
+              <b-nav-item role="presentation" @click.prevent="addQuestion" href="#"><b>+</b></b-nav-item>
+            </template>
+
+            <!-- Render this if no tabs -->
+            <template v-slot:empty>
+              <div class="text-center text-muted">
+                There are no open tabs<br>
+                Open a new tab using the <b>+</b> button above.
+              </div>
+            </template>
+          </b-tabs>
+        </b-card>
+      </div>
+      <br>
+      <b-row>
+        <b-col class="text-right">
+          <b-button variant="primary" @click="submitCoverLetter">제출하기</b-button>
+        </b-col>
+      </b-row>
+    </b-container>
+
+
+
+
+
+
+
+
+
     <h1>자소서 수정</h1>
     <b-container>
       <hr>
