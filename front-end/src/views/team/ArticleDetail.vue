@@ -11,7 +11,7 @@
     </b-row>
     <b-row class="my-3">
       <b-col md="3" offset-md="1" class="text-left"><h5>작성일: {{ article.date }}</h5></b-col>
-      <b-col md="2" offset-md="5" class="text-right"><h5>작성자: {{ article.writer }}</h5> </b-col>
+      <b-col md="2" offset-md="5" class="text-right"><h5>작성자: {{ article.writerName }}</h5> </b-col>
       <b-col offset-md="1"></b-col>
     </b-row>
     <br>
@@ -24,8 +24,8 @@
     <br>
     <b-row align-h="end" >
       <b-col md="4">
-        <b-button variant="info" class="mx-2" @click="updatePost">글 수정</b-button>
-        <b-button variant="danger" class="mx-2" @click="deletePost">글 삭제</b-button>
+        <b-button variant="info" class="mx-2" @click="updatePost" v-if="isWriter">글 수정</b-button>
+        <b-button variant="danger" class="mx-2" @click="deletePost" v-if="isWriter">글 삭제</b-button>
       </b-col>
     </b-row>
   </b-container>
@@ -52,20 +52,6 @@ export default {
     })
   },
   created () {
-    // 유저 정보
-    Axios({
-      method: "GET",
-      url: `${API_URL}user/${this.email}`,
-      headers: { "Content-Type": "application/json; charset=utf-8",
-                'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
-                'user-email': sessionStorage.getItem('user-email')},
-    })
-    .then(res => {
-      if (this.email==res.data.email) {
-        this.isWriter = true
-      }
-    })
-    .catch(() => {alert('사용자 정보를 불러올 수 없습니다')})
     // article 정보
     Axios({
       method: "GET",
@@ -75,12 +61,26 @@ export default {
                 'user-email': sessionStorage.getItem('user-email')},
     })
     .then(res => {
+      console.log(res.data)
       this.article = res.data
       this.findWriterName(this.article.writer)
       const articleContent = document.getElementById('content')
       articleContent.innerHTML = this.article.content
     })
     .catch(() => {alert('글 정보를 불러올 수 없습니다')})
+    // 유저 정보
+    // Axios({
+    //   method: "GET",
+    //   url: `${API_URL}user/id/${this.article.writer}`,
+    //   headers: { "Content-Type": "application/json; charset=utf-8",
+    //             'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+    //             'user-email': sessionStorage.getItem('user-email')},
+    // })
+    // .then(res => {
+    //   this.writer = res.data
+    //   if (this.writer.email == this.email) {this.isWriter = true}
+    // })
+    // .catch(() => {alert('사용자 정보를 불러올 수 없습니다')})
   },
   methods: {
     deletePost () {
@@ -114,11 +114,15 @@ export default {
                   'user-email': sessionStorage.getItem('user-email')},
       })
       .then(res => {
-        this.article.writer = res.data.name
+        this.article.writerName = res.data.name
+        if (res.data.email == this.email) {
+          this.isWriter = true
+        }
       })
       .catch(() => {alert('스터디팀 정보를 불러올 수 없습니다')})
     }
-  }
+  },
+  
 }
 </script>
 
