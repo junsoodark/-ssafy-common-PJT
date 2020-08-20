@@ -13,6 +13,7 @@
         <b-button v-show="nowCase != 2" @click="selectCategory(2)" class="mx-3" variant="secondary">면접 질문 글만 보기</b-button>
       </div>
     </b-container>
+    <br>
     <b-container class="my-3">
       <b-list-group>
         <b-row>
