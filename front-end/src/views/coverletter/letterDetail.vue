@@ -31,7 +31,7 @@
               </b-row>
               <hr>
               <b-row>
-                <b-col class="text-left" style="height: 600px;">{{ item.content }}</b-col>
+                <b-col class="text-left" style="height: 600px;" v-html="item.content"></b-col>
               </b-row>
             </b-card-text>
           </b-tab>
@@ -145,6 +145,10 @@ export default {
       this.letterTitle = res.data[0].title
       this.letterId = res.data[0].id
       this.letterContent = res.data[0].content.split('\n').join('<br />')
+      this.isChanged = true
+      for (var i=0; i<this.items.length; i++) {
+        this.items[i].content = this.items[i].content.split('\n').join('<br />')
+      }
     })
     .catch(err => {
       alert(err.response.data.msg)
@@ -330,6 +334,9 @@ export default {
     })
     .then(res => {
       this.items = res.data
+      for (var i=0; i<this.items.length; i++) {
+        this.items[i].content = this.items[i].content.split('\n').join('<br />')
+      }
     })
     .catch(err => {
       alert(err.response.data.msg)

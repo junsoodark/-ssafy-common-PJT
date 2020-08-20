@@ -24,7 +24,7 @@
         <b-row v-for="item in letters" :key="item.studyId">
           <b-col cols="2" class="p-0"><b-list-group-item >{{ item.category }}</b-list-group-item></b-col>
           <b-col cols="3" class="p-0"><b-list-group-item >{{ item.company }} / {{ item.job }}</b-list-group-item></b-col>
-          <b-col cols="7" class="p-0"><b-list-group-item route :to="{ name: 'coverLetterDetail', params: {id:item.id} }" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; height:50px;">{{ item.title }}</b-list-group-item></b-col>
+          <b-col cols="7" class="p-0 grow"><b-list-group-item route :to="{ name: 'coverLetterDetail', params: {id:item.id} }" style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; height:50px;">{{ item.title }}</b-list-group-item></b-col>
         </b-row>
       </b-list-group>
     </b-container>
@@ -140,5 +140,11 @@ export default {
 </script>
 
 <style>
+.grow { 
+transition: all .2s ease-in-out; 
+}
 
+.grow:hover { 
+transform: scale(1.05); 
+}
 </style>

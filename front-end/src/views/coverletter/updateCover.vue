@@ -38,7 +38,7 @@
         <b-card no-body>
           <b-tabs card>
             <!-- Render Tabs, supply a unique `key` to each tab -->
-            <b-tab v-for="item in items" :key="item.num" :title="`${item.num} 번`">
+            <b-tab v-for="item in items" :key="item.num" :title="`${item.num+1} 번`">
               <div :id="'my-'+item.num" class="my-3">
                 <b-form-textarea 
                   v-model="item.title" 
