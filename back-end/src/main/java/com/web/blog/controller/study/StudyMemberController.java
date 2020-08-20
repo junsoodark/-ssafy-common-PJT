@@ -156,10 +156,31 @@ public class StudyMemberController {
 
 		return new ResponseEntity("스터디 가입승인을 거절했습니다.", HttpStatus.OK);
 	}
+	
+	@DeleteMapping("/study/{study_id}/")
+	@ApiOperation(value = "사용자가 스터디에서 탈퇴합니다.")
+	public ResponseEntity leave(@PathVariable final int study_id,
+			@RequestHeader(value = "jwt-auth-token") final String token) {
+		final String usrEmail = jwtService.parseEmail(token);
+		
+		User user = userService.findUserByEmail(usrEmail);
+		
+		Study study = studyService.findStudyByStudyId(study_id);
+		if (study == null)
+			return new ResponseEntity("존재하지 않는 스터디입니다.", HttpStatus.NOT_FOUND);
+		
+		if (studyMemberService.isExistMember(study, user) == false)
+			return new ResponseEntity("스터디의 멤버가 아닙니다.", HttpStatus.NOT_FOUND);
+		
+		if (studyMemberService.leave(study, user) == false)
+			return new ResponseEntity("스터디에서 탈퇴할 수 없습니다. 관리자에게 문의바랍니다.", HttpStatus.FORBIDDEN);
+		return new ResponseEntity("스터디에서 탈퇴되었습니다.", HttpStatus.OK);
 
+	}
+	
 	@DeleteMapping("/study/member")
 	@ApiOperation(value = "스터디 아이디와 사용자 이메일을 입력받아 가입 여부를 확인하고, 해당 스터디에서 사용자를 탈퇴시킵니다.")
-	public ResponseEntity leave(@RequestParam final int studyId,
+	public ResponseEntity kick(@RequestParam final int studyId,
 			@RequestHeader(value = "jwt-auth-token") final String token, @RequestParam final String email) {
 		final String mgrEmail = jwtService.parseEmail(token);
 		User mgr = userService.findUserByEmail(mgrEmail);
@@ -181,10 +202,10 @@ public class StudyMemberController {
 			return new ResponseEntity("스터디 탈퇴 권한이 없습니다.", HttpStatus.UNAUTHORIZED);
 
 		if (studyMemberService.leave(study, user) == false)
-			return new ResponseEntity("스터디에서 탈퇴할 수 없습니다. 관리자에게 문의바랍니다.", HttpStatus.FORBIDDEN);
-		return new ResponseEntity("스터디에서 탈퇴되었습니다.", HttpStatus.OK);
+			return new ResponseEntity("스터디에서 탈퇴 시킬 수 없습니다. 관리자에게 문의바랍니다.", HttpStatus.FORBIDDEN);
+		return new ResponseEntity("스터디에서 " + user.getEmail() + "를 탈퇴시켰습니다.", HttpStatus.OK);
 	}
-
+	
 	@GetMapping("/study/{study_id}/list")
 	@ApiOperation(value = ("스터디 id 를 입력받고, 해당 스터디에 가입된 스터디원 목록을 반환합니다."))
 	public ResponseEntity getStudyUserList(@RequestHeader(value = "jwt-auth-token") final String token,
