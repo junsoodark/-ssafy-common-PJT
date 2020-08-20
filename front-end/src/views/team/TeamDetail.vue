@@ -272,7 +272,7 @@
               <TeamArticle :key="this.study_id" v-bind:team="team"></TeamArticle>
             </b-card-text>
           </b-tab>
-          <b-tab title="탈퇴하기" v-if="isMember" v-b-modal.modal-secession>
+          <b-tab title="탈퇴하기" v-if="isMember && email !== team.mgrEmail" v-b-modal.modal-secession>
             <b-card-text>
               <b-button v-if="isMember" v-b-modal.modal-secession variant="info">탈퇴신청</b-button>
             </b-card-text>
@@ -439,10 +439,7 @@ export default {
     },
     secessionSubmit () {
       if (this.checkDelete === this.checkSecessionForm) {
-        var params = new URLSearchParams()
-        params.append('email',this.email)
-        params.append('studyId',this.study_id)
-        Axios({method:'DELETE',url:`${API_URL}study/member`,params:params,headers:{'Content-Type': 'application/json; charset=utf-8','jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),'user-email': sessionStorage.getItem('user-email')}})
+        Axios({method:'DELETE',url:`${API_URL}study/${this.study_id}/`,headers:{'Content-Type': 'application/json; charset=utf-8','jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),'user-email': sessionStorage.getItem('user-email')}})
         .then(() => {
           alert('탈퇴가 성공적으로 진행되었습니다.')
           this.checkDelete = ''

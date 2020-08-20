@@ -3,7 +3,7 @@
     
     <b-container>
       <br>
-      <h1>자소서 작성</h1>
+      <h1>자소서 수정</h1>
       <br>
       <b-row class="my-3">
         <b-col md="4" class="text-left">
@@ -87,42 +87,6 @@
       </b-row>
     </b-container>
 
-
-
-
-
-
-
-
-
-    <!-- <h1>자소서 수정</h1>
-    <b-container>
-      <hr>
-      <b-row>
-        <b-form-select v-model="category" :options="options" class="col-4 my-1"></b-form-select>
-        <b-form-input v-model="title" placeholder="글 제목을 입력해주세요" class="col-8 my-1"></b-form-input>
-        <b-form-input v-model="company" placeholder="회사를 입력해주세요" class="col-4"></b-form-input>
-        <b-form-input v-model="job" placeholder="직무를 입력해주세요" class="col-8"></b-form-input>
-      </b-row>
-      <b-button class="my-2" @click="addQuestion">자소서 항목 추가</b-button> | <b-button class="my-2" @click="delQuestion">자소서 항목 삭제</b-button>
-      <div v-for="item in items" :key="item.num" class="my-3">
-        <b-button v-b-toggle="'my-'+item.num">
-            <span class="when-open">{{item.num+1}}번 질문 닫기</span><span class="when-closed">{{item.num+1}}번 질문 열기</span>
-        </b-button>
-        <b-collapse :id="'my-'+item.num" class="my-1">
-          <div class="my-3">
-            <b-form-input v-model="item.title" placeholder="질문을 입력해주세요"></b-form-input>
-            <b-form-textarea
-              v-model="item.answer"
-              placeholder="Tall textarea"
-              rows="8"
-            ></b-form-textarea>
-          </div>
-        </b-collapse>
-      </div>
-      <br>
-      <b-button @click="submitCoverLetter">제출하기</b-button>
-    </b-container> -->
   </div>
 </template>
 
@@ -135,7 +99,7 @@ export default {
     return {
       id: this.$route.params.id,
       items: [],
-      question:0,
+      question:1,
       title: null,
       company: null,
       job: null,

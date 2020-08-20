@@ -12,12 +12,6 @@
       </b-col>
     </b-row>
     <br>
-
-
-
-
-
-
     <br>
     <b-row>
       <b-col md="10" offset-md="1" class="border py-3">
@@ -41,10 +35,9 @@
         </b-row>
         <br>
         <b-row>
-          {{ this.content }}
           <b-col md="10" offset-md="1">
             <p
-              v-for="(value, index) in contents"
+              v-for="(value, index) in content"
               id="paragraph"
               :key="index"
               contenteditable
@@ -75,9 +68,6 @@ export default {
       content: [
         { value: '여기에 글을 쓰세요' },
       ],
-      contents: [
-        { value: '여기에 ㅁㄴㅇㅁㄴㅇ글을 쓰세요' },
-      ],
       size: 3,
       title: null,
       BV: false,
@@ -85,7 +75,7 @@ export default {
       UV: false,
       fontColor: '#000000',
       backColor: '#ffffff',
-      id: this.$route.params.id,
+      id: this.$route.params.articleid,
       articleId: null,
       studyId : null,
     };
@@ -110,6 +100,7 @@ export default {
       this.articleId = res.data.id
       this.title = res.data.title
       this.studyId = res.data.study_id
+      this.check(res.data.writer)
     })
   },
   mounted() {
@@ -190,6 +181,22 @@ export default {
         console.log('zxvzxcvzx', err)
         alert(err.response.data)
       })
+    },
+    check(userId) {
+      Axios({
+        method: "GET",
+        url: `${API_URL}user/id/${userId}`,
+        headers: { "Content-Type": "application/json; charset=utf-8",
+                  'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+                  'user-email': sessionStorage.getItem('user-email')},
+      })
+      .then(resp => {
+        if (resp.data.email != this.email) {
+          alert('다른 유저의 글은 수정할 수 없습니다.')
+          this.$router.push({ name: "ArticleDetail", params: {studyid:this.studyId,articleid:this.articleId}})
+        }
+      })
+      .catch(() => {alert('스터디팀 정보를 불러올 수 없습니다')})
     }
   },
 };
