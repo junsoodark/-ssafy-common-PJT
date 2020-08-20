@@ -38,7 +38,7 @@
           <b-tabs card>
             <!-- Render Tabs, supply a unique `key` to each tab -->
             <b-tab v-for="item in items" :key="item.num" :title="`${item.num} 번`">
-              <div :id="'my-'+item.num" class="my-3">
+              <div class="my-3" style="height: 630px">
                 <b-form-textarea 
                   v-model="item.title" 
                   required
@@ -139,6 +139,18 @@ export default {
         alert('카테고리를 선택해주세요')
         return false
       }
+      if (this.company == null) {
+        alert('회사를 입력하세요')
+        return false
+      }
+      if (this.job == null) {
+        alert('직무를 입력하세요')
+        return false
+      }
+      if (this.title == null) {
+        alert('글 제목을 입력하세요')
+        return false
+      }
       var items = []
       for (var i=0;i<this.items.length; i++) {
         items.push({'title':this.items[i].title,'content':this.items[i].answer})
@@ -149,6 +161,18 @@ export default {
         'job':this.job,
         'category': this.category,
         'resumeItems': items
+      }
+      console.log(items)
+      var flag = false
+      for (var j=0; j<items.length; j++) {
+        if (!items[j].title || !items[j].content) {
+          flag = true
+          break
+        }
+      }
+      if (flag) {
+        alert('질문과 답변을 입력하세요')
+        return false
       }
       Axios({
         method: "POST",
@@ -164,9 +188,10 @@ export default {
         this.$router.push({ name: "LetterList"})
       })
       .catch(err => {
-        console.log(err)
+        console.log('err', err)
       })
     },
+
     submitQuestion (resumeId,quest) {
       var params = []
       var trigger = false

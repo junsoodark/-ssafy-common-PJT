@@ -3,7 +3,6 @@
     <div>
       <b-card no-body>
         <b-tabs v-model="tabIndex" pills card vertical>
-          <!-- <h3>현재탭 {{ tabIndex }}</h3> -->
           <b-tab title="상세보기">
             <b-card-text>
               <b-container>
@@ -232,7 +231,7 @@
             </b-container>
             </b-card-text>
           </b-tab>
-
+          
           <b-tab title="스터디원" v-if="isMember">
             <b-card-text>
               <div class="my-2">
@@ -278,7 +277,7 @@
               <b-button v-if="isMember" v-b-modal.modal-secession variant="info">탈퇴신청</b-button>
             </b-card-text>
           </b-tab>
-          <b-tab title="스터디원 관리" v-if="team.mgrEmail === this.email">
+          <b-tab title="스터디원 관리" v-if="team.mgrEmail === this.email && isLoggedIn">
             <b-card-text>
               <div class="my-2" v-if="email == team.mgrEmail">
                 <b-container>
@@ -314,7 +313,7 @@
               </div>
             </b-card-text>
           </b-tab>
-          <b-tab title="가입신청자" v-if="team.mgrEmail === this.email">
+          <b-tab title="가입신청자" v-if="team.mgrEmail === this.email && isLoggedIn">
             <b-card-text>
               <div class="my-2" v-if="email == team.mgrEmail">
                 <b-container>
@@ -362,7 +361,6 @@ export default {
       isMember: false,
       isReady: false,
       tabIndex: 1,
-      prevTabIndex: 0,
     }
   },
   computed: {
@@ -425,8 +423,8 @@ export default {
         },
       })
       .then(res => {
-        alert(res.data)
         this.isReady = true
+        alert(res.data)
       })
       .catch(err => {
         alert(err.response.data)
@@ -444,7 +442,6 @@ export default {
       if (this.checkDelete === this.checkSecessionForm) {
         Axios({method:'DELETE',url:`${API_URL}study/${this.study_id}/`,headers:{'Content-Type': 'application/json; charset=utf-8','jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),'user-email': sessionStorage.getItem('user-email')}})
         .then(() => {
-          alert('탈퇴가 성공적으로 진행되었습니다.')
           this.checkDelete = ''
           this.isMember = false
           this.isReady = false
@@ -452,6 +449,7 @@ export default {
           this.$nextTick(() => {
             this.$bvModal.hide('modal-secession')
           })
+          alert('탈퇴가 성공적으로 진행되었습니다.')
         })
         .catch(err => {
           alert(err.response.data)
@@ -479,8 +477,8 @@ export default {
         }
       })
       .then(() => {
-        alert('가입 신청을 취소하였습니다.')
         this.isReady = false
+        alert('가입 신청을 취소하였습니다.')
       })
       .catch(err => {
         alert(err.response.msg)
@@ -572,8 +570,12 @@ export default {
 
 
   },
+  mounted() {
+    // setTimeout(() => {
+    //   this.tabIndex = 2;
+    // }, 200)
+  },
   created() {
-    console.log('tab', this.tabIndex)
     // 스터디 디테일 정보 가져오기
     Axios({
       method: "GET",

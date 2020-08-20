@@ -63,7 +63,6 @@ export default {
     Axios.get(`${API_URL}study/all`)
     .then(res => {
       this.TeamList = res.data.reverse()
-      console.log(this.TeamList)
     })
     .catch(err => {
       console.log(err)
