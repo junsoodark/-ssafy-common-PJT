@@ -162,7 +162,7 @@ export default {
         'category': this.category,
         'resumeItems': items
       }
-      console.log(items)
+      
       var flag = false
       for (var j=0; j<items.length; j++) {
         if (!items[j].title || !items[j].content) {
@@ -182,8 +182,8 @@ export default {
                   'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
                   'user-email': sessionStorage.getItem('user-email')},
       })
-      .then(res => {
-        console.log(res)
+      .then(() => {
+
         alert('작성이 완료되었습니다')
         this.$router.push({ name: "LetterList"})
       })
@@ -199,7 +199,7 @@ export default {
         params.push({'resume':resumeId,'title':quest[i].title,'content':quest[i].answer})
         if (i==quest.length-1) {trigger = true}
       }
-      console.log(params)
+      
       if (trigger) {
         Axios({
           method: "POST",
@@ -208,8 +208,7 @@ export default {
                     'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
                     'user-email': sessionStorage.getItem('user-email')},
         })
-        .then(res => {
-          console.log(res)
+        .then(() => {
         })
         .catch(err => {
           alert(err.response.data.msg)
