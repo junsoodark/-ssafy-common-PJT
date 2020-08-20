@@ -38,7 +38,7 @@
         <b-card no-body>
           <b-tabs card>
             <!-- Render Tabs, supply a unique `key` to each tab -->
-            <b-tab v-for="item in items" :key="item.num" :title="`${item.num} 번`">
+            <b-tab v-for="item in items" :key="item.num" :title="`${item.num+1} 번`">
               <div :id="'my-'+item.num" class="my-3">
                 <b-form-textarea 
                   v-model="item.title" 
@@ -95,7 +95,7 @@
 
 
 
-    <h1>자소서 수정</h1>
+    <!-- <h1>자소서 수정</h1>
     <b-container>
       <hr>
       <b-row>
@@ -122,7 +122,7 @@
       </div>
       <br>
       <b-button @click="submitCoverLetter">제출하기</b-button>
-    </b-container>
+    </b-container> -->
   </div>
 </template>
 
