@@ -65,7 +65,6 @@ export default {
                 'user-email': sessionStorage.getItem('user-email')},
     })
     .then(res => {
-      console.log(res.data)
       this.article = res.data
       this.findWriterName(this.article.writer)
       const articleContent = document.getElementById('content')

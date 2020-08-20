@@ -271,7 +271,7 @@ export default {
         numMeetings: this.form.numMeetings,
         weekId: this.form.weekId,
       };
-      console.log("params", params);
+      
 
       const JsonParams = JSON.stringify(params);
       Axios({
@@ -286,10 +286,8 @@ export default {
         },
       })
         .then((res) => {
-          alert("스터디 생성 성공");
-
+          alert(res.data)
           router.push({ name: "StudyList" });
-          console.log(res);
         })
         .catch((err) => {
           // alert(err.response.data);

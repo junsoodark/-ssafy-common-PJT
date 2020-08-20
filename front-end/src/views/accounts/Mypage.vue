@@ -256,7 +256,6 @@ export default {
       console.log('취소')
     },
     deleteUserAccount(data) {
-      console.log('삭제', data)
       const params = {
         email: this.email,
         password: data,
@@ -286,9 +285,6 @@ export default {
         router.push({ name: "Home" })
       })
       .catch(err => {
-        console.log(err)
-        console.log(err.response.data)
-        console.log(err.request.status)
         if (err.request.status === 500) {
           alert(`${this.userInfo.name} 님은 스터디 팀의 리더입니다.`)
         } else {
