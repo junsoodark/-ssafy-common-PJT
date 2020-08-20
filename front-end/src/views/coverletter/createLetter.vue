@@ -137,30 +137,29 @@ export default {
         alert('카테고리를 선택해주세요')
         return false
       }
-      const params = {
-        'category': this.category,
+      var items = []
+      for (var i=0;i<this.items.length; i++) {
+        items.push({'title':this.items[i].title,'content':this.items[i].answer})
+      }
+      const body = {
+        'title':this.title,
         'company': this.company,
-        'email': this.email,
         'job':this.job,
-        'title':this.title
+        'category': this.category,
+        'resumeItems': items
       }
       Axios({
         method: "POST",
-        url: `${API_URL}resume`,
-        params: params,
+        url: `${API_URL}resume/resumeandresumeitem`,
+        data: body,
         headers: { "Content-Type": "application/json; charset=utf-8",
                   'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
                   'user-email': sessionStorage.getItem('user-email')},
       })
       .then(res => {
-        const resumeId = res.data
-        if (resumeId == -1) {
-          alert('글 작성이 알 수 없는 이유로 실패했습니다')
-          return false
-        }
-        this.submitQuestion(resumeId,this.items)
+        console.log(res)
         alert('작성이 완료되었습니다')
-        this.$router.push({ name: "coverLetterDetail", params: {id:resumeId}})
+        this.$router.push({ name: "LetterList"})
       })
       .catch(err => {
         console.log(err)
