@@ -24,7 +24,7 @@
     <div class="resumeTabs">
       <b-card no-body>
         <b-tabs pills card vertical>
-          <b-tab  v-for="(item, index) in items" :key="item.id" :title="String(index+1)">
+          <b-tab v-for="(item, index) in items" :key="item.id" :title="String(index+1)">
             <b-card-text>
               <b-row class="cardHeader">
                 <b-col class="text-left">{{ item.title }}</b-col>

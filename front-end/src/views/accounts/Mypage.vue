@@ -129,8 +129,8 @@
           </b-col>
         </b-row>
         <b-row v-for="applying in applyingList" :key="applying.title">
-          <b-col cols="4" class="p-0"><b-list-group-item id="myStudyList" route :to="{ name: 'StudyDetail', params: {id:applying.studyId} }">{{ applying.title }}</b-list-group-item></b-col>
-          <b-col cols="8" class="p-0"><b-list-group-item route :to="{ name: 'StudyDetail', params: {id:applying.studyId} }">{{ applying.content }}</b-list-group-item></b-col>
+          <b-col cols="4" class="p-0"><b-list-group-item id="myStudyList" route :to="{ name: 'StudyDetail', params: {id:applying.id} }">{{ applying.title }}</b-list-group-item></b-col>
+          <b-col cols="8" class="p-0"><b-list-group-item route :to="{ name: 'StudyDetail', params: {id:applying.id} }">{{ applying.content }}</b-list-group-item></b-col>
         </b-row>
       </b-list-group>
     </div>
