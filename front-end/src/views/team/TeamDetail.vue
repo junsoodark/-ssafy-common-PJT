@@ -2,8 +2,8 @@
   <div>
     <div>
       <b-card no-body>
-        <b-tabs pills card vertical>
-          <b-tab title="상세보기" active>
+        <b-tabs v-model="tabIndex" pills card vertical>
+          <b-tab title="상세보기">
             <b-card-text>
               <b-container>
               <br>
@@ -11,13 +11,12 @@
                 <b-col class="totheleft text-center" cols="12"><h1>{{ team.title }}</h1></b-col>
               </b-row>
               <b-row  align-h="end">
-                <b-col v-if="isLoggedIn" class="totheright my-3 text-center" offset="9" cols="3">
+                <b-col v-if="isLoggedIn" class="totheright my-3 text-right" offset="9" cols="3">
                   <!-- <b-button v-if="isMember" @click="toAricle" class="mr-1">게시판 보기</b-button> -->
                   <!-- 탈퇴 -->
-                  <b-button v-if="isMember" v-b-modal.modal-secession variant="info">탈퇴신청</b-button>
+                  <b-button v-if="isMember && email !== team.mgrEmail"  v-b-modal.modal-secession variant="info">탈퇴신청</b-button>
                 </b-col>
                 <b-col>
-                  
                   <b-modal
                     id="modal-secession"
                     ref="modal"
@@ -56,10 +55,13 @@
                     </template>
                   </b-modal>
                   <!-- 여기까지 -->
-                  <div v-if="!isMember">
-                    <b-button v-if="!isReady" v-b-modal.modal-prevent-closing variant="info">가입신청</b-button>
-                    <b-button v-if="isReady" variant="warning" @click="cancleSubmit">가입 신청 취소</b-button>
-                  </div>
+                  <b-row align-h="end" v-if="isLoggedIn">
+                    <b-col md="2" class="text-right" v-if="!isMember">
+                      <b-button v-if="!isReady" v-b-modal.modal-prevent-closing variant="info">가입신청</b-button>
+                      <b-button v-if="isReady" variant="danger" @click="cancleSubmit">가입 신청 취소</b-button>
+                    </b-col>
+                  </b-row>
+                  <br>
                   <b-modal
                     id="modal-prevent-closing"
                     ref="modal"
@@ -70,15 +72,11 @@
                   >
                     <form ref="form" @submit.stop.prevent="handleSubmit">
                       <b-form-group
-                        label="신청 메시지"
+                        label="가입 신청을 하시려면 신청 버튼을 클릭해주세요"
                         label-for="name-input"
                         invalid-feedback="message is required"
+                        class="text-center"
                       >
-                        <b-form-input
-                          id="name-input"
-                          v-model="joinMsg"
-                          required
-                        ></b-form-input>
                       </b-form-group>
                     </form>
                     <template v-slot:modal-footer="{ ok, cancel }">
@@ -178,13 +176,13 @@
                       <b-icon icon="info-square-fill" aria-hidden="true"></b-icon> 스터디 소개
                     </div>
                   </template>
-                  <b-card-text>{{ team.content }}</b-card-text>
+                  <b-card-text v-html="team.content"></b-card-text>
                 </b-card>
               </b-card-group>
-              
+              <br>
               <b-row>
-                <b-col v-if="email == team.mgrEmail" class="totheright my-3 text-center" offset="8" cols="4">
-                  <router-link :to="{ name: 'UpdateTeam', params: {id:study_id} }" variant="primary" tag="b-button">스터디 수정</router-link>
+                <b-col v-if="email == team.mgrEmail" class="totheright my-3 text-right" offset="8" cols="4">
+                  <b-button router :to="{ name: 'UpdateTeam', params: {id:study_id} }" variant="info" tag="b-button">스터디 수정</b-button>
                   <b-button v-if="isLoggedIn" class="ml-2" @click="$bvModal.show('modal-scoped')" variant="danger">스터디 삭제</b-button>
 
                   <b-modal
@@ -233,7 +231,7 @@
             </b-container>
             </b-card-text>
           </b-tab>
-
+          
           <b-tab title="스터디원" v-if="isMember">
             <b-card-text>
               <div class="my-2">
@@ -255,7 +253,7 @@
                   <!-- 스터디원 -->
                   <b-row v-for="item in memberList" :key="item.name">
                     <b-col cols="4" class="p-0">
-                      <b-list-group-item v-if="item.email != team.mgrEmail" style="height:50px;" class="d-flex justify-content-center py-1" @click="banMember(item.email)">
+                      <b-list-group-item v-if="item.email != team.mgrEmail" style="height:50px;" class="d-flex justify-content-center py-1">
                         <b-button variant="success" >멤버</b-button>
                       </b-list-group-item>
                     </b-col>
@@ -274,17 +272,17 @@
               <TeamArticle :key="this.study_id" v-bind:team="team"></TeamArticle>
             </b-card-text>
           </b-tab>
-          <b-tab title="탈퇴하기" v-if="isMember" v-b-modal.modal-secession>
+          <b-tab title="탈퇴하기" v-if="isMember && email !== team.mgrEmail" v-b-modal.modal-secession>
             <b-card-text>
               <b-button v-if="isMember" v-b-modal.modal-secession variant="info">탈퇴신청</b-button>
             </b-card-text>
           </b-tab>
-          <b-tab title="스터디원 관리" v-if="team.mgrEmail === this.email">
+          <b-tab title="스터디원 관리" v-if="team.mgrEmail === this.email && isLoggedIn">
             <b-card-text>
               <div class="my-2" v-if="email == team.mgrEmail">
                 <b-container>
                   <h1>스터디원 관리</h1>
-                  <hr>
+                  <br>
                   <!-- 스터디 리더 -->
                   <b-row>
                     <b-col cols="8" class="p-0">
@@ -315,7 +313,7 @@
               </div>
             </b-card-text>
           </b-tab>
-          <b-tab title="가입신청자" v-if="team.mgrEmail === this.email">
+          <b-tab title="가입신청자" v-if="team.mgrEmail === this.email && isLoggedIn">
             <b-card-text>
               <div class="my-2" v-if="email == team.mgrEmail">
                 <b-container>
@@ -361,7 +359,8 @@ export default {
       memberList: [],
       applyList: [],
       isMember: false,
-      isReady: false
+      isReady: false,
+      tabIndex: 1,
     }
   },
   computed: {
@@ -424,11 +423,11 @@ export default {
         },
       })
       .then(res => {
-        alert(res.data)
         this.isReady = true
+        alert(res.data)
       })
       .catch(err => {
-        alert(err.response.data.msg)
+        alert(err.response.data)
       })
 
 
@@ -441,12 +440,8 @@ export default {
     },
     secessionSubmit () {
       if (this.checkDelete === this.checkSecessionForm) {
-        var params = new URLSearchParams()
-        params.append('email',this.email)
-        params.append('studyId',this.study_id)
-        Axios({method:'DELETE',url:`${API_URL}study/member`,params:params,headers:{'Content-Type': 'application/json; charset=utf-8','jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),'user-email': sessionStorage.getItem('user-email')}})
+        Axios({method:'DELETE',url:`${API_URL}study/${this.study_id}/`,headers:{'Content-Type': 'application/json; charset=utf-8','jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),'user-email': sessionStorage.getItem('user-email')}})
         .then(() => {
-          alert('탈퇴가 성공적으로 진행되었습니다.')
           this.checkDelete = ''
           this.isMember = false
           this.isReady = false
@@ -454,6 +449,7 @@ export default {
           this.$nextTick(() => {
             this.$bvModal.hide('modal-secession')
           })
+          alert('탈퇴가 성공적으로 진행되었습니다.')
         })
         .catch(err => {
           alert(err.response.data)
@@ -480,9 +476,9 @@ export default {
           'user-email': sessionStorage.getItem('user-email')
         }
       })
-      .then(res => {
-        console.log(res)
+      .then(() => {
         this.isReady = false
+        alert('가입 신청을 취소하였습니다.')
       })
       .catch(err => {
         alert(err.response.msg)
@@ -504,8 +500,7 @@ export default {
           'user-email': sessionStorage.getItem('user-email')
         }
       })
-      .then(res => {
-        console.log(res)
+      .then(() => {
         var newMember = []
         for (var i=0; i<this.memberList.length; i++) {
           if (this.memberList[i].email != banEmail) {
@@ -513,6 +508,7 @@ export default {
           }
         }
         this.memberList = newMember
+        this.team.numMembers -= 1
         alert('성공적으로 탈퇴시켰습니다')
       })
       .catch(err => {
@@ -531,8 +527,7 @@ export default {
           'user-email': sessionStorage.getItem('user-email')
         }
       })
-      .then(res => {
-        console.log(res)
+      .then(() => {
         var newMember = []
         for (var i=0; i<this.applyList.length; i++) {
           if (this.applyList[i].email != approveEmail) {
@@ -541,6 +536,8 @@ export default {
         }
         this.applyList = newMember
         this.memberList.push({'name':approveName,'email':approveEmail})
+        
+        this.team.numMembers += 1
         alert("성공적으로 승인했습니다")
       })
       .catch(err => {
@@ -559,8 +556,7 @@ export default {
           'user-email': sessionStorage.getItem('user-email')
         }
       })
-      .then(res => {
-        console.log(res)
+      .then(() => {
         var newMember = []
         for (var i=0; i<this.applyList.length; i++) {
           if (this.applyList[i].email != disEmail) {
@@ -573,7 +569,14 @@ export default {
       .catch(err => {
         alert(err.response.data)
       })
-    }
+    },
+
+
+  },
+  mounted() {
+    // setTimeout(() => {
+    //   this.tabIndex = 2;
+    // }, 200)
   },
   created() {
     // 스터디 디테일 정보 가져오기
@@ -588,7 +591,7 @@ export default {
     })
     .then(res => {
       this.team = res.data
-      console.log('스터디 디테일', this.team)
+      this.team.content = this.team.content.split('\n').join('<br />')
     })
     .catch(err => {
       console.log(err)
@@ -612,7 +615,6 @@ export default {
     })
     .then(res => {
       this.memberList = res.data
-      console.log('현재 스터디원', this.memberList)
       for (var i=0; i < this.memberList.length; i++) {
         if (this.email === this.memberList[i].email) {
           this.isMember  = true
@@ -635,7 +637,6 @@ export default {
     })
     .then(res => {
       this.applyList = res.data
-      console.log('가입 요청한 사람', this.applyList)
       for (var i=0; i < this.applyList.length; i++) {
         if (this.email === this.applyList[i].email) {
           this.isReady = true

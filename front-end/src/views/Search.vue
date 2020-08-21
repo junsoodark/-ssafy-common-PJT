@@ -2,7 +2,7 @@
   <div class="my-3">
     <h1>{{searchData}} 검색결과</h1>
     <hr>
-    <h2 class="my-2">팀 검색 결과</h2>
+    <h2 class="my-2">스터디 검색 결과</h2>
     <h2 v-if="!emptyTeam">{{teamSearchResult}}</h2>
     <b-container v-else>
       <b-row>

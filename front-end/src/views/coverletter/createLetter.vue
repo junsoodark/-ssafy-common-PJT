@@ -1,32 +1,91 @@
 <template>
   <div class="my-3">
-    <h1>자소서 작성</h1>
     <b-container>
-      <hr>
-      <b-row>
-        <b-form-select v-model="category" :options="options" class="col-4 my-1"></b-form-select>
-        <b-form-input v-model="title" placeholder="글 제목을 입력해주세요" class="col-8 my-1"></b-form-input>
-        <b-form-input v-model="company" placeholder="회사를 입력해주세요" class="col-4"></b-form-input>
-        <b-form-input v-model="job" placeholder="직무를 입력해주세요" class="col-8"></b-form-input>
+      <br>
+      <h1>자소서 작성</h1>
+      <br>
+      <b-row class="my-3">
+        <b-col md="4" class="text-left">
+          <b-form-select v-model="category" :options="options" required></b-form-select>
+        </b-col>
+        <b-col class="text-right">
+          <b-button variant="primary" @click="submitCoverLetter">제출하기</b-button>
+        </b-col>
       </b-row>
-      <b-button class="m-3" @click="addQuestion" variant="primary">자소서 항목 추가</b-button><b-button class="m-3" @click="delQuestion" variant="danger">자소서 항목 삭제</b-button>
-      <div v-for="item in items" :key="item.num" class="my-3">
-        <b-button v-b-toggle="'my-'+item.num">
-            <span class="when-open">{{item.num+1}}번 질문 닫기</span><span class="when-closed">{{item.num+1}}번 질문 열기</span>
-        </b-button>
-        <b-collapse :id="'my-'+item.num" class="my-1">
-          <div class="my-3">
-            <b-form-input v-model="item.title" placeholder="질문을 입력해주세요"></b-form-input>
-            <b-form-textarea
-              v-model="item.answer"
-              placeholder="Tall textarea"
-              rows="8"
-            ></b-form-textarea>
-          </div>
-        </b-collapse>
+      <!-- <b-row>
+        <b-col class="text-left"><p>[자소서 컨펌] 피드백 받고 싶은 자기소개서를 등록하세요</p></b-col>
+      </b-row>
+      <b-row>
+        <b-col class="text-left"><p>[자소서 면접] 자기소개서 기반 면접 질문이 궁금하면 등록하세요</p></b-col>
+      </b-row> -->
+      <b-row class="my-3">
+        <b-col class="pr-0">
+          <b-form-input v-model="company" placeholder="회사를 입력해주세요" required></b-form-input>
+        </b-col>
+        <b-col>
+          <b-form-input v-model="job" placeholder="직무를 입력해주세요" required></b-form-input>
+        </b-col>
+      </b-row>
+      <b-row class="my-3">
+        <b-col>
+          <b-form-input v-model="title" placeholder="글 제목을 입력해주세요" required></b-form-input>
+        </b-col>
+      </b-row>
+      <!-- 제목까지 -->
+
+      <div>
+        <b-card no-body>
+          <b-tabs card>
+            <!-- Render Tabs, supply a unique `key` to each tab -->
+            <b-tab v-for="item in items" :key="item.num" :title="`${item.num} 번`">
+              <div class="my-3" style="height: 630px">
+                <b-form-textarea 
+                  v-model="item.title" 
+                  required
+                  placeholder="질문을 입력하세요" 
+                  rows="5"
+                  max-rows="9"
+                  class="pt-3"
+                ></b-form-textarea>
+                <b-form-textarea
+                  v-model="item.answer"
+                  required
+                  placeholder="답변을 입력하세요"
+                  rows="19"
+                  max-rows="30"
+                  class="pt-3"
+                ></b-form-textarea>
+              </div>
+
+
+
+              <b-button size="sm" variant="danger" class="float-right" @click="delQuestion(item.num)">
+                Close tab
+              </b-button>
+              <br>
+            </b-tab>
+
+            <!-- New Tab Button (Using tabs-end slot) -->
+            <template v-slot:tabs-end>
+              <b-nav-item role="presentation" @click.prevent="addQuestion" href="#"><b>+</b></b-nav-item>
+            </template>
+
+            <!-- Render this if no tabs -->
+            <template v-slot:empty>
+              <div class="text-center text-muted">
+                There are no open tabs<br>
+                Open a new tab using the <b>+</b> button above.
+              </div>
+            </template>
+          </b-tabs>
+        </b-card>
       </div>
       <br>
-      <b-button @click="submitCoverLetter">제출하기</b-button>
+      <b-row>
+        <b-col class="text-right">
+          <b-button variant="primary" @click="submitCoverLetter">제출하기</b-button>
+        </b-col>
+      </b-row>
     </b-container>
   </div>
 </template>
@@ -38,16 +97,16 @@ const API_URL = process.env.VUE_APP_LOCAL_URL
 export default {
   data () {
     return {
-      items: [],
-      question:0,
+      items: [{num: 1, title: null, answer: null}],
+      question:1,
       title: null,
       company: null,
       job: null,
-      category: '자소서 컨펌',
+      category: null,
       options: [
         { value: null, text: '항목을 선택해주세요' },
         { value: '자소서 컨펌', text: '자소서 컨펌'},
-        { value: '자소서 면접', text: '자소서 면접'}
+        { value: '자소서 면접', text: '자소서 면접'},
       ]
     }
   },
@@ -58,76 +117,104 @@ export default {
   },
   methods: {
     addQuestion () {
-      var cover = new Object
-      const numCover = this.question
-      cover = {num: numCover, title: null, answer: null}
       this.question += 1
+      const numCover = this.question
+      var cover = {num: numCover, title: null, answer: null}
       this.items.push(cover)
     },
-    delQuestion () {
+    delQuestion(x) {
+      var changeItems = []
+      for (let i = 0; i < this.items.length; i++) {
+        if (this.items[i].num < x){
+          changeItems.push({num:i+1,title:this.items[i].title,answer:this.items[i].answer})
+        } else if (this.items[i].num > x) {
+          changeItems.push({num:i,title:this.items[i].title,answer:this.items[i].answer})
+        }
+      }
       this.question -= 1
-      this.items.pop()
+      this.items = changeItems
     },
     submitCoverLetter () {
       if (this.category == null) {
         alert('카테고리를 선택해주세요')
         return false
       }
-      const params = {
-        'category': this.category,
+      if (this.company == null) {
+        alert('회사를 입력하세요')
+        return false
+      }
+      if (this.job == null) {
+        alert('직무를 입력하세요')
+        return false
+      }
+      if (this.title == null) {
+        alert('글 제목을 입력하세요')
+        return false
+      }
+      var items = []
+      for (var i=0;i<this.items.length; i++) {
+        items.push({'title':this.items[i].title,'content':this.items[i].answer})
+      }
+      const body = {
+        'title':this.title,
         'company': this.company,
-        'email': this.email,
         'job':this.job,
-        'title':this.title
+        'category': this.category,
+        'resumeItems': items
+      }
+      
+      var flag = false
+      for (var j=0; j<items.length; j++) {
+        if (!items[j].title || !items[j].content) {
+          flag = true
+          break
+        }
+      }
+      if (flag) {
+        alert('질문과 답변을 입력하세요')
+        return false
       }
       Axios({
         method: "POST",
-        url: `${API_URL}resume`,
-        params: params,
+        url: `${API_URL}resume/resumeandresumeitem`,
+        data: body,
         headers: { "Content-Type": "application/json; charset=utf-8",
                   'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
                   'user-email': sessionStorage.getItem('user-email')},
       })
-      .then(res => {
-        const resumeId = res.data
-        var trigger = false
-        if (resumeId == -1) {
-          alert('글 작성이 알 수 없는 이유로 실패했습니다')
-          return false
-        }
-        for (var i=0; i<this.items.length; i++) {
-          this.submitQuestion(resumeId,this.items[i])
-          if (i==this.items.length-1) {
-            trigger = true
-          }
-        }
+      .then(() => {
         alert('작성이 완료되었습니다')
-        if (trigger) {this.$router.push({ name: "coverLetterDetail", params: {id:resumeId}})}
+        this.$router.push({ name: "LetterList"})
       })
       .catch(err => {
-        console.log(err)
+        console.log('err', err)
       })
     },
+
     submitQuestion (resumeId,quest) {
-      const params = {
-        'content': quest.answer,
-        'resumeId': resumeId,
-        'title': quest.title
+      var params = []
+      var trigger = false
+      for (var i=0; i<quest.length; i++) {
+        params.push({'resume':resumeId,'title':quest[i].title,'content':quest[i].answer})
+        if (i==quest.length-1) {trigger = true}
       }
-      Axios({
-        method: "POST",
-        url: `${API_URL}resumeitem`,
-        params: params,
-        headers: { "Content-Type": "application/json; charset=utf-8",
-                  'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
-                  'user-email': sessionStorage.getItem('user-email')},
-      })
-      .then(res => {
-        console.log(res)
-      })
-      .catch(err => {
-        alert(err.response.data.msg)
-      })
+      
+      if (trigger) {
+        Axios({
+          method: "POST",
+          url: `${API_URL}resumeitem?list=${params}`,
+          headers: { "Content-Type": "application/json; charset=utf-8",
+                    'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
+                    'user-email': sessionStorage.getItem('user-email')},
+        })
+        .then(() => {
+          
+        })
+        .catch(err => {
+          alert(err.response.data.msg)
+        })
+        trigger = false
+      }
     }
   }
 }

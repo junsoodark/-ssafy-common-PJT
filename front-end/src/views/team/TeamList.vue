@@ -11,11 +11,11 @@
             <template v-slot:append>
               <b-input-group-text @click="Search" style="cursor: pointer;"><strong>확인</strong></b-input-group-text>
             </template>
-            <b-form-input list="my-list-id" placeholder="분야를 검색하세요" @keyup.enter="Search" v-model="SearchText"></b-form-input>
+            <b-form-input list="my-list-id" placeholder="스터디를 검색하세요" @keyup.enter="Search" v-model="SearchText"></b-form-input>
 
-            <datalist id="my-list-id">
+            <!-- <datalist id="my-list-id">
               <option v-for="size in sizes" :key="size">{{ size }}</option>
-            </datalist>
+            </datalist> -->
           </b-input-group>
         </b-col>
         <b-col md="3">
@@ -24,10 +24,11 @@
       </b-row>
     </div>
     <div class="my-badges">
-      <b-badge pill class="my-badge1" style="cursor: pointer;" @click="searchButton('코딩 테스트')">코딩테스트</b-badge>
-      <b-badge pill class="my-badge2" style="cursor: pointer;" @click="searchButton('인적성/NCS')">NCS/인적성</b-badge>
-      <b-badge pill class="my-badge3" style="cursor: pointer;" @click="searchButton('면접')">면접</b-badge>
-      <b-badge pill class="my-badge4" style="cursor: pointer;" @click="searchButton('기타')">기타</b-badge>
+      <b-badge pill class="my-badge1" style="cursor: pointer;" @click="searchButton('코딩 테스트')" href="#">코딩테스트</b-badge>
+      <b-badge pill class="my-badge2" style="cursor: pointer;" @click="searchButton('인적성/NCS')" href="#">NCS/인적성</b-badge>
+      <b-badge pill class="my-badge3" style="cursor: pointer;" @click="searchButton('면접')" href="#">면접</b-badge>
+      <b-badge pill class="my-badge4" style="cursor: pointer;" @click="searchButton('기타')" href="#">기타</b-badge>
+      <b-badge pill class="my-badge5" variant="dark" style="cursor: pointer;" @click="showAllCase" href="#">전체</b-badge>
     </div>
 
     <br><br>
@@ -62,7 +63,6 @@ export default {
     Axios.get(`${API_URL}study/all`)
     .then(res => {
       this.TeamList = res.data.reverse()
-      console.log(this.TeamList)
     })
     .catch(err => {
       console.log(err)
@@ -97,6 +97,11 @@ export default {
         }
       }
       this.TeamList = this.SearchData
+    },
+    showAllCase () {
+      if (this.SaveTeamList.length != 0) {
+        this.TeamList = this.SaveTeamList
+      }
     }
   }
 }
@@ -129,6 +134,11 @@ export default {
 }
 .my-badge4 {
   background-color:#00BFFF !important;
+  padding: 5px !important;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+.my-badge5 {
   padding: 5px !important;
   margin-right: 5px;
   margin-left: 5px;

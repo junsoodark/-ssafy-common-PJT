@@ -44,8 +44,12 @@ export default {
     Header,
   },
   methods: {
+    t() {
+
+    },
     timeCheck() {
       if (this.isLoggedIn) {
+        
         var date = new Date()
         var H = date.getHours() * 1
         var M = date.getMinutes() * 1
@@ -68,6 +72,9 @@ export default {
         if (S < 10) {
           S = '0' + S
           S *= 1
+        }
+        if (H >=24) {
+          H = 0
         }
         // console.log('현재시간 보정', H,M,S)
         // console.log('로그인 시간', this.loginTime)

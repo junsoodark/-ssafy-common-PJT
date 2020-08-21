@@ -76,10 +76,8 @@ export default new Vuex.Store({
         firebase.auth().signInWithEmailAndPassword(loginData.email, fbpassword)
         .catch(function(error) {
           // Handle Errors here.
-          var errorCode = error.code;
           var errorMessage = error.message;
           console.log('파이어베이스 로그인 에러')
-          console.log(errorCode)
           console.log(errorMessage)
           // ...
         })
@@ -93,8 +91,64 @@ export default new Vuex.Store({
         alert(err.response.data)
       })
     },
-    signup(state, { code, age, email, nickname, password, sex }) {
-      console.log(code, age, email, nickname, password, sex)
+    
+    initSignUp({ commit }, loginData) {
+      const params = {
+        'email' : loginData.email,
+        'password' : loginData.password
+      }
+      var JsonForm = JSON.stringify(params)
+      Axios({method:'POST',url:`${API_URL}login`,params:params,data:JsonForm,headers:{'Content-Type': 'application/json; charset=utf-8'}})
+      .then(res => {
+        commit('SET_TOKEN', res.data.token)
+        commit('UPDATE_EMAIL', loginData.email)
+
+        sessionStorage.setItem('jwt-auth-token', res.data.token);
+        sessionStorage.setItem('user-email', loginData.email);
+
+        // 로그인 시간 저장
+        let date = new Date()
+        var loginH = date.getHours()
+        var loginM = date.getMinutes()
+        var loginS = date.getSeconds()
+
+        if (loginH < 10) {
+          loginH = '0' + loginH
+        }
+        if (loginM < 10) {
+          loginM = '0' + loginM
+        }
+        if (loginS < 10) {
+          loginS = '0' + loginS
+        }
+
+        const loginTime = loginH + ":" + loginM + ":" + loginS
+        commit('UPDATE_LOGIN_TIME', loginTime)
+        
+        var fbpassword = res.data.fbpassword
+        // firebase 사용자 로그인
+        firebase.auth().signInWithEmailAndPassword(loginData.email, fbpassword)
+        .then(() => {
+        
+        })
+        .catch(function(error) {
+          // Handle Errors here.
+          var errorMessage = error.message;
+          console.log('파이어베이스 로그인 에러')
+          console.log(errorMessage)
+          // ...
+        })
+
+        alert("로그인")
+
+        router.push({ name: 'Home' })
+      })
+      .catch(err => {
+        alert(err.response.data)
+      })
+    },
+
+    signup({ dispatch }, { code, age, email, nickname, password, sex }) {
       var params = new URLSearchParams();
       params.append("code", code);
       var form = {
@@ -105,30 +159,35 @@ export default new Vuex.Store({
         sex: sex,
       };
       var JsonForm = JSON.stringify(form);
-    
       Axios({
         method: "POST",
         url: `${API_URL}user/signUp`,
         params: params,
         data: JsonForm,
         headers: { "Content-Type": "application/json; charset=utf-8" },
-        })
-        .then((res) => {
-          console.log(res)
-          var fbPassword = res.data.fbPassword
+      })
+      .then((res) => {
+        var fbPassword = res.data.fbPassword
         // firebase 회원가입
         firebase.auth().createUserWithEmailAndPassword(email, fbPassword)
         .catch(function (error) {
           // Handle Errors here.
-          var errorCode = error.code;
           var errorMessage = error.message;
-          console.log("firebase 인증 에러", email, fbPassword);
-          console.log(errorCode);
+          console.log("firebase 인증 에러");
           console.log(errorMessage);
           // ...
-        });
+        })
+        //
+        const loginData = {
+          'email': email,
+          'password': password,
+        }
+        
+        dispatch("initSignUp", loginData)
+
+        //
         alert(res.data.msg);
-        router.push({ name: "Login" });
+        // router.push({ name: "Login" });
       })
       .catch((err) => {
         alert(err.response.data);
@@ -155,11 +214,9 @@ export default new Vuex.Store({
       router.push({ name: "Home" });
     },
     createTeam(state, form) {
-      console.log("fffff", form);
       Axios.post(`${API_URL}study/create`, form)
-        .then((res) => {
+        .then(() => {
           alert("스터디 생성");
-          console.log(res);
         })
         .catch((err) => {
           alert(err.response.data);

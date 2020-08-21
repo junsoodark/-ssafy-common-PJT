@@ -50,8 +50,7 @@ export default {
           'user-email': sessionStorage.getItem('user-email')
         }
       })
-      .then(res => {
-        console.log(res)
+      .then(() => {
         alert("수정성공")
         this.$router.push({ name: "coverLetterDetail",params: {id:this.resumeId}})
       })

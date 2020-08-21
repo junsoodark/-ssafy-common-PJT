@@ -52,8 +52,7 @@ export default {
     };
   },
   props: {
-    studyId: Number,
-    writer: Number
+    propsData: Object,
   },
   mounted() {
     document.getElementById('paragraph').setAttribute('contenteditable', 'true');
@@ -63,7 +62,6 @@ export default {
     onInput(event, index) {
       const value = event.target.innerText;
       this.content[index].value = value;
-      console.log(event.target.innerHTML)
     },
     onRemove(index) {
       if (this.content.length > 1 && this.content[index].value.length === 0) {
@@ -111,9 +109,9 @@ export default {
       const articleData = document.querySelector('#paragraph')
       const params = {
         'content': articleData.innerHTML,
-        'studyId': this.studyId,
+        'studyId': this.propsData.studyId,
         'title': this.title,
-        "writer": this.writer
+        "writer": this.propsData.writerId
       }
       Axios({
         method: "POST",
@@ -123,12 +121,11 @@ export default {
                   'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
                   'user-email': sessionStorage.getItem('user-email')},
       })
-      .then(res => {
-        console.log(res)
+      .then(() => {
         this.$emit('endSubmit')
       })
       .catch(err => {
-        console.log(err)
+        console.log('err', err)
         alert(err.response.data)
       })
     }

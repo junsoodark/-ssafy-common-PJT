@@ -1,17 +1,37 @@
 <template>
-  <b-container class="rounded p-2" style="cursor:pointer;" @click="clickCard">
+  <b-container class="rounded p-2 grow" style="cursor:pointer;" @click="clickCard">
     <div class="card">
       <div v-if="team.category === '코딩 테스트'" class="mycard-header1 text-left pt-2">
-        <b-icon icon="person-circle" font-scale="1"></b-icon> {{ team.numMembers }}/{{ team.maxMembers }}
+        <b-row>
+          <b-col>
+            <b-icon icon="person-circle" font-scale="1"></b-icon> {{ team.numMembers }}/{{ team.maxMembers }}
+          </b-col>
+          <b-col class="text-right font-weight-bold">{{ team.category }}</b-col>
+        </b-row>
       </div>
       <div v-if="team.category === '인적성/NCS'" class="mycard-header2 text-left pt-2">
-        <b-icon icon="person-circle" font-scale="1"></b-icon> {{ team.numMembers }}/{{ team.maxMembers }}
+        <b-row>
+          <b-col>
+            <b-icon icon="person-circle" font-scale="1"></b-icon> {{ team.numMembers }}/{{ team.maxMembers }}
+          </b-col>
+          <b-col class="text-right font-weight-bold">{{ team.category }}</b-col>
+        </b-row>
       </div>
       <div v-if="team.category === '면접'" class="mycard-header3 text-left pt-2">
-        <b-icon icon="person-circle" font-scale="1"></b-icon> {{ team.numMembers }}/{{ team.maxMembers }}
+        <b-row>
+          <b-col>
+            <b-icon icon="person-circle" font-scale="1"></b-icon> {{ team.numMembers }}/{{ team.maxMembers }}
+          </b-col>
+          <b-col class="text-right font-weight-bold">{{ team.category }}</b-col>
+        </b-row>
       </div>
       <div v-if="team.category === '기타'" class="mycard-header4 text-left pt-2">
-        <b-icon icon="person-circle" font-scale="1"></b-icon> {{ team.numMembers }}/{{ team.maxMembers }}
+        <b-row>
+          <b-col>
+            <b-icon icon="person-circle" font-scale="1"></b-icon> {{ team.numMembers }}/{{ team.maxMembers }}
+          </b-col>
+          <b-col class="text-right font-weight-bold">{{ team.category }}</b-col>
+        </b-row>
       </div>
       <div class="card-body text-center">
         <img :id="team.studyId" :src="defaultImageUrl" style="width:140px; height:140px; margin-top:-85px" alt="User" class="studyimg img-fluid img-thumbnail rounded-circle border-0 mb-2">
@@ -54,24 +74,36 @@ export default {
     team: Object,
   },
   created() {
+    
+      var storageRef = firebase.storage().ref();
+      //
+      var listRef = storageRef.child(`images/${this.team.mgrEmail}`);
+      
+      const studyId = this.team.studyId
+      // Find all the prefixes and items.
+      listRef.listAll().then(function(res) {
+        res.items.forEach(function(itemRef) {
+          const fullPath = itemRef.fullPath
+          firebase.storage().ref(`${fullPath}`).getDownloadURL()
+          .then(function(url) {
+            var xhr = new XMLHttpRequest();
+            xhr.responseType = 'blob';
+            xhr.onload = function() {};
+            xhr.open('GET', url);
+            xhr.send();
+            var img = document.getElementById(studyId);
+            img.src = url;
+          })
+          .catch(function(err) {
+            console.log(err)
+          })
+          // All the items under listRef.
+        });
+      }).catch(function(error) {
+        // Uh-oh, an error occurred!
+        console.log('eer', error)
+      });
 
-
-
-    const profileEmail = this.team.mgrEmail
-    const studyId = this.team.studyId
-    firebase.storage().ref(`images/${profileEmail}/${profileEmail}`).getDownloadURL()
-    .then(function(url) {
-      var xhr = new XMLHttpRequest();
-      xhr.responseType = 'blob';
-      xhr.onload = function() {};
-      xhr.open('GET', url);
-      xhr.send();
-      var img = document.getElementById(studyId);
-      img.src = url;
-    })
-    .catch(function(err) {
-      console.log(err)
-    })
   },
   computed: {},
   methods: {
@@ -117,5 +149,11 @@ export default {
   z-index: 1;
 }
 
+.grow { 
+transition: all .2s ease-in-out; 
+}
 
+.grow:hover { 
+transform: scale(1.05); 
+}
 </style>

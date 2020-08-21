@@ -22,7 +22,6 @@ const mutations = {
 
 const actions = {
   update_user_info(params) {
-    console.log(params)
       
       Axios.put(`${API_URL}user`, params, {
         headers: {
@@ -32,7 +31,6 @@ const actions = {
       })
       .then((res) => {
         alert(res.data)
-        console.log(res)
       })
       .catch((err) => {
         alert("비밀번호를 확인해주세요")
