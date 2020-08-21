@@ -19,7 +19,9 @@ import javax.validation.constraints.Pattern;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.web.blog.model.board.Post;
 import com.web.blog.model.reply.Reply;
+import com.web.blog.model.resume.Resume;
 import com.web.blog.model.study.Study;
 
 import lombok.AllArgsConstructor;
@@ -71,4 +73,12 @@ public class User {
 	@JsonIgnore
 	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "user")
 	private Set<Reply> reply;
+
+	@JsonIgnore
+	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "user")
+	private Set<Resume> resume;
+
+	@JsonIgnore
+	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "user")
+	private Set<Post> posts;
 }
