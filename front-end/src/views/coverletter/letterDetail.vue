@@ -185,7 +185,8 @@ export default {
         'user-email': sessionStorage.getItem('user-email')
       },
     })
-    .then(() => {
+    .then((res) => {
+      alert(res.data)
       this.$router.push({ name: "LetterList"})
     })
     .catch( err => {
@@ -207,7 +208,7 @@ export default {
           'user-email': sessionStorage.getItem('user-email')
         }
       })
-      .then(() => {
+      .then((res) => {
         var newQuest = []
         for (var i=0; i<this.items.length; i++) {
           if (this.items[i].id != id) {
@@ -219,6 +220,7 @@ export default {
         this.letterId = this.items[0].id
         this.letterContent = this.items[0].content.split('\n').join('<br />')
         this.isChanged = true
+        alert(res.data)
       })
     },
     updateQuest (id) {
