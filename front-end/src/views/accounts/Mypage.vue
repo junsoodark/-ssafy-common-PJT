@@ -253,7 +253,7 @@ export default {
 
     ...mapActions(['authDelete']),
     cancel() {
-      console.log('취소')
+      // console.log('취소')
     },
     deleteUserAccount(data) {
       const params = {

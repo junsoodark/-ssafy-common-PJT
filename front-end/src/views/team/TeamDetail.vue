@@ -508,7 +508,6 @@ export default {
           }
         }
         this.memberList = newMember
-        console.log(this.team)
         this.team.numMembers -= 1
         alert('성공적으로 탈퇴시켰습니다')
       })
