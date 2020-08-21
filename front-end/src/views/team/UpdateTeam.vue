@@ -65,7 +65,7 @@
       <div class="CreateTeamControl" id="CreateTeamControl-Period">
         <span class="CreateTeamText">일정:</span>
         <div>
-          <b-form-select :state="periodState" v-model="form.periodId" :options="period" required></b-form-select>
+          <b-form-select v-model="form.periodId" :options="period" required></b-form-select>
 
           <!-- <b-form-radio-group
             :state="periodState"
@@ -131,9 +131,9 @@
         <div>
           <!-- <b-form-select :state="weekState" v-model="form.weekId" :options="week" required></b-form-select> -->
 
-          <b-form-radio-group :state="weekState" v-model="form.weekId" :options="week">
-            <b-form-invalid-feedback :state="weekState">한 가지를 선택해주세요.</b-form-invalid-feedback>
-            <b-form-valid-feedback :state="weekState">감사합니다.</b-form-valid-feedback>
+          <b-form-radio-group v-model="form.weekId" :options="week">
+            <b-form-invalid-feedback >한 가지를 선택해주세요.</b-form-invalid-feedback>
+            <b-form-valid-feedback >감사합니다.</b-form-valid-feedback>
           </b-form-radio-group>
         </div>
       </div>
@@ -143,9 +143,9 @@
         <div>
           <!-- <b-form-select :state="shiftState" v-model="form.shiftId" :options="shift" required></b-form-select> -->
 
-          <b-form-radio-group :state="shiftState" v-model="form.shiftId" :options="shift">
-            <b-form-invalid-feedback :state="shiftState">한 가지를 선택해주세요.</b-form-invalid-feedback>
-            <b-form-valid-feedback :state="shiftState">감사합니다.</b-form-valid-feedback>
+          <b-form-radio-group v-model="form.shiftId" :options="shift">
+            <b-form-invalid-feedback >한 가지를 선택해주세요.</b-form-invalid-feedback>
+            <b-form-valid-feedback >감사합니다.</b-form-valid-feedback>
           </b-form-radio-group>
         </div>
       </div>
@@ -317,7 +317,6 @@ export default {
         }
 
         this.changeGu();
-        console.log(this.form);
       })
       .catch((err) => {
         console.log(err);
@@ -342,7 +341,7 @@ export default {
         title: this.form.title,
         weekId: this.form.weekId,
       };
-      console.log(params);
+      
       const JsonParams = JSON.stringify(params);
       Axios({
         method: "PUT",
@@ -355,8 +354,7 @@ export default {
           "user-email": sessionStorage.getItem("user-email"),
         },
       })
-        .then((res) => {
-          console.log("zzzz", res);
+        .then(() => {
           alert("스터디 수정 성공");
           router.push({
             name: "StudyDetail",
@@ -364,7 +362,7 @@ export default {
           });
         })
         .catch((err) => {
-          console.log("aa", err.response.data);
+          console.log(err.response.data);
         });
     },
 
