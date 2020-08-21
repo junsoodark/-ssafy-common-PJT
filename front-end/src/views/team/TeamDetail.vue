@@ -508,6 +508,8 @@ export default {
           }
         }
         this.memberList = newMember
+        console.log(this.team)
+        this.team.numMembers -= 1
         alert('성공적으로 탈퇴시켰습니다')
       })
       .catch(err => {
@@ -535,6 +537,8 @@ export default {
         }
         this.applyList = newMember
         this.memberList.push({'name':approveName,'email':approveEmail})
+        
+        this.team.numMembers += 1
         alert("성공적으로 승인했습니다")
       })
       .catch(err => {

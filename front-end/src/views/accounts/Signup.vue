@@ -393,7 +393,6 @@ export default {
   },
   methods: {
     signup() {
-      console.log("사인업");
       const code = this.code;
       const age = this.age;
       const nickname = this.nickname;
