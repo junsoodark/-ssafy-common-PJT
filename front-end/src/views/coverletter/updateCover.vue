@@ -163,7 +163,6 @@ export default {
                   'user-email': sessionStorage.getItem('user-email')},
       })
       .then((res) => {
-        console.log(res)
         for (var j=0; j<this.delItems.length; j++) {
           this.deleteQuest(this.delItems[j])
         }
@@ -174,6 +173,7 @@ export default {
             this.updateQuestion(this.items[i])
           }
         }
+        alert(res.data)
         this.$router.push({ name: "coverLetterDetail", params: {id: this.id}})
       })
       .catch(err => {
@@ -194,8 +194,7 @@ export default {
                   'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
                   'user-email': sessionStorage.getItem('user-email')},
       })
-      .then(res => {
-        console.log(res)
+      .then(() => {
       })
       .catch(err => {
         alert(err.response.data.msg)
@@ -215,8 +214,7 @@ export default {
                   'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
                   'user-email': sessionStorage.getItem('user-email')},
       })
-      .then(res => {
-        console.log(res)
+      .then(() => {
       })
       .catch(err => {
         console.log(err)
@@ -231,8 +229,8 @@ export default {
                   'jwt-auth-token': sessionStorage.getItem('jwt-auth-token'),
                   'user-email': sessionStorage.getItem('user-email')},
       })
-      .then(res => {
-        console.log(res)
+      .then(() => {
+        console.log()
       })
       .catch(err => {
         console.log(err)
@@ -272,7 +270,6 @@ export default {
                   'user-email': sessionStorage.getItem('user-email')},
     })
     .then(res => {
-      console.log(res)
       for (var i=0; i<res.data.length; i++) {
         const item = {}
         item.title = res.data[i].title
